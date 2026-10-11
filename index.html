@@ -290,6 +290,68 @@ td.mk{min-width:190px}
 .tabs button{flex:1;border:0;background:none;border-radius:var(--r-pill);padding:9px 6px;font-weight:700;font-size:13px;color:var(--muted)}
 .tabs button[aria-current="page"]{background:var(--volt);color:var(--on-brand)}
 
+/* ---------- gerador de propostas ---------- */
+.gen{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:20px;align-items:start}
+.gform{display:flex;flex-direction:column;gap:14px;min-width:0}
+.gsec h2{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.gn{width:24px;height:24px;border-radius:50%;background:var(--volt);color:var(--on-brand);display:grid;place-items:center;font-size:12px;flex:none}
+.gbody{display:flex;flex-direction:column;gap:12px}
+.gprev{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--raised2);padding:12px}
+.gprev-in .doc{gap:12px}
+.tin{width:100%;min-width:60px;background:var(--raised);border:1px solid var(--line);border-radius:8px;padding:7px 8px;font-size:14px}
+@media (max-width:1100px){.gen{grid-template-columns:minmax(0,1fr)}.gprev{position:static;max-height:none}}
+
+/* ---------- documento da proposta (16:9) ---------- */
+.doc{display:flex;flex-direction:column;gap:16px}
+.pg{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;background:#0B0B0C;color:#F7F7F2;border-radius:10px;overflow:hidden;padding:5.5cqw 6cqw;display:flex;flex-direction:column;gap:2.4cqw;font-family:var(--f-text);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pg .pn{position:absolute;top:4cqw;right:5cqw;font-family:var(--f-display);font-weight:700;font-size:1.6cqw;color:#A3A3AB}
+.pg .eb{font-size:1.25cqw;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#A3A3AB;display:block}
+.pg h1{font-family:var(--f-display);font-weight:800;font-size:5.6cqw;line-height:1.02;margin:0;max-width:70%}
+.pg h2{font-family:var(--f-display);font-weight:800;font-size:3.3cqw;line-height:1.08;margin:0}
+.pg h3{font-family:var(--f-display);font-weight:700;font-size:1.7cqw;margin:0 0 1.2cqw}
+.pg em{font-style:normal;color:#D4FF2F}
+.pg .two{display:grid;grid-template-columns:1fr 1.25fr;gap:4cqw;align-items:start;flex:1}
+.pg .two.eq{grid-template-columns:1fr 1fr}
+.pg .tb{display:grid;grid-template-columns:auto 1fr;gap:1.3cqw 2.4cqw;margin:0;font-size:1.55cqw}
+.pg .tb dt{color:#A3A3AB;font-weight:600}
+.pg .tb dd{margin:0;font-weight:600}
+.pg .vv{color:#D4FF2F}
+.pg .ft,.pg .sm{font-size:1.35cqw;color:#A3A3AB;margin:0;max-width:80%}
+.pg .ls{margin:0;padding-left:2cqw;display:flex;flex-direction:column;gap:.8cqw;font-size:1.55cqw}
+.pg .ls li::marker{color:#FF3FA4}
+.pg .obs{font-size:1.35cqw;background:#17171A;border-radius:1.4cqw;padding:1.6cqw 2cqw;margin:0}
+.pg .cards{display:grid;gap:2cqw;margin-top:1cqw}
+.pg .cards.c1{grid-template-columns:minmax(0,.5fr)}
+.pg .cards.c2{grid-template-columns:repeat(2,1fr)}
+.pg .cards.c3{grid-template-columns:repeat(3,1fr)}
+.pg .cards.c4{grid-template-columns:repeat(4,1fr)}
+.pg .pk{position:relative;background:#17171A;border:.25cqw solid #2A2A30;border-radius:2cqw;padding:2.6cqw 2.2cqw 2.2cqw;display:flex;flex-direction:column;gap:.9cqw}
+.pg .pk b{font-family:var(--f-display);font-size:2.2cqw}
+.pg .pk small{font-size:1.3cqw;color:#A3A3AB}
+.pg .pk strong{font-family:var(--f-display);font-size:1.6cqw;color:#F7F7F2;margin-top:.8cqw;line-height:1.25}
+.pg .pk.on{background:#D4FF2F;border-color:#0B0B0C;color:#0B0B0C;box-shadow:.7cqw .7cqw 0 #FF3FA4}
+.pg .pk.on small,.pg .pk.on strong{color:#0B0B0C}
+.pg .pk .tag{position:absolute;top:-1.3cqw;left:2cqw;background:#FF3FA4;color:#0B0B0C;border-radius:99px;padding:.35cqw 1.1cqw;font-size:1.05cqw;font-weight:800}
+.pg .af{display:flex;justify-content:space-between;background:#2B3BFF;color:#fff;border-radius:1.6cqw;padding:1.4cqw 2cqw;font-size:1.6cqw}
+.pg .af b{font-family:var(--f-display)}
+.pg.capa{justify-content:space-between;background:#2B3BFF}
+.pg.capa .eb{color:rgba(255,255,255,.8);margin-bottom:1.5cqw}
+.pg .lg svg{width:20cqw;height:auto}
+.pg .noar{position:absolute;right:8cqw;top:42%;background:#FF3FA4;color:#0B0B0C;font-weight:800;font-size:1.8cqw;border-radius:99px;padding:.8cqw 2cqw;transform:rotate(-6deg);border:.25cqw solid #0B0B0C}
+.pg.fim .noar{top:auto;bottom:12cqw;right:8cqw;background:#D4FF2F}
+.pg .spark{position:absolute;right:6cqw;top:30%;width:5cqw;height:5cqw}
+.pg .rod{font-size:1.3cqw;color:rgba(255,255,255,.8);margin:0}
+.pg .ct{font-size:1.55cqw;line-height:1.6;margin:0}
+#printdoc{display:none}
+@media print{
+  @page{size:297mm 167.06mm;margin:0}
+  html,body{background:#fff!important;padding:0!important}
+  body>*:not(#printdoc){display:none!important}
+  #printdoc{display:block!important}
+  #printdoc .doc{gap:0}
+  #printdoc .pg{width:297mm;height:167.06mm;aspect-ratio:auto;border-radius:0;break-after:page;page-break-after:always}
+}
+
 /* ---------- responsivo ---------- */
 @media (max-width:1400px){ .page{grid-template-columns:minmax(0,1fr)} .rail{position:static;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))} }
 @media (max-width:1100px){ .quad,.quad.three{grid-template-columns:minmax(0,1fr)} .grid3{grid-template-columns:repeat(2,minmax(0,1fr))} }
@@ -332,7 +394,7 @@ const ETAPAS=['Lead','Proposta','Contrato','Briefing','Escala','No ar','Relatór
 const SALAS=[...Array.from({length:11},(_,i)=>'E'+(i+1)),...Array.from({length:6},(_,i)=>'P'+(i+1)),'B1','B2','C1','Esc1','Esc2','Esc3'];
 const NIVEL={adm:'ADM',manager:'Gerência',basic:'Consulta',seller:'Seller'};
 const PAPEL={host:'Host',operador:'Operador',editor:'Editor',outro:'Outro'};
-const PROP_ST={rascunho:['Rascunho','mute'],enviada:['Enviada','info'],negociacao:['Negociação','warn'],aceita:['Aceita','ok'],perdida:['Perdida','bad']};
+const PROP_ST={rascunho:['Rascunho','mute'],enviada:['Enviada','info'],negociacao:['Negociação','warn'],aceita:['Aceita','ok'],perdida:['Perdida','bad'],substituida:['Substituída','mute']};
 const ALERTA={'':['Em dia','ok'],atencao:['Atenção','warn'],travado:['Travado','bad']};
 const CORES=[
  '#C8102E','#E63946','#FF6B6F','#FF5A1F','#F08C00','#FFB23F','#F4D03F','#D4FF2F','#9BE15D','#3DDC97',
@@ -347,7 +409,7 @@ const PCORES=['#D4FF2F','#FF3FA4','#8C97FF','#3DDC97','#FFB23F','#FF6B6F','#7FD8
 
 /* ---------------- estado ---------------- */
 let sb=null, SESSION=null, ME=null;
-let D={profiles:[],marcas:[],jobs:[],props:[],free:[],lives:[],cands:[],pags:[],recs:[],recados:[],log:[],desp:[],reemb:[],conv:[]};
+let D={profiles:[],marcas:[],jobs:[],props:[],free:[],lives:[],cands:[],pags:[],recs:[],recados:[],log:[],desp:[],reemb:[],conv:[],config:[],contratos:[],conds:[]};
 const UI={status:'carregando',view:'painel',q:'',filtro:'todas',semana:0,relMes:0,layer:null,confirm:null,lmode:'senha',email:'',aviso:'',erro:'',verCanc:false};
 
 /* ---------------- utilidades ---------------- */
@@ -403,6 +465,7 @@ const IC={
  chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
  chat:'<path d="M4 5h16v11H9l-5 4z"/>',
  key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M14 9l2 2"/>',
+ pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
@@ -426,11 +489,11 @@ async function loadAll(){
     lives:sb.from('lives').select('*').gte('data',desde).order('data').order('ini').limit(5000),
     cands:s('candidaturas','criado_em',false), pags:s('pagamentos_freela','competencia',false),
   };
-  if(!isSeller()){ Object.assign(reqs,{recados:s('recados','criado_em',false,60),log:s('central_log','em',false,300)}); }
+  if(!isSeller()){ Object.assign(reqs,{recados:s('recados','criado_em',false,60),log:s('central_log','em',false,300),config:s('config','chave'),contratos:s('contratos','numero',false),conds:s('contrato_condicoes','vale_desde')}); }
   if(isAdm()){ Object.assign(reqs,{recs:s('recebimentos','vencimento'),desp:sb.from('despesas').select('id,valor,origem,pagador_id,pagador_nome,aprov').eq('origem','pessoal').limit(10000),reemb:sb.from('reembolsos').select('id,valor,pessoa_id,pessoa_nome').limit(10000),conv:s('convites','nome')}); }
   const ks=Object.keys(reqs), rs=await Promise.all(ks.map(k=>reqs[k]));
   const first=rs.find(r=>r.error&&/relation|does not exist|schema cache/i.test(r.error.message));
-  if(first) throw new Error('As tabelas da Central ainda não existem. Rode o arquivo supabase/central-1.sql no Supabase.');
+  if(first) throw new Error(/contrat|config/i.test(first.error.message)?'Falta rodar o arquivo supabase/central-2.sql no Supabase.':'As tabelas da Central ainda não existem. Rode o arquivo supabase/central-1.sql no Supabase.');
   ks.forEach((k,i)=>{ if(!rs[i].error) D[k]=rs[i].data||[]; });
   ME=D.profiles.find(p=>p.id===SESSION.user.id)||ME;
 }
@@ -504,10 +567,10 @@ function draw(){
 const redraw=()=>{ if(UI.status==='ok') draw(); };
 function nav(){
   const adm=isAdm();
-  const MODS=[['painel','home','Painel'],['agenda','cal','Lives e agenda'],['jobs','brand','Marcas e jobs'],['propostas','doc','Propostas'],['equipe','team','Equipe freelancer'],['estudios','room','Estúdios'],
+  const MODS=[['painel','home','Painel'],['agenda','cal','Lives e agenda'],['jobs','brand','Marcas e jobs'],['propostas','doc','Propostas'],['contratos','pen','Contratos'],['equipe','team','Equipe freelancer'],['estudios','room','Estúdios'],
     ...(adm?[['financeiro','money','Financeiro']]:[]),['relatorios','chart','Relatórios'],['recados','chat','Recados'],['historico','clock','Histórico'],...(adm?[['acessos','key','Acessos']]:[])];
   const cnt={agenda:semVaga(7).length,financeiro:adm?D.recs.filter(r=>r.status==='a receber'&&r.vencimento<hoje()).length:0,acessos:D.profiles.filter(p=>p.status==='pendente').length};
-  document.getElementById('nav').innerHTML=MODS.map(([k,i,t])=>`<button data-go="${k}" ${UI.view===k?'aria-current="page"':''}>${ic(i)}<span>${t}</span>${cnt[k]?`<span class="cnt">${cnt[k]}</span>`:'<span></span>'}</button>`).join('');
+  document.getElementById('nav').innerHTML=MODS.map(([k,i,t])=>`<button data-go="${k}" ${(UI.view==='gerador'?'propostas':UI.view)===k?'aria-current="page"':''}>${ic(i)}<span>${t}</span>${cnt[k]?`<span class="cnt">${cnt[k]}</span>`:'<span></span>'}</button>`).join('');
 }
 
 /* ---------------- entrada (login) ---------------- */
@@ -685,20 +748,6 @@ V.jobs=()=>{
   </div>`;
 };
 
-V.propostas=()=>{
-  const op=canOp(), ps=D.props.filter(p=>match(marca(p.marca_id).nome,p.escopo,'P-'+pad(p.numero)));
-  const fech=D.props.filter(p=>['aceita','perdida'].includes(p.status)), ac=fech.filter(p=>p.status==='aceita');
-  return `<div class="col full">
-   <div class="mh"><div><h1>Propostas</h1><p>Registre cada proposta enviada. Quando a marca aceitar, crie o job direto da proposta.</p></div>${op?'<div class="acts"><button class="btn sticker" data-act="novaprop">+ Nova proposta</button></div>':''}</div>
-   <div class="grid3">
-     <div class="kpi"><span class="label">Em negociação</span><span class="v num">${moneyK(D.props.filter(p=>['enviada','negociacao'].includes(p.status)).reduce((s,p)=>s+Number(p.valor),0))}</span><span class="s">enviadas e em negociação</span></div>
-     <div class="kpi"><span class="label">Taxa de fechamento</span><span class="v num">${fech.length?Math.round(ac.length/fech.length*100)+'%':'—'}</span><span class="s">${ac.length} de ${fech.length} decididas</span></div>
-     <div class="kpi"><span class="label">Ticket médio</span><span class="v num">${ac.length?moneyK(ac.reduce((s,p)=>s+Number(p.valor),0)/ac.length):'—'}</span><span class="s">propostas aceitas</span></div>
-   </div>
-   <section class="card">${ps.length?`<div class="tblwrap"><table><thead><tr><th>Nº</th><th>Marca</th><th>Escopo</th><th class="r">Valor</th><th>Situação</th><th>Validade</th></tr></thead><tbody>${ps.map(p=>`<tr class="click" ${op?`data-prop="${p.id}"`:''}><td class="num muted">P-${pad(p.numero)}</td><td><div class="who">${logo(p.marca_id)}<b>${esc(marca(p.marca_id).nome)}</b></div></td><td style="max-width:320px">${esc(p.escopo)}</td><td class="num r" style="font-weight:700">${money(p.valor)}</td><td>${pill(...PROP_ST[p.status])}${p.job_id?' <span class="muted" style="font-size:11px">· job criado</span>':''}</td><td class="muted">${p.validade?dCurto(p.validade):'—'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">Nenhuma proposta registrada.</p>'}</section>
-  </div>`;
-};
-
 V.equipe=()=>{
   const op=canOp(), adm=isAdm(), xs=equipeMes().filter(x=>match(x.f.nome,PAPEL[x.f.papel],x.f.email));
   const inat=D.free.filter(f=>!f.ativo);
@@ -849,7 +898,7 @@ DET.job=id=>{
    <h2 style="font-size:18px">${esc(j.nome)}</h2><div>${jobSit(j)}</div>
    <div class="tblwrap" style="margin:0">${steps(j.etapa)}</div>
    ${op&&j.status==='ativo'?`<div class="chips" role="group" aria-label="Mover etapa"><button data-act="etapa" data-id="${j.id}" data-d="-1" ${j.etapa===0?'disabled':''}>‹ Voltar etapa</button><button data-act="etapa" data-id="${j.id}" data-d="1" ${j.etapa===8?'disabled':''} style="background:var(--volt);color:var(--on-brand);border-color:var(--volt)">Avançar para ${ETAPAS[Math.min(8,j.etapa+1)]} ›</button></div>`:''}
-   <dl class="dl"><dt>Valor</dt><dd class="num">${m.conta_propria?'Conta própria':money(j.valor)}</dd><dt>Lives</dt><dd>${feitas.length} feitas de ${j.lives_previstas||ls.length} previstas</dd><dt>GMV até agora</dt><dd class="num">${money(gmv)}</dd><dt>Onde</dt><dd>${esc(j.canais||'—')}</dd><dt>Responsável</dt><dd>${esc(pNome(j.responsavel_id))}</dd><dt>Próximo passo</dt><dd>${esc(j.prox_passo||'—')}${j.prox_data?' · '+esc(dExt(j.prox_data)):''}</dd>${j.obs?`<dt>Obs.</dt><dd>${esc(j.obs)}</dd>`:''}${props.length?`<dt>Proposta</dt><dd>${props.map(p=>'P-'+pad(p.numero)).join(', ')}</dd>`:''}</dl>
+   <dl class="dl"><dt>Valor</dt><dd class="num">${m.conta_propria?'Conta própria':money(j.valor)}</dd><dt>Lives</dt><dd>${feitas.length} feitas de ${j.lives_previstas||ls.length} previstas</dd><dt>GMV até agora</dt><dd class="num">${money(gmv)}</dd><dt>Contrato</dt><dd>${j.contrato_id&&D.contratos.find(c=>c.id===j.contrato_id)?`<button class="link" style="font-size:13px" data-contrato="${j.contrato_id}">C-${pad(D.contratos.find(c=>c.id===j.contrato_id).numero)} · ${esc(investTxt(condEm(j.contrato_id,hoje())||{remun:'fixo',fixo:0},1))} ›</button>`:'—'}</dd><dt>Onde</dt><dd>${esc(j.canais||'—')}</dd><dt>Responsável</dt><dd>${esc(pNome(j.responsavel_id))}</dd><dt>Próximo passo</dt><dd>${esc(j.prox_passo||'—')}${j.prox_data?' · '+esc(dExt(j.prox_data)):''}</dd>${j.obs?`<dt>Obs.</dt><dd>${esc(j.obs)}</dd>`:''}${props.length?`<dt>Proposta</dt><dd>${props.map(p=>'P-'+pad(p.numero)).join(', ')}</dd>`:''}</dl>
    <div><div class="card-h" style="margin-bottom:6px"><span class="label">Lives</span>${op&&j.status==='ativo'?`<button class="btn sm" data-act="novalive" data-job="${j.id}">+ Live neste job</button>`:''}</div><div class="list">${ls.map(l=>`<button class="row click" data-live="${l.id}"><span class="grow"><b>${dCurto(l.data)} · ${hm(l.ini)}–${hm(l.fim)}</b><small>${esc(ondeTxt(l))} · host ${l.host_id?esc(free(l.host_id).nome):'—'}</small></span>${liveSt(l)}</button>`).join('')||'<p class="empty">Nenhuma live ainda.</p>'}</div></div>
    ${isAdm()?`<div><div class="card-h" style="margin-bottom:6px"><span class="label">A receber deste job</span><button class="btn sm" data-act="novorec" data-job="${j.id}">+ A receber</button></div><div class="list">${recs.map(r=>`<button class="row click" data-rec="${r.id}"><span class="grow"><b>${money(r.valor)} · ${esc(r.descricao||'')}</b><small>vence ${dCurto(r.vencimento)}</small></span>${r.status==='recebido'?pill('Recebido','ok'):r.vencimento<hoje()?pill('Atrasado','bad'):pill('A receber','info')}</button>`).join('')||'<p class="empty">Nada lançado.</p>'}</div></div>`:''}
    ${op?`<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="editjob" data-id="${j.id}">Editar job</button>${j.status==='ativo'?(UI.confirm==='cancj'?`<button class="btn danger" data-act="canceljob" data-id="${j.id}">Confirmar cancelamento</button>`:'<button class="btn ghost danger" data-act="confirm" data-c="cancj">Cancelar job</button>'):`<button class="btn" data-act="reativajob" data-id="${j.id}">Reativar</button>`}</div>`:''}`;
@@ -884,6 +933,8 @@ FORM.live=(id,ex={})=>{
    <label class="f"><span>Job</span><select id="lv-job" required>${js.map(j=>`<option value="${j.id}" ${j.id===l.job_id?'selected':''}>${esc(marca(j.marca_id).nome)} · ${esc(j.nome)}</option>`).join('')}</select></label>
    ${dataIn('lv-data',l.data,'Dia')}
    <div class="frow"><div class="f"><span>Começa</span>${horaSel('lv-ini',l.ini)}</div><div class="f"><span>Termina</span>${horaSel('lv-fim',l.fim)}</div></div>
+   ${id?'':`<div class="f"><span>Essa live…</span>${chips('jafoi',[['nao','Vai acontecer'],['sim','Já aconteceu']],l.data<hoje()?'sim':'nao','big')}</div>
+   <div class="card" data-show="jafoi=sim" style="padding:14px;display:flex;flex-direction:column;gap:12px"><h3>Resultado</h3><div class="frow"><label class="f"><span>GMV (R$)</span><input id="lv-gmv" inputmode="decimal" placeholder="0,00"></label><label class="f"><span>Pedidos</span><input id="lv-ped" inputmode="numeric"></label></div><label class="f"><span>Pico de audiência</span><input id="lv-pico" inputmode="numeric"></label><small class="muted">A live entra como feita. O pagamento do host e do operador escolhidos abaixo é lançado sozinho.</small></div>`}
    <div class="f"><span>Onde</span>${chips('local',[['paulista','Paulista 2200'],['cliente','No local do cliente']],l.local,'big')}</div>
    <div class="f" data-show="local=paulista"><span>Sala</span>${chips('sala',SALAS.map(s=>[s,s]),l.sala)}</div>
    <div class="f"><span>Conta do TikTok</span>${chips('conta',[['marca','Da marca'],['implay','Da Implay']],l.conta,'big')}</div>
@@ -908,12 +959,13 @@ FORM.resultado=id=>{
    <button class="btn sticker" type="submit">${l.status==='feita'?'Salvar resultado':'Encerrar live'}</button></div></form>`;
 };
 FORM.job=(id,ex={})=>{
-  const j=id?job(id):{marca_id:ex.marca||'',nome:'',etapa:ex.etapa??0,responsavel_id:ME.id,valor:ex.valor||0,lives_previstas:0,canais:'',prox_passo:'',prox_data:'',alerta:'',obs:''};
+  const j=id?job(id):{contrato_id:ex.contrato||null,marca_id:ex.marca||(ex.contrato?(D.contratos.find(c=>c.id===ex.contrato)||{}).marca_id:''),nome:'',etapa:ex.etapa??(ex.contrato?2:0),responsavel_id:ME.id,valor:ex.valor||0,lives_previstas:0,canais:'',prox_passo:'',prox_data:'',alerta:'',obs:''};
   const resp=D.profiles.filter(p=>p.status==='ativo'&&['adm','manager'].includes(p.nivel));
   if(!D.marcas.length) return `<div class="dhead"><h2>Novo job</h2>${fecharBtn}</div><div class="callout">Cadastre a marca primeiro.</div><button class="btn sticker" data-act="novamarca">+ Marca</button>`;
   return `<form id="fjob" data-id="${id||''}" data-fromprop="${ex.prop||''}"><div class="dhead"><h2>${id?'Editar job':'Novo job'}</h2>${fecharBtn}</div>
    <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
    <div class="f"><span>Marca</span><div style="display:flex;gap:8px"><select id="jb-marca" style="flex:1" required>${D.marcas.filter(m=>m.ativo||m.id===j.marca_id).map(m=>`<option value="${m.id}" ${m.id===j.marca_id?'selected':''}>${esc(m.nome)}</option>`).join('')}</select><button type="button" class="btn sm" data-act="novamarca">+ Marca</button></div></div>
+   <label class="f"><span>Contrato</span><select id="jb-contrato"><option value="">Sem contrato ainda</option>${D.contratos.filter(c=>c.status!=='cancelado'||c.id===j.contrato_id).map(c=>`<option value="${c.id}" ${c.id===j.contrato_id?'selected':''}>C-${pad(c.numero)} · ${esc(marca(c.marca_id).nome)}${c.titulo?' · '+esc(c.titulo):''}</option>`).join('')}</select><small>O contrato define valores e comissão das lives deste job.</small></label>
    <label class="f"><span>Nome do job</span><input id="jb-nome" value="${esc(j.nome)}" placeholder="Ex.: Lançamento sérum vitamina C" required></label>
    <div class="f"><span>Etapa</span>${chips('etapa',ETAPAS.map((e,i)=>[i,e]),j.etapa)}</div>
    <div class="frow"><label class="f"><span>Valor do contrato (R$)</span><input id="jb-valor" inputmode="decimal" value="${valIn(j.valor)}"></label><label class="f"><span>Lives previstas</span><input id="jb-lives" inputmode="numeric" value="${j.lives_previstas||''}"></label></div>
@@ -937,22 +989,6 @@ FORM.marca=id=>{
    ${id?`<label class="toggle"><input type="checkbox" id="mc-ativo" ${m.ativo?'checked':''}> Ativa</label>`:''}
    <p class="err" id="f-err" hidden></p>
    <button class="btn sticker" type="submit">${id?'Salvar':'Criar marca'}</button></div></form>`;
-};
-FORM.prop=id=>{
-  const p=id?D.props.find(x=>x.id===id):{marca_id:'',escopo:'',valor:'',status:'enviada',validade:addD(hoje(),15),motivo:'',job_id:null};
-  if(!D.marcas.length) return `<div class="dhead"><h2>Nova proposta</h2>${fecharBtn}</div><div class="callout">Cadastre a marca primeiro.</div><button class="btn sticker" data-act="novamarca">+ Marca</button>`;
-  return `<form id="fprop" data-id="${id||''}"><div class="dhead"><h2>${id?'Proposta P-'+pad(p.numero):'Nova proposta'}</h2>${fecharBtn}</div>
-   <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
-   <div class="f"><span>Marca</span><div style="display:flex;gap:8px"><select id="pp-marca" style="flex:1">${D.marcas.map(m=>`<option value="${m.id}" ${m.id===p.marca_id?'selected':''}>${esc(m.nome)}</option>`).join('')}</select><button type="button" class="btn sm" data-act="novamarca">+ Marca</button></div></div>
-   <label class="f"><span>Escopo</span><textarea id="pp-esc" placeholder="Ex.: 12 lives de 3h + 20 cortes">${esc(p.escopo)}</textarea></label>
-   <div class="frow"><label class="f"><span>Valor (R$)</span><input id="pp-valor" inputmode="decimal" value="${valIn(p.valor)}"></label>${dataIn('pp-val',p.validade,'Válida até')}</div>
-   <div class="f"><span>Situação</span>${chips('pst',Object.entries(PROP_ST).map(([k,[t]])=>[k,t]),p.status)}</div>
-   <label class="f" data-show="pst=perdida"><span>Por que perdemos</span><input id="pp-mot" value="${esc(p.motivo)}" placeholder="Ex.: preço"></label>
-   <p class="err" id="f-err" hidden></p>
-   <button class="btn sticker" type="submit">${id?'Salvar':'Registrar proposta'}</button>
-   ${id&&p.status==='aceita'&&!p.job_id?`<button type="button" class="btn" data-act="propjob" data-id="${p.id}">Criar job desta proposta</button>`:''}
-   ${id&&p.job_id?`<button type="button" class="btn ghost" data-job="${p.job_id}">Abrir o job ›</button>`:''}
-   </div></form>`;
 };
 FORM.free=id=>{
   const f=id?free(id):{nome:'',papel:'host',email:'',telefone:'',pix:'',documento:'',valor_hora:'',valor_corte:'',ativo:true,obs:''};
@@ -998,6 +1034,294 @@ FORM.pag=(id)=>{
 function ferr(m){const e=document.getElementById('f-err');if(e){e.textContent=m;e.hidden=false;e.scrollIntoView({block:'center'})}return false}
 
 /* =========================================================================
+   COMERCIAL · propostas (gerador), contratos e condições
+   ========================================================================= */
+const CFG_PADRAO={pacotes:[{nome:'Essencial',lives:10,horas:4,fixo:0,pct:0},{nome:'Crescimento',lives:15,horas:4,fixo:0,pct:0},{nome:'Escala',lives:20,horas:4,fixo:0,pct:0}],afiliados:{fixo:0,pct:0},contatos:[{nome:'Larissa Amarante',tel:'(21) 96938-8998'},{nome:'Caio Riccio',tel:'(21) 96590-7894'}],instagram:'@implay.shop',validade_dias:10,vigencia_meses:3};
+const cfgP=()=>Object.assign({},CFG_PADRAO,((D.config||[]).find(c=>c.chave==='propostas')||{}).valor||{});
+const moneyC=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const pctTxt=v=>Number(v||0).toLocaleString('pt-BR',{maximumFractionDigits:3})+'%';
+const REMUN={fixo:'Fixo',variavel:'Variável (comissão)',misto:'Fixo + variável'};
+const CONT_ST={rascunho:['Rascunho','mute'],vigente:['Vigente','ok'],encerrado:['Encerrado','info'],cancelado:['Cancelado','bad']};
+function investTxt(o,curto){
+  const f=`${(curto?money:moneyC)(o.fixo)} ${o.fixo_periodo==='projeto'?'por projeto':'por mês'}`, c=`${pctTxt(o.comissao)} sobre ${curto?'vendas':'as vendas das lives'}`;
+  return o.remun==='fixo'?f:o.remun==='variavel'?c:f+' + '+c;
+}
+const OBJETIVOS=['Criar recorrência de vendas no perfil da marca no TikTok Shop','Lançar a marca no TikTok Shop','Aumentar o GMV das lives','Testar o canal de live com poucos SKUs'];
+const INCLUI_DIA=['Cenografia','Flash sales','Sorteios','Convidados','Equipe em escala','Acompanhamento presencial','Alinhamento com o time do TikTok Shop'];
+const LOCAIS=['Estúdio Implay','Loja/sede da marca','Remoto'];
+const PAGTO=['PIX','Boleto','Transferência'];
+const mesRefAtual=()=>{const d=new Date();return MESES[d.getMonth()]+' de '+d.getFullYear()};
+
+function novaGen(base={}){
+  const c=cfgP(), pk=c.pacotes[1]||c.pacotes[0]||{nome:'Personalizado',lives:10,horas:4,fixo:0,pct:0};
+  return Object.assign({id:null,numero:null,versao:1,origem_id:null,status:'rascunho',marca_id:'',categoria:'',ja_vende:'nao',
+    formato:'recorrente',pacote:pk.nome,lives:pk.lives,horas:pk.horas,mostrar:'todos',local:'Estúdio Implay',dias:'',
+    ev_data:'',ev_horas:12,ev_local:'Estúdio Implay',inclui:['Flash sales','Equipe em escala','Acompanhamento presencial'],
+    afiliados:false,af_fixo:c.afiliados.fixo||0,af_pct:c.afiliados.pct||0,
+    remun:'misto',fixo:pk.fixo||0,fixo_periodo:'mes',comissao:pk.pct||0,
+    objetivo:OBJETIVOS[0],produtos:'',complementos:'',primeira:'',
+    vigencia:c.vigencia_meses||3,pagamento:'PIX',venc_dia:10,validade_dias:c.validade_dias||10,mes_ref:mesRefAtual(),obs:''},base);
+}
+function genDeProposta(p){
+  const d=p.dados&&Object.keys(p.dados).length?p.dados:{obs:p.escopo||'',remun:p.remun||'fixo',fixo:p.fixo||p.valor||0,comissao:p.comissao||0};
+  return novaGen(Object.assign({},d,{id:p.id,numero:p.numero,versao:p.versao||1,origem_id:p.origem_id,status:p.status,marca_id:p.marca_id}));
+}
+const nomeM=G=>marca(G.marca_id).nome!=='—'?marca(G.marca_id).nome:'Marca';
+const pacoteTxt=G=>G.formato==='dia'?`Live de lançamento de ${G.ev_horas} h${G.ev_data?' em '+dExt(G.ev_data):''}`:`${G.pacote==='Personalizado'?'Personalizado':G.pacote}: ${G.lives} lives de ${G.horas} h por mês (${G.lives*G.horas} h) · ${G.local}`;
+const complTxt=G=>G.complementos||[G.afiliados?'Marca + afiliados':'',G.formato==='recorrente'?'Live de lançamento, se fizer sentido':''].filter(Boolean).join(' · ')||'—';
+function faltando(G){
+  const f=[];if(!G.marca_id)f.push('marca');if(!G.produtos)f.push('produtos iniciais');
+  if(G.formato==='recorrente'&&!G.primeira)f.push('data da primeira live');if(G.formato==='dia'&&!G.ev_data)f.push('data do evento');
+  if(G.remun!=='variavel'&&!(G.fixo>0))f.push('valor fixo');if(G.remun!=='fixo'&&!(G.comissao>0))f.push('% de comissão');
+  if(!G.objetivo)f.push('objetivo');return f;
+}
+
+/* ---------- documento da proposta (prévia e PDF) ---------- */
+function docHTML(G){
+  const M=esc(nomeM(G)), c=cfgP(), N=n=>`<span class="pn">${pad(n)}</span>`;
+  const brilho='<svg class="spark" viewBox="-20 -20 40 40" aria-hidden="true"><path d="M0 -16 Q0 0 16 0 Q0 0 0 16 Q0 0 -16 0 Q0 0 0 -16Z" fill="#FF3FA4" stroke="#0B0B0C" stroke-width="2"/></svg>';
+  const val=t=>`<b class="vv">${t}</b>`;
+  let n=1;const pages=[];
+  pages.push(`<section class="pg capa">${N(n++)}<div class="lg">${LOGO}</div><div class="cap"><span class="eb">Proposta de operação no TikTok Shop</span><h1>Operação de Live Shop para a <em>${M}</em></h1></div><span class="noar">no ar</span>${brilho}<p class="rod">${esc(G.mes_ref)} · proposta válida por ${G.validade_dias} dias corridos</p></section>`);
+  const rows=[['Objetivo',esc(G.objetivo)],['Formato',esc(pacoteTxt(G))],['Produtos iniciais',esc(G.produtos||'—')],['Complementos',esc(complTxt(G))],['Investimento',val(esc(investTxt(G)))],[G.formato==='dia'?'Data do evento':'Primeira live',G.formato==='dia'?esc(G.ev_data?dExt(G.ev_data):'—'):esc(G.primeira?dExt(G.primeira)+', depois da implantação':'—')]];
+  pages.push(`<section class="pg">${N(n++)}<span class="eb">Resumo da proposta</span><div class="two"><h2>Nossa recomendação para a <em>${M}</em></h2><dl class="tb">${rows.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl></div><p class="ft">A proposta em uma página. As seguintes mostram o formato, o investimento e as condições.</p></section>`);
+  if(G.formato==='recorrente'){
+    let pk=c.pacotes.map(p=>({...p,esc:p.nome===G.pacote}));
+    if(G.pacote==='Personalizado'||!pk.some(p=>p.esc))pk=[...(G.mostrar==='todos'?pk:[]),{nome:'Personalizado',lives:G.lives,horas:G.horas,esc:true}];
+    if(G.mostrar!=='todos')pk=pk.filter(p=>p.esc);
+    const preco=p=>p.esc?investTxt(G,1):(G.remun!=='variavel'&&!(p.fixo>0))?'sob consulta':investTxt({remun:G.remun,fixo:p.fixo,fixo_periodo:'mes',comissao:p.pct||G.comissao},1);
+    pages.push(`<section class="pg">${N(n++)}<span class="eb">Investimento</span><h2>Pacotes mensais de lives</h2><div class="cards c${pk.length}">${pk.map(p=>`<div class="pk${p.esc?' on':''}">${p.esc?`<span class="tag">recomendado para a ${M}</span>`:''}<b>${esc(p.nome)}</b><small>${p.lives} lives de ${String(p.horas).replace('.',',')} h · ${Math.round(p.lives*p.horas)} h por mês</small><strong>${esc(preco(p))}</strong></div>`).join('')}</div>
+      <p class="sm">Todos incluem: estúdio com áudio e vídeo, apresentadores treinados, roteiro e ofertas, operação presencial ou remota, resumo de cada live, calendário mensal com o TikTok e cadastro de SKUs novos.${G.dias?' Dias e horários sugeridos: '+esc(G.dias)+'.':''}</p>
+      ${G.afiliados?`<div class="af"><b>Marca + afiliados</b><span>${G.af_fixo>0?money(G.af_fixo)+' /mês':''}${G.af_fixo>0&&G.af_pct>0?' + ':''}${G.af_pct>0?pctTxt(G.af_pct):''}${!(G.af_fixo>0)&&!(G.af_pct>0)?'sob consulta':''}</span></div><p class="sm">Quem contratar lives e afiliados paga só a comissão das lives sobre as vendas feitas em live. As duas não se somam.</p>`:''}</section>`);
+  }else{
+    pages.push(`<section class="pg">${N(n++)}<span class="eb">Live de lançamento</span><div class="two"><div><h2>Projeto especial para a <em>${M}</em></h2><dl class="tb"><dt>Data</dt><dd>${esc(G.ev_data?dExt(G.ev_data):'a definir')}</dd><dt>Duração</dt><dd>${G.ev_horas} h${G.ev_horas>=12?' · formato lançamento':''}</dd><dt>Local</dt><dd>${esc(G.ev_local)}</dd><dt>Investimento</dt><dd>${val(esc(investTxt(G)))}</dd></dl></div><div><span class="eb" style="margin-bottom:1.2cqw">O que inclui</span><ul class="ls">${(G.inclui||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div>${G.afiliados?`<p class="sm">Inclui também o módulo Marca + afiliados${G.af_fixo>0||G.af_pct>0?': '+[G.af_fixo>0?money(G.af_fixo)+'/mês':'',G.af_pct>0?pctTxt(G.af_pct):''].filter(Boolean).join(' + '):''}.</p>`:''}</section>`);
+  }
+  pages.push(`<section class="pg">${N(n++)}<span class="eb">Condições</span><h2>O que não está no pacote e como contratar</h2><div class="two eq"><div><h3>Fica por conta da marca</h3><ul class="ls"><li>Verba de mídia (GMV Max)</li><li>Comissão dos afiliados</li><li>Produtos, fretes e envios</li><li>Atendimento ao cliente e logística</li><li>Cenário com a identidade visual da marca, orçado à parte</li>${G.formato==='recorrente'?'<li>Lives de 12 horas ou mais, orçadas como lançamento</li>':''}</ul></div><div><h3>Condições</h3><ul class="ls">${G.formato==='recorrente'?`<li>Vigência de ${G.vigencia} ${G.vigencia>1?'meses':'mês'}, renovável</li>`:''}<li>Pagamento: ${esc(G.pagamento)}${G.venc_dia?', todo dia '+G.venc_dia:''}</li>${G.remun!=='fixo'?'<li>Percentual calculado sobre as vendas das lives, sem pedidos cancelados ou devolvidos</li>':''}<li>Início conforme agenda do estúdio</li><li>Proposta válida por ${G.validade_dias} dias corridos. Depois disso, valores e disponibilidade podem mudar.</li></ul></div></div>${G.obs?`<p class="obs">${esc(G.obs).replace(/\n/g,'<br>')}</p>`:''}</section>`);
+  pages.push(`<section class="pg fim">${N(n++)}<div class="two"><div><h2>Escolha o pacote e marcamos a <em>primeira live</em></h2><p class="sm">Com o pacote aprovado, reservamos a agenda do estúdio e começamos a preparação assim que os produtos chegam.</p></div><div><h3>O que a marca envia</h3><ul class="ls"><li>Pacote escolhido</li><li>Lista de produtos e condições comerciais</li><li>Amostras</li><li>Acesso à loja no TikTok Shop</li></ul><h3 style="margin-top:2cqw">Fale com a gente</h3><p class="ct">${(c.contatos||[]).map(x=>`${esc(x.nome)} · ${esc(x.tel)}`).join('<br>')}${c.instagram?'<br>'+esc(c.instagram):''}</p></div></div><span class="noar">bora!</span><p class="rod">As informações desta proposta são confidenciais e destinadas apenas aos envolvidos.</p></section>`);
+  return `<div class="doc">${pages.join('')}</div>`;
+}
+function imprimir(G){
+  let d=document.getElementById('printdoc');if(!d){d=document.createElement('div');d.id='printdoc';document.body.appendChild(d)}
+  d.innerHTML=docHTML(G);const t=document.title;
+  document.title=`Proposta_Implay_${nomeM(G).replace(/[^\p{L}\p{N}]+/gu,'')}_${hoje().slice(0,7)}_v${G.versao||1}`;
+  setTimeout(()=>{window.print();setTimeout(()=>{document.title=t},500)},150);
+}
+
+/* ---------- tela do gerador ---------- */
+V.gerador=()=>{
+  const G=UI.gen||(UI.gen=novaGen()), c=cfgP(), falta=faltando(G);
+  const ch=(k,opts,val)=>`<div class="chips" role="group">${opts.map(([v,t])=>`<button type="button" data-g="${k}" data-gv="${esc(v)}" aria-pressed="${String(val)===String(v)}">${esc(t)}</button>`).join('')}</div>`;
+  const inp=(k,lbl,val,ex='')=>`<label class="f"><span>${lbl}</span><input data-gi="${k}" value="${esc(val??'')}" ${ex}></label>`;
+  const num=(k,lbl,val,suf='')=>`<label class="f"><span>${lbl}</span><input data-gi="${k}" data-num="1" inputmode="decimal" value="${valIn(val)}" placeholder="0">${suf?`<small>${suf}</small>`:''}</label>`;
+  const dt=(k,lbl,val)=>`<label class="f"><span>${lbl}</span><input type="date" data-gi="${k}" value="${val||''}"><span class="ext">${val?esc(dExt(val)):''}</span></label>`;
+  const sec=(n,t,body)=>`<section class="card gsec"><h2><span class="gn">${n}</span>${t}</h2><div class="gbody">${body}</div></section>`;
+  return `<div class="col full">
+   <div class="mh"><div><button class="link" data-go="propostas">‹ Propostas</button><h1 style="margin-top:6px">${G.id?`Proposta P-${pad(G.numero)} · v${G.versao}`:'Nova proposta'}</h1><p>Escolha nos botões; tudo que aparece na proposta pode ser digitado e ajustado. A prévia ao lado atualiza na hora.${G.id&&G.status!=='rascunho'?' Como esta proposta já foi enviada, salvar cria a versão '+(G.versao+1)+' e guarda a anterior.':''}</p></div>
+     <div class="acts"><button class="btn ghost" data-act="gimprimir">Ver PDF</button><button class="btn" data-act="gsalvar" data-st="rascunho">Salvar rascunho</button><button class="btn sticker" data-act="gsalvar" data-st="enviada">Salvar como enviada</button></div></div>
+   <div class="gen">
+    <div class="gform">
+     ${sec(1,'Cliente',`<div class="f"><span>Marca</span><div style="display:flex;gap:8px"><select data-gi="marca_id" style="flex:1"><option value="">Escolha…</option>${D.marcas.filter(m=>m.ativo||m.id===G.marca_id).map(m=>`<option value="${m.id}" ${m.id===G.marca_id?'selected':''}>${esc(m.nome)}</option>`).join('')}</select><button type="button" class="btn sm" data-act="novamarca">+ Marca</button></div></div>
+       <div class="f"><span>Categoria</span>${ch('categoria',[['Alimentos e bebidas','Alimentos e bebidas'],['Saúde','Saúde'],['Beleza e cuidados pessoais','Beleza'],['Pet','Pet'],['Outra','Outra']],G.categoria)}</div>
+       <div class="f"><span>Já vende no TikTok Shop?</span>${ch('ja_vende',[['sim','Sim'],['nao','Não']],G.ja_vende)}</div>`)}
+     ${sec(2,'Formato',`${ch('formato',[['recorrente','Vários dias · lives recorrentes'],['dia','1 dia · lançamento / projeto especial']],G.formato)}
+       <label class="toggle"><input type="checkbox" data-gc="afiliados" ${G.afiliados?'checked':''}> + Marca + afiliados (gestão da loja e dos afiliados)</label>`)}
+     ${G.formato==='recorrente'?sec(3,'Pacote',`${ch('pacote',[...c.pacotes.map(p=>[p.nome,`${p.nome} · ${p.lives}×${String(p.horas).replace('.',',')}h`]),['Personalizado','Personalizado']],G.pacote)}
+       <div class="frow">${num('lives','Lives por mês',G.lives)}${num('horas','Horas por live',G.horas,`Total: ${Math.round(G.lives*G.horas)} h por mês`)}</div>
+       <div class="f"><span>Na página de investimento</span>${ch('mostrar',[['todos','Mostrar todos os pacotes'],['so','Só o escolhido']],G.mostrar)}</div>
+       <div class="f"><span>Local</span>${ch('local',LOCAIS.map(x=>[x,x]),G.local)}</div>
+       ${inp('dias','Dias e horários sugeridos',G.dias,'placeholder="Ex.: terça e quinta 19h, sábado 11h"')}`)
+     :sec(3,'Lançamento / 1 dia',`<div class="frow">${dt('ev_data','Data do evento',G.ev_data)}${num('ev_horas','Duração (horas)',G.ev_horas,G.ev_horas>=12?'12 h ou mais conta como lançamento':'')}</div>
+       <div class="f"><span>Local</span>${ch('ev_local',[['Estúdio Implay','Estúdio Implay'],['Loja da marca','Loja da marca'],['Outro local','Outro local']],LOCAIS.includes(G.ev_local)||['Loja da marca','Outro local'].includes(G.ev_local)?G.ev_local:'Outro local')}</div>
+       ${!['Estúdio Implay','Loja da marca'].includes(G.ev_local)?inp('ev_local','Qual local?',G.ev_local==='Outro local'?'':G.ev_local):''}
+       <div class="f"><span>O que inclui</span><div class="chips" role="group">${INCLUI_DIA.map(x=>`<button type="button" data-gm="inclui" data-gv="${esc(x)}" aria-pressed="${(G.inclui||[]).includes(x)}">${esc(x)}</button>`).join('')}</div></div>`)}
+     ${sec(4,'Remuneração',`${ch('remun',Object.entries(REMUN),G.remun)}
+       <div class="frow">${G.remun!=='variavel'?num('fixo',G.formato==='dia'?'Valor do projeto (R$)':'Fixo por mês (R$)',G.fixo,(c.pacotes.find(p=>p.nome===G.pacote)||{}).fixo>0&&G.formato==='recorrente'?'Tabela: '+money(c.pacotes.find(p=>p.nome===G.pacote).fixo):''):''}${G.remun!=='fixo'?num('comissao','Comissão sobre vendas das lives (%)',G.comissao,(c.pacotes.find(p=>p.nome===G.pacote)||{}).pct>0&&G.formato==='recorrente'?'Tabela: '+pctTxt(c.pacotes.find(p=>p.nome===G.pacote).pct):''):''}</div>
+       ${G.afiliados?`<div class="frow">${num('af_fixo','Afiliados: fixo por mês (R$)',G.af_fixo)}${num('af_pct','Afiliados: comissão (%)',G.af_pct)}</div>`:''}
+       <div class="note"><b>Na proposta vai sair:</b> ${esc(investTxt(G))}</div>`)}
+     ${sec(5,'Recomendação',`<div class="f"><span>Objetivo</span>${ch('objetivo',OBJETIVOS.map(x=>[x,x]),G.objetivo)}<input data-gi="objetivo" value="${esc(G.objetivo)}" style="margin-top:6px"></div>
+       ${inp('produtos','Produtos iniciais (SKUs ou categorias)',G.produtos,'placeholder="Ex.: kit skincare, sérum vitamina C"')}
+       ${inp('complementos','Complementos',G.complementos,`placeholder="${esc(complTxt({...G,complementos:''}))}"`)}
+       ${G.formato==='recorrente'?dt('primeira','Primeira live',G.primeira):''}`)}
+     ${sec(6,'Condições',`${G.formato==='recorrente'?`<div class="f"><span>Vigência</span>${ch('vigencia',[[1,'1 mês'],[3,'3 meses'],[6,'6 meses'],[12,'12 meses']],G.vigencia)}</div>`:''}
+       <div class="f"><span>Pagamento</span>${ch('pagamento',PAGTO.map(x=>[x,x]),G.pagamento)}</div>
+       <div class="frow">${num('venc_dia','Dia do vencimento',G.venc_dia)}${num('validade_dias','Validade da proposta (dias)',G.validade_dias)}</div>
+       ${inp('mes_ref','Mês da proposta (capa)',G.mes_ref)}
+       <label class="f"><span>Observações na proposta (opcional)</span><textarea data-gi="obs" placeholder="Qualquer condição especial, desconto do período, volume combinado…">${esc(G.obs)}</textarea></label>`)}
+     <div class="${falta.length?'callout':'note'}">${falta.length?'Falta preencher: '+falta.join(', ')+'. Dá para salvar como rascunho mesmo assim.':'<b>Tudo preenchido.</b> Salve e use "Ver PDF" para baixar ou imprimir.'}</div>
+    </div>
+    <div class="gprev"><div class="gprev-in" id="gprev">${docHTML(G)}</div></div>
+   </div></div>`;
+};
+function genRefresh(){const p=document.getElementById('gprev');if(p)p.innerHTML=docHTML(UI.gen)}
+async function genSalvar(st){
+  const G=UI.gen;if(!G.marca_id){toast('Escolha a marca',true);return}
+  const falta=faltando(G);if(st==='enviada'&&falta.length){toast('Falta: '+falta.join(', '),true);return}
+  const dados={...G};['id','numero','versao','origem_id','status'].forEach(k=>delete dados[k]);
+  const row={marca_id:G.marca_id,escopo:pacoteTxt(G),valor:G.remun==='variavel'?0:(G.formato==='recorrente'?G.fixo*G.vigencia:G.fixo),validade:addD(hoje(),Number(G.validade_dias)||10),
+    formato:G.formato,remun:G.remun,fixo:G.remun==='variavel'?0:G.fixo,fixo_periodo:G.formato==='dia'?'projeto':'mes',comissao:G.remun==='fixo'?0:G.comissao,vigencia:G.vigencia,dados,atualizado_em:new Date().toISOString()};
+  let r;
+  if(G.id&&G.status!=='rascunho'){
+    r=await save('propostas',{...row,status:st,numero:G.numero,versao:G.versao+1,origem_id:G.origem_id||G.id});
+    if(r)await sb.from('propostas').update({status:'substituida'}).eq('id',G.id);
+  }else r=await save('propostas',{...row,status:st},G.id);
+  if(!r)return;
+  await loadAll();const p=D.props.find(x=>x.id===(r.id||G.id));if(p)UI.gen=genDeProposta(p);
+  redraw();toast(st==='enviada'?`Proposta P-${pad(p.numero)} v${p.versao} salva como enviada`:'Rascunho salvo');
+}
+document.addEventListener('input',e=>{
+  const el=e.target;if(!el.dataset||!el.dataset.gi||!UI.gen)return;
+  const k=el.dataset.gi;let val=el.value;
+  if(el.dataset.num){val=parseValor(val);if(isNaN(val))return}
+  UI.gen[k]=val;
+  if(k==='marca_id'||el.type==='date'){redraw();return}
+  genRefresh();
+});
+document.addEventListener('change',e=>{const el=e.target;if(el.dataset&&el.dataset.gc&&UI.gen){UI.gen[el.dataset.gc]=el.checked;redraw()}});
+function genChip(t){
+  const G=UI.gen,k=t.dataset.g;let v=t.dataset.gv;if(['vigencia'].includes(k))v=Number(v);
+  if(t.dataset.gm){const a=new Set(G.inclui||[]);a.has(v)?a.delete(v):a.add(v);G.inclui=[...a];redraw();return}
+  G[k]=v;
+  if(k==='pacote'&&v!=='Personalizado'){const p=cfgP().pacotes.find(x=>x.nome===v);if(p){G.lives=p.lives;G.horas=p.horas;if(p.fixo>0)G.fixo=p.fixo;if(p.pct>0)G.comissao=p.pct}}
+  if(k==='formato'){G.fixo_periodo=v==='dia'?'projeto':'mes';if(v==='dia'&&G.objetivo===OBJETIVOS[0])G.objetivo=OBJETIVOS[1]}
+  redraw();
+}
+
+/* ---------- lista de propostas ---------- */
+V.propostas=()=>{
+  const op=canOp(), ps=D.props.filter(p=>p.status!=='substituida'&&match(marca(p.marca_id).nome,p.escopo,'P-'+pad(p.numero)));
+  const atv=D.props.filter(p=>p.status!=='substituida'), fech=atv.filter(p=>['aceita','perdida'].includes(p.status)), ac=fech.filter(p=>p.status==='aceita');
+  const neg=atv.filter(p=>['enviada','negociacao'].includes(p.status));
+  return `<div class="col full">
+   <div class="mh"><div><h1>Propostas</h1><p>Monte a proposta com botões, ajuste o que precisar e baixe o PDF. Cada mudança depois de enviada vira uma nova versão. Aceita, ela vira contrato.</p></div>
+     <div class="acts">${isAdm()?'<button class="btn ghost" data-act="precos">Tabela de preços</button>':''}${op?'<button class="btn sticker" data-act="gnova">+ Gerar proposta</button>':''}</div></div>
+   <div class="grid3">
+     <div class="kpi"><span class="label">Em negociação</span><span class="v num">${moneyK(neg.reduce((s,p)=>s+Number(p.valor),0))}</span><span class="s">${neg.length} proposta(s) · fixo × vigência</span></div>
+     <div class="kpi"><span class="label">Taxa de fechamento</span><span class="v num">${fech.length?Math.round(ac.length/fech.length*100)+'%':'—'}</span><span class="s">${ac.length} de ${fech.length} decididas</span></div>
+     <div class="kpi"><span class="label">Ticket médio</span><span class="v num">${ac.length?moneyK(ac.reduce((s,p)=>s+Number(p.valor),0)/ac.length):'—'}</span><span class="s">propostas aceitas</span></div>
+   </div>
+   <section class="card">${ps.length?`<div class="tblwrap"><table><thead><tr><th>Nº</th><th>Marca</th><th>Formato</th><th>Investimento</th><th>Situação</th><th>Validade</th></tr></thead><tbody>${ps.map(p=>`<tr class="click" data-prop="${p.id}"><td class="num muted">P-${pad(p.numero)}${p.versao>1?' · v'+p.versao:''}</td><td><div class="who">${logo(p.marca_id)}<b>${esc(marca(p.marca_id).nome)}</b></div></td><td style="max-width:300px;font-size:12px">${esc(p.escopo)}</td><td class="num" style="font-weight:700;font-size:12px">${esc(investTxt({remun:p.remun||'fixo',fixo:p.fixo||p.valor,fixo_periodo:p.fixo_periodo,comissao:p.comissao},1))}</td><td>${pill(...(PROP_ST[p.status]||['?','mute']))}${D.contratos.some(c=>c.proposta_id===p.id)?' <span class="muted" style="font-size:11px">· contrato</span>':''}</td><td class="muted">${p.validade?dCurto(p.validade):'—'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">Nenhuma proposta ainda. Toque em "+ Gerar proposta".</p>'}</section>
+  </div>`;
+};
+DET.prop=id=>{
+  const p=D.props.find(x=>x.id===id);if(!p)return null;
+  const op=canOp(), G=genDeProposta(p), orig=p.origem_id||p.id, vers=D.props.filter(x=>x.id===orig||x.origem_id===orig).sort((a,b)=>b.versao-a.versao);
+  const ct=D.contratos.find(c=>c.proposta_id===p.id);
+  return `<div class="dhead"><div class="who">${logo(p.marca_id)}<div><b style="font-size:15px">${esc(marca(p.marca_id).nome)}</b><small>Proposta P-${pad(p.numero)} · v${p.versao}</small></div></div>${fecharBtn}</div>
+   <div>${pill(...(PROP_ST[p.status]||['?','mute']))}</div>
+   <dl class="dl"><dt>Formato</dt><dd>${esc(p.escopo)}</dd><dt>Investimento</dt><dd>${esc(investTxt(G))}</dd>${p.formato!=='dia'?`<dt>Vigência</dt><dd>${p.vigencia} meses</dd>`:''}<dt>Validade</dt><dd>${p.validade?dExt(p.validade):'—'}</dd>${p.motivo?`<dt>Motivo</dt><dd>${esc(p.motivo)}</dd>`:''}</dl>
+   ${op&&p.status!=='substituida'?`<div><span class="label">Mudar situação</span><div class="chips" style="margin-top:6px">${['enviada','negociacao','aceita','perdida'].map(s=>`<button data-act="propst" data-id="${p.id}" data-s="${s}" aria-pressed="${p.status===s}">${PROP_ST[s][0]}</button>`).join('')}</div></div>
+   ${p.status==='perdida'?`<form id="fmotivo" data-id="${p.id}" style="display:flex;gap:8px;align-items:flex-end"><label class="f" style="flex:1"><span>Por que perdemos</span><input id="pm-mot" value="${esc(p.motivo)}" placeholder="Ex.: preço, timing"></label><button class="btn sm" type="submit">Salvar</button></form>`:''}`:''}
+   <div style="display:flex;gap:8px;flex-wrap:wrap">
+     <button class="btn sticker" data-act="gpdf" data-id="${p.id}">Ver PDF</button>
+     ${op&&p.status!=='substituida'?`<button class="btn" data-act="geditar" data-id="${p.id}">${p.status==='rascunho'?'Editar no gerador':'Mudar valores (nova versão)'}</button>`:''}
+     ${op?`<button class="btn ghost" data-act="gduplicar" data-id="${p.id}">Duplicar</button>`:''}
+   </div>
+   ${p.status==='aceita'&&op?(ct?`<button class="btn" data-contrato="${ct.id}">Abrir contrato C-${pad(ct.numero)} ›</button>`:`<button class="btn ok" data-act="propcontrato" data-id="${p.id}">Gerar contrato desta proposta</button>`):''}
+   ${vers.length>1?`<div><span class="label">Versões</span><div class="list" style="margin-top:6px">${vers.map(x=>`<button class="row click" data-prop="${x.id}"><span class="grow"><b>v${x.versao} · ${esc(investTxt({remun:x.remun,fixo:x.fixo,fixo_periodo:x.fixo_periodo,comissao:x.comissao},1))}</b><small>${tempo(x.criado_em)} · ${esc(pNome(x.criado_por))}</small></span>${pill(...(PROP_ST[x.status]||['?','mute']))}</button>`).join('')}</div></div>`:''}`;
+};
+
+/* ---------- tabela de preços ---------- */
+FORM.precos=()=>{
+  const c=cfgP();
+  return `<form id="fprecos"><div class="dhead"><h2>Tabela de preços</h2>${fecharBtn}</div>
+   <p class="muted" style="margin:6px 0 14px">Valores que entram pré-preenchidos no gerador. Na proposta sempre dá para mudar.</p>
+   <div style="display:flex;flex-direction:column;gap:14px">
+   <div class="f"><span>Pacotes de lives recorrentes</span>
+    <div class="tblwrap"><table style="min-width:440px"><thead><tr><th>Nome</th><th>Lives/mês</th><th>Horas</th><th>Fixo/mês R$</th><th>%</th></tr></thead><tbody>
+    ${[...c.pacotes,{nome:'',lives:'',horas:'',fixo:'',pct:''}].map((p,i)=>`<tr><td><input class="tin" id="pk-n-${i}" value="${esc(p.nome)}" placeholder="${i===c.pacotes.length?'+ novo pacote':''}"></td><td><input class="tin" id="pk-l-${i}" inputmode="numeric" value="${p.lives}"></td><td><input class="tin" id="pk-h-${i}" inputmode="decimal" value="${valIn(p.horas)}"></td><td><input class="tin" id="pk-f-${i}" inputmode="decimal" value="${valIn(p.fixo)}"></td><td><input class="tin" id="pk-p-${i}" inputmode="decimal" value="${valIn(p.pct)}"></td></tr>`).join('')}
+    </tbody></table></div><small>Para tirar um pacote, apague o nome.</small></div>
+   <div class="frow"><label class="f"><span>Marca + afiliados · fixo/mês (R$)</span><input id="af-f" inputmode="decimal" value="${valIn(c.afiliados.fixo)}"></label><label class="f"><span>Marca + afiliados · %</span><input id="af-p" inputmode="decimal" value="${valIn(c.afiliados.pct)}"></label></div>
+   <div class="frow"><label class="f"><span>Validade padrão (dias)</span><input id="cf-val" inputmode="numeric" value="${c.validade_dias}"></label><label class="f"><span>Vigência padrão (meses)</span><input id="cf-vig" inputmode="numeric" value="${c.vigencia_meses}"></label></div>
+   <label class="f"><span>Contatos na última página (um por linha: Nome · telefone)</span><textarea id="cf-ct">${esc((c.contatos||[]).map(x=>x.nome+' · '+x.tel).join('\n'))}</textarea></label>
+   <label class="f"><span>Instagram</span><input id="cf-ig" value="${esc(c.instagram||'')}"></label>
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">Salvar tabela</button></div></form>`;
+};
+
+/* ---------- contratos ---------- */
+const condsDe=cid=>D.conds.filter(x=>x.contrato_id===cid).sort((a,b)=>a.vale_desde.localeCompare(b.vale_desde)||a.criado_em.localeCompare(b.criado_em));
+const condEm=(cid,data)=>{const cs=condsDe(cid).filter(x=>x.vale_desde<=data);return cs[cs.length-1]||null};
+function livesDoContrato(c){
+  const js=D.jobs.filter(j=>j.contrato_id===c.id).map(j=>j.id);
+  return D.lives.filter(l=>l.status==='feita'&&(js.length?js.includes(l.job_id):(l.marca_id===c.marca_id&&l.data>=c.inicio&&(!c.fim||l.data<=c.fim))));
+}
+function mesContrato(c,p){
+  const ls=livesDoContrato(c).filter(l=>l.data.startsWith(p));
+  const gmv=ls.reduce((s,l)=>s+Number(l.gmv||0),0);
+  const com=ls.reduce((s,l)=>{const k=condEm(c.id,l.data);return s+(k&&k.remun!=='fixo'?Number(l.gmv||0)*Number(k.comissao)/100:0)},0);
+  const k=condEm(c.id,p+'-28')||condEm(c.id,p+'-01');
+  const fixo=k&&k.remun!=='variavel'&&k.fixo_periodo==='mes'?Number(k.fixo):0;
+  return {lives:ls.length,gmv,com,fixo,total:fixo+com,cond:k};
+}
+V.contratos=()=>{
+  const op=canOp(), {p,nome}=mesPrefixo(), cs=D.contratos.filter(c=>(UI.verCanc?['encerrado','cancelado'].includes(c.status):['vigente','rascunho'].includes(c.status))&&match(marca(c.marca_id).nome,c.titulo,'C-'+pad(c.numero)));
+  return `<div class="col full">
+   <div class="mh"><div><h1>Contratos</h1><p>O contrato guarda as condições de cada marca. Quando valor ou comissão mudam (época, volume, renegociação), registre uma nova condição: o histórico fica e cada live usa a condição da data dela.</p></div>${op?'<div class="acts"><button class="btn sticker" data-act="novocontrato">+ Contrato</button></div>':''}</div>
+   <div class="chips"><button data-act="vercanc" aria-pressed="${!UI.verCanc}">Vigentes</button><button data-act="vercanc" aria-pressed="${UI.verCanc}">Encerrados e cancelados</button></div>
+   ${cs.length?`<div class="grid3">${cs.map(c=>{const k=condEm(c.id,hoje())||condsDe(c.id)[0],m=mesContrato(c,p);return `<button class="roomcard" data-contrato="${c.id}"><span class="who">${logo(c.marca_id)}<span style="min-width:0"><b>${esc(marca(c.marca_id).nome)}</b><small>C-${pad(c.numero)} · ${esc(c.titulo||'Contrato')}</small></span></span>
+     <b style="font-size:13px">${k?esc(investTxt(k,1)):'<span class="muted">sem condição</span>'}</b>
+     <small class="muted">${dCurto(c.inicio)}${c.fim?' até '+dCurto(c.fim):' · sem data de fim'}${condsDe(c.id).length>1?' · '+condsDe(c.id).length+' condições':''}</small>
+     <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:4px">${pill(...CONT_ST[c.status])}${isAdm()?`<span class="muted" style="font-size:11px">${nome}: <b style="color:var(--text)">${money(m.total)}</b></span>`:''}</div></button>`}).join('')}</div>`:'<section class="card"><p class="empty">Nenhum contrato aqui. Gere um a partir de uma proposta aceita ou toque em "+ Contrato".</p></section>'}
+  </div>`;
+};
+DET.contrato=id=>{
+  const c=D.contratos.find(x=>x.id===id);if(!c)return null;
+  const op=canOp(), adm=isAdm(), ks=condsDe(c.id), kh=condEm(c.id,hoje()), js=D.jobs.filter(j=>j.contrato_id===c.id), pr=D.props.find(x=>x.id===c.proposta_id);
+  const meses=[0,-1,-2].map(o=>({...mesPrefixo(o),...mesContrato(c,mesPrefixo(o).p)}));
+  return `<div class="dhead"><div class="who">${logo(c.marca_id)}<div><b style="font-size:15px">${esc(marca(c.marca_id).nome)}</b><small>Contrato C-${pad(c.numero)}${c.titulo?' · '+esc(c.titulo):''}</small></div></div>${fecharBtn}</div>
+   <div>${pill(...CONT_ST[c.status])}</div>
+   <div class="card" style="background:var(--cobalt);color:#fff;border:0"><span class="label" style="color:rgba(255,255,255,.78)">Condição de hoje</span><b style="display:block;font-family:var(--f-display);font-size:17px;margin-top:4px">${kh?esc(investTxt(kh)):'Nenhuma condição vale hoje'}</b>${kh&&(kh.lives_mes||kh.horas_live)?`<small>${kh.lives_mes?kh.lives_mes+' lives/mês':''}${kh.horas_live?' · '+String(kh.horas_live).replace('.',',')+' h por live':''}</small>`:''}</div>
+   <dl class="dl"><dt>Vigência</dt><dd>${dExt(c.inicio)}${c.fim?' até '+dExt(c.fim):' · sem data de fim'}</dd><dt>Pagamento</dt><dd>${esc(c.pagamento||'—')}${c.vencimento_dia?', todo dia '+c.vencimento_dia:''}</dd>${c.escopo?`<dt>Escopo</dt><dd>${esc(c.escopo)}</dd>`:''}${pr?`<dt>Proposta</dt><dd><button class="link" style="font-size:13px" data-prop="${pr.id}">P-${pad(pr.numero)} v${pr.versao} ›</button></dd>`:''}${c.link_arquivo?`<dt>Arquivo</dt><dd><a href="${esc(c.link_arquivo)}" target="_blank" rel="noopener">Abrir contrato assinado ›</a></dd>`:''}${c.obs?`<dt>Obs.</dt><dd>${esc(c.obs)}</dd>`:''}</dl>
+   <div><div class="card-h" style="margin-bottom:6px"><span class="label">Condições ao longo do tempo</span>${op?`<button class="btn sm" data-act="novacond" data-id="${c.id}">+ Nova condição</button>`:''}</div>
+     <div class="list">${ks.slice().reverse().map(k=>`<div class="row"><div class="grow"><b>${esc(investTxt(k,1))}</b><small>a partir de ${dCurto(k.vale_desde)}${k.lives_mes?' · '+k.lives_mes+' lives/mês':''}${k.motivo?' · '+esc(k.motivo):''}</small></div>${k===kh?pill('Vale hoje','ok'):k.vale_desde>hoje()?pill('Futura','info'):pill('Anterior','mute')}</div>`).join('')||'<p class="empty">Nenhuma condição. Toque em "+ Nova condição".</p>'}</div></div>
+   ${adm?`<div><span class="label">Quanto faturar</span><div class="list" style="margin-top:6px">${meses.map(m=>`<div class="row"><div class="grow"><b>${m.nome[0].toUpperCase()+m.nome.slice(1)} · ${money(m.total)}</b><small>${m.lives} live(s) · GMV ${money(m.gmv)}${m.fixo?' · fixo '+money(m.fixo):''}${m.com?' · comissão '+money(m.com):''}</small></div>${m.total>0?`<button class="btn sm" data-act="faturar" data-id="${c.id}" data-p="${m.p}">Lançar a receber</button>`:''}</div>`).join('')}</div><small class="muted">Comissão de cada live usa a condição que valia na data dela.</small></div>`:''}
+   <div><div class="card-h" style="margin-bottom:6px"><span class="label">Jobs deste contrato</span>${op?`<button class="btn sm" data-act="novojob" data-contrato="${c.id}">+ Job</button>`:''}</div><div class="list">${js.map(j=>`<button class="row click" data-job="${j.id}"><span class="grow"><b>${esc(j.nome)}</b><small>${ETAPAS[j.etapa]}</small></span>${jobSit(j)}</button>`).join('')||'<p class="empty">Nenhum job ligado. Sem job ligado, o contrato conta todas as lives da marca no período.</p>'}</div></div>
+   ${op?`<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="editcontrato" data-id="${c.id}">Editar contrato</button></div>`:''}`;
+};
+FORM.contrato=(id,ex={})=>{
+  const c=id?D.contratos.find(x=>x.id===id):Object.assign({marca_id:'',proposta_id:null,titulo:'',inicio:hoje(),fim:'',status:'vigente',escopo:'',pagamento:'PIX',vencimento_dia:10,link_arquivo:'',obs:''},ex.c||{});
+  const k=ex.k||{remun:'misto',fixo:'',fixo_periodo:'mes',comissao:'',lives_mes:'',horas_live:''};
+  if(!D.marcas.length) return `<div class="dhead"><h2>Novo contrato</h2>${fecharBtn}</div><div class="callout">Cadastre a marca primeiro.</div>`;
+  return `<form id="fcontrato" data-id="${id||''}"><div class="dhead"><h2>${id?'Editar contrato C-'+pad(c.numero):'Novo contrato'}</h2>${fecharBtn}</div>
+   <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
+   <label class="f"><span>Marca</span><select id="ct-marca">${D.marcas.map(m=>`<option value="${m.id}" ${m.id===c.marca_id?'selected':''}>${esc(m.nome)}</option>`).join('')}</select></label>
+   <input type="hidden" id="ct-prop" value="${c.proposta_id||''}">
+   <label class="f"><span>Título</span><input id="ct-tit" value="${esc(c.titulo)}" placeholder="Ex.: Lives recorrentes 2026"></label>
+   <div class="frow">${dataIn('ct-ini',c.inicio,'Início')}${dataIn('ct-fim',c.fim,'Fim (opcional)')}</div>
+   <div class="f"><span>Situação</span>${chips('cst',Object.entries(CONT_ST).map(([k,[t]])=>[k,t]),c.status)}</div>
+   <div class="frow"><div class="f"><span>Pagamento</span>${chips('cpag',PAGTO.map(x=>[x,x]),c.pagamento)}</div><label class="f"><span>Dia do vencimento</span><input id="ct-venc" inputmode="numeric" value="${c.vencimento_dia??''}"></label></div>
+   <label class="f"><span>Escopo</span><textarea id="ct-esc">${esc(c.escopo)}</textarea></label>
+   ${id?'':`<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:12px"><h3>Condição inicial</h3>${condCampos(k)}</div>`}
+   <label class="f"><span>Link do contrato assinado (Drive, Dropbox…)</span><input id="ct-link" value="${esc(c.link_arquivo)}" placeholder="https://"></label>
+   <label class="f"><span>Observação</span><input id="ct-obs" value="${esc(c.obs)}"></label>
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">${id?'Salvar':'Criar contrato'}</button></div></form>`;
+};
+function condCampos(k){
+  return `<div class="f"><span>Remuneração</span>${chips('crem',Object.entries(REMUN),k.remun)}</div>
+   <div class="frow"><label class="f" data-show="crem=fixo|misto"><span>Fixo (R$)</span><input id="cd-fixo" inputmode="decimal" value="${valIn(k.fixo)}"></label><div class="f" data-show="crem=fixo|misto"><span>Período</span>${chips('cper',[['mes','Por mês'],['projeto','Por projeto']],k.fixo_periodo)}</div></div>
+   <label class="f" data-show="crem=variavel|misto"><span>Comissão sobre vendas das lives (%)</span><input id="cd-pct" inputmode="decimal" value="${valIn(k.comissao)}"></label>
+   <div class="frow"><label class="f"><span>Lives por mês (opcional)</span><input id="cd-lives" inputmode="numeric" value="${k.lives_mes??''}"></label><label class="f"><span>Horas por live (opcional)</span><input id="cd-horas" inputmode="decimal" value="${valIn(k.horas_live)}"></label></div>`;
+}
+FORM.cond=(cid)=>{
+  const c=D.contratos.find(x=>x.id===cid), at=condEm(cid,hoje())||condsDe(cid).slice(-1)[0]||{remun:'misto',fixo:'',fixo_periodo:'mes',comissao:''};
+  const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+1);
+  return `<form id="fcond" data-c="${cid}"><div class="dhead"><h2>Nova condição · C-${pad(c.numero)}</h2>${fecharBtn}</div>
+   <p class="muted" style="margin:6px 0 14px">Use quando valor, comissão ou volume mudarem. A condição anterior continua valendo até a data abaixo.</p>
+   <div style="display:flex;flex-direction:column;gap:14px">
+   ${dataIn('cd-desde',dkey(d),'Vale a partir de')}
+   ${condCampos(at)}
+   <label class="f"><span>Motivo</span><input id="cd-mot" placeholder="Ex.: Black Friday, volume maior, renegociação"></label>
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">Registrar condição</button></div></form>`;
+}
+function lerCond(f){
+  const fixo=parseValor(v('cd-fixo')),pct=parseValor(v('cd-pct'));if(isNaN(fixo)||isNaN(pct))return null;
+  const remun=gv(f,'crem')||'misto';
+  return {remun,fixo:remun==='variavel'?0:fixo||0,fixo_periodo:gv(f,'cper')||'mes',comissao:remun==='fixo'?0:pct||0,lives_mes:v('cd-lives')?parseInt(v('cd-lives'),10):null,horas_live:v('cd-horas')?parseValor(v('cd-horas')):null};
+}
+
+/* =========================================================================
    SELLER (hosts, operadores, editores) · celular
    ========================================================================= */
 function drawSeller(){
@@ -1036,7 +1360,7 @@ function toast(m,bad){clearTimeout(tt);let t=document.querySelector('.toast');if
 async function depois(msg){await loadAll();redraw();if(UI.layer)renderLayer();if(msg)toast(msg)}
 
 document.addEventListener('click',async e=>{
-  const t=e.target.closest('[data-act],[data-go],[data-live],[data-job],[data-marca],[data-prop],[data-free],[data-rec],[data-pag],[data-filtro],[data-lmode],[data-group] button,[data-scrim]');
+  const t=e.target.closest('[data-act],[data-go],[data-g],[data-contrato],[data-live],[data-job],[data-marca],[data-prop],[data-free],[data-rec],[data-pag],[data-filtro],[data-lmode],[data-group] button,[data-scrim]');
   if(!t)return;
   if(t.hasAttribute('data-scrim')){if(e.target===t)fechar();return}
   if(t.closest('[data-group]')&&t.dataset.v!==undefined){e.preventDefault();t.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===t)));if(t.parentElement.dataset.group==='cor'){const ci=document.getElementById('mc-cor');if(ci)ci.value=t.dataset.v}syncForm();return}
@@ -1046,7 +1370,9 @@ document.addEventListener('click',async e=>{
   if(t.dataset.live&&!t.dataset.act){abrir('det','live',t.dataset.live);return}
   if(t.dataset.job&&!t.dataset.act){abrir('det','job',t.dataset.job);return}
   if(t.dataset.marca){abrir('form','marca',t.dataset.marca);return}
-  if(t.dataset.prop){abrir('form','prop',t.dataset.prop);return}
+  if(t.dataset.prop){abrir('det','prop',t.dataset.prop);return}
+  if(t.dataset.contrato&&!t.dataset.act){abrir('det','contrato',t.dataset.contrato);return}
+  if(t.dataset.g){genChip(t);return}
   if(t.dataset.free){abrir('form','free',t.dataset.free);return}
   if(t.dataset.rec){abrir('form','rec',t.dataset.rec);return}
   if(t.dataset.pag){abrir('form','pag',t.dataset.pag);return}
@@ -1059,10 +1385,9 @@ document.addEventListener('click',async e=>{
     case 'reload': start(); return;
     case 'novalive': abrir('form','live',null,{d:t.dataset.d,job:t.dataset.job}); return;
     case 'editlive': abrir('form','live',id); return;
-    case 'novojob': abrir('form','job',null); return;
+    case 'novojob': abrir('form','job',null,{contrato:t.dataset.contrato}); return;
     case 'editjob': abrir('form','job',id); return;
     case 'novamarca': UI.voltar=UI.layer&&UI.layer.kind==='form'?{...UI.layer}:null; abrir('form','marca',null); return;
-    case 'novaprop': abrir('form','prop',null); return;
     case 'novofree': abrir('form','free',null); return;
     case 'novorec': abrir('form','rec',null,{job:t.dataset.job}); return;
     case 'novopag': abrir('form','pag',null); return;
@@ -1079,7 +1404,21 @@ document.addEventListener('click',async e=>{
     case 'etapa': {const j=job(id);const n=Math.max(0,Math.min(8,j.etapa+Number(t.dataset.d)));if(await save('jobs',{etapa:n},id)) depois('Movido para '+ETAPAS[n]);return}
     case 'canceljob': UI.confirm=null; if(await save('jobs',{status:'cancelado'},id)) depois('Job cancelado'); return;
     case 'reativajob': if(await save('jobs',{status:'ativo'},id)) depois('Job reativado'); return;
-    case 'propjob': {const p=D.props.find(x=>x.id===id);abrir('form','job',null,{marca:p.marca_id,etapa:2,valor:p.valor,prop:p.id});return}
+    case 'gnova': UI.gen=novaGen();UI.view='gerador';fechar();draw();window.scrollTo(0,0);return;
+    case 'geditar': {const p=D.props.find(x=>x.id===id);UI.gen=genDeProposta(p);UI.view='gerador';fechar();draw();window.scrollTo(0,0);return}
+    case 'gduplicar': {const p=D.props.find(x=>x.id===id);const g=genDeProposta(p);UI.gen=novaGen({...g,id:null,numero:null,versao:1,origem_id:null,status:'rascunho',mes_ref:mesRefAtual()});UI.view='gerador';fechar();draw();window.scrollTo(0,0);toast('Cópia aberta no gerador. Troque a marca e os valores.');return}
+    case 'gsalvar': genSalvar(t.dataset.st); return;
+    case 'gimprimir': imprimir(UI.gen); return;
+    case 'gpdf': imprimir(genDeProposta(D.props.find(x=>x.id===id))); return;
+    case 'propst': {const s2=t.dataset.s;if(await save('propostas',{status:s2},id)){await depois(s2==='aceita'?'Proposta aceita! Gere o contrato.':'Situação atualizada')}return}
+    case 'propcontrato': {const p=D.props.find(x=>x.id===id),G=genDeProposta(p);abrir('form','contrato',null,{c:{marca_id:p.marca_id,proposta_id:p.id,titulo:G.formato==='dia'?'Live de lançamento':'Lives recorrentes',escopo:pacoteTxt(G)+(G.afiliados?' · Marca + afiliados':''),pagamento:G.pagamento,vencimento_dia:G.venc_dia,fim:G.formato==='recorrente'?addD(addD(hoje(),G.vigencia*30),0):''},k:{remun:p.remun,fixo:p.fixo,fixo_periodo:p.fixo_periodo,comissao:p.comissao,lives_mes:G.formato==='recorrente'?G.lives:'',horas_live:G.formato==='recorrente'?G.horas:''}});return}
+    case 'precos': abrir('form','precos',null); return;
+    case 'novocontrato': abrir('form','contrato',null); return;
+    case 'editcontrato': abrir('form','contrato',id); return;
+    case 'novacond': abrir('form','cond',id); return;
+    case 'faturar': {const c=D.contratos.find(x=>x.id===id),m=mesContrato(c,t.dataset.p),j=D.jobs.find(x=>x.contrato_id===c.id);const [y,mm]=t.dataset.p.split('-').map(Number);const venc=new Date(y,mm,Math.min(28,c.vencimento_dia||10));
+      const row={marca_id:c.marca_id,job_id:j?j.id:null,descricao:`C-${pad(c.numero)} · ${MESES[mm-1]}: ${[m.fixo?'fixo '+money(m.fixo):'',m.com?'comissão '+money(m.com)+' (GMV '+money(m.gmv)+')':''].filter(Boolean).join(' + ')}`,valor:Math.round(m.total*100)/100,vencimento:dkey(venc)};
+      if(await save('recebimentos',row))depois('Lançado em A receber: '+money(row.valor));return}
     case 'recebido': if(await save('recebimentos',{status:'recebido',recebido_em:hoje()},id)) depois('Marcado como recebido'); return;
     case 'cancelrec': UI.confirm=null; if(await save('recebimentos',{status:'cancelado'},id)){fechar();depois('Cancelado')} return;
     case 'nf': {const ps=D.pags.filter(p=>p.freelancer_id===t.dataset.f&&p.status==='a pagar');const val=t.getAttribute('aria-pressed')!=='true';const {error}=await sb.from('pagamentos_freela').update({nf_recebida:val}).in('id',ps.map(p=>p.id));if(error)toast(trErr(error.message),true);else depois(val?'NF marcada como recebida':'NF desmarcada');return}
@@ -1094,7 +1433,7 @@ document.addEventListener('click',async e=>{
 });
 document.addEventListener('change',async e=>{
   const el=e.target;
-  if(el.matches('[data-ext]')){const x=document.getElementById(el.id+'-ext');if(x)x.textContent=el.value?dExt(el.value):'';return}
+  if(el.matches('[data-ext]')){const x=document.getElementById(el.id+'-ext');if(x)x.textContent=el.value?dExt(el.value):'';if(el.id==='lv-data'){const b=document.querySelector(`[data-group="jafoi"] [data-v="${el.value&&el.value<hoje()?'sim':'nao'}"]`);if(b)b.click()}return}
   if(el.id==='mc-cor'){document.querySelectorAll('[data-group="cor"] button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v.toLowerCase()===el.value.toLowerCase())));return}
   if(el.id==='estdia'){UI.estDia=el.value||null;draw();return}
   if(el.id==='rc-job'&&el.value){const j=job(el.value);const m=document.getElementById('rc-marca');if(j&&m)m.value=j.marca_id;return}
@@ -1134,7 +1473,10 @@ document.addEventListener('submit',async e=>{
       precisa_host:hs!=='__nao',host_id:hs.startsWith('__')?null:hs,precisa_operador:os!=='__nao',operador_id:os.startsWith('__')?null:os};
     const conflito=D.lives.find(l=>l.id!==id&&l.status!=='cancelada'&&l.local==='paulista'&&local==='paulista'&&l.sala===sala&&l.data===data&&hm(l.ini)<fim&&ini<hm(l.fim));
     if(conflito&&!f.dataset.ok){f.dataset.ok='1';return ferr(`A sala ${sala} já tem ${marca(conflito.marca_id).nome} das ${hm(conflito.ini)} às ${hm(conflito.fim)}. Toque de novo em salvar para manter mesmo assim.`)}
+    const jafoi=!id&&gv(f,'jafoi')==='sim';
+    if(jafoi){const g=parseValor(v('lv-gmv'));if(isNaN(g))return ferr('GMV inválido.');Object.assign(row,{status:'feita',gmv:v('lv-gmv')?g:null,pedidos:v('lv-ped')?parseInt(v('lv-ped').replace(/\D/g,''),10):null,pico:v('lv-pico')?parseInt(v('lv-pico').replace(/\D/g,''),10):null});if(!row.host_id&&row.precisa_host){row.precisa_host=false}if(!row.operador_id&&row.precisa_operador){row.precisa_operador=false}}
     const r=await save('lives',row,id);if(!r)return;
+    if(jafoi){UI.layer={kind:'form',type:'live',id:null,extra:{d:data,job:jb.id}};await depois('Live lançada como feita. Pode lançar a próxima.');return}
     UI.layer={kind:'det',type:'live',id:r.id||id};await depois(id?'Live salva':(row.host_id||!row.precisa_host)&&(row.operador_id||!row.precisa_operador)?'Live criada':'Live criada · vaga aberta para os freelancers');
   });
   if(f.id==='fres') return run(async()=>{
@@ -1146,7 +1488,8 @@ document.addEventListener('submit',async e=>{
   /* ---- job ---- */
   if(f.id==='fjob') return run(async()=>{
     const valor=parseValor(v('jb-valor'));if(isNaN(valor))return ferr('Valor inválido.');
-    const row={marca_id:v('jb-marca'),nome:v('jb-nome'),etapa:Number(gv(f,'etapa')||0),valor:valor||0,lives_previstas:parseInt(v('jb-lives')||'0',10)||0,canais:v('jb-canais'),responsavel_id:v('jb-resp')||null,prox_passo:v('jb-passo'),prox_data:v('jb-pdata')||null,alerta:gv(f,'alerta'),obs:v('jb-obs')};
+    const row={marca_id:v('jb-marca'),nome:v('jb-nome'),etapa:Number(gv(f,'etapa')||0),valor:valor||0,lives_previstas:parseInt(v('jb-lives')||'0',10)||0,canais:v('jb-canais'),responsavel_id:v('jb-resp')||null,prox_passo:v('jb-passo'),prox_data:v('jb-pdata')||null,alerta:gv(f,'alerta'),obs:v('jb-obs'),contrato_id:v('jb-contrato')||null};
+    if(row.contrato_id){const c=D.contratos.find(x=>x.id===row.contrato_id);if(c&&c.marca_id!==row.marca_id)return ferr('O contrato escolhido é de outra marca.')}
     if(!row.marca_id)return ferr('Escolha a marca.');if(!row.nome)return ferr('Dê um nome para o job.');
     const r=await save('jobs',row,id);if(!r)return;
     if(f.dataset.fromprop) await sb.from('propostas').update({job_id:r.id}).eq('id',f.dataset.fromprop);
@@ -1159,16 +1502,33 @@ document.addEventListener('submit',async e=>{
     if(!row.nome)return ferr('Digite o nome da marca.');
     const r=await save('marcas',row,id);if(!r)return;
     const volta=UI.voltar;UI.voltar=null;await loadAll();
+    if(!volta&&UI.view==='gerador'&&UI.gen&&r.id&&!id){UI.gen.marca_id=r.id}
     if(volta){UI.layer=volta;renderLayer();const sel=document.getElementById(volta.type==='job'?'jb-marca':volta.type==='prop'?'pp-marca':'');if(sel&&r.id)sel.value=r.id}else fechar();
     redraw();toast(id?'Marca salva':'Marca criada');
   });
-  /* ---- proposta ---- */
-  if(f.id==='fprop') return run(async()=>{
-    const valor=parseValor(v('pp-valor'));if(isNaN(valor))return ferr('Valor inválido.');
-    const row={marca_id:v('pp-marca'),escopo:v('pp-esc'),valor:valor||0,validade:v('pp-val')||null,status:gv(f,'pst')||'enviada',motivo:v('pp-mot')};
-    if(!row.escopo)return ferr('Descreva o escopo.');
-    const r=await save('propostas',row,id);if(!r)return;
-    if(row.status==='aceita'&&!r.job_id){UI.layer={kind:'form',type:'prop',id:r.id};await depois('Proposta aceita! Agora crie o job.')}else{fechar();await depois(id?'Proposta salva':'Proposta registrada')}
+  /* ---- comercial ---- */
+  if(f.id==='fmotivo') return run(async()=>{if(await save('propostas',{motivo:v('pm-mot')},id||f.dataset.id))depois('Motivo salvo')});
+  if(f.id==='fprecos') return run(async()=>{
+    const c=cfgP(),pk=[];for(let i=0;document.getElementById('pk-n-'+i);i++){const nome=v('pk-n-'+i);if(!nome)continue;const n=x=>{const r=parseValor(v(x));return isNaN(r)?0:r};pk.push({nome,lives:parseInt(v('pk-l-'+i)||'0',10)||0,horas:n('pk-h-'+i),fixo:n('pk-f-'+i),pct:n('pk-p-'+i)})}
+    if(!pk.length)return ferr('Deixe pelo menos um pacote.');
+    const val={...c,pacotes:pk,afiliados:{fixo:parseValor(v('af-f'))||0,pct:parseValor(v('af-p'))||0},validade_dias:parseInt(v('cf-val'),10)||10,vigencia_meses:parseInt(v('cf-vig'),10)||3,instagram:v('cf-ig'),
+      contatos:v('cf-ct').split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const [a,...b]=l.split('·');return {nome:a.trim(),tel:b.join('·').trim()}})};
+    const {error}=await sb.from('config').upsert({chave:'propostas',valor:val,atualizado_em:new Date().toISOString()});
+    if(error)return ferr(trErr(error.message));fechar();await depois('Tabela de preços salva');
+  });
+  if(f.id==='fcontrato') return run(async()=>{
+    const row={marca_id:v('ct-marca'),proposta_id:v('ct-prop')||null,titulo:v('ct-tit'),inicio:v('ct-ini')||hoje(),fim:v('ct-fim')||null,status:gv(f,'cst')||'vigente',pagamento:gv(f,'cpag')||'',vencimento_dia:v('ct-venc')?parseInt(v('ct-venc'),10):null,escopo:v('ct-esc'),link_arquivo:v('ct-link'),obs:v('ct-obs')};
+    if(row.fim&&row.fim<row.inicio)return ferr('O fim não pode ser antes do início.');
+    let k=null;if(!id){k=lerCond(f);if(!k)return ferr('Valor inválido.');if(k.remun!=='variavel'&&!(k.fixo>0)&&k.remun!=='fixo'&&!(k.comissao>0))return ferr('Preencha o fixo ou a comissão.')}
+    const r=await save('contratos',row,id);if(!r)return;
+    if(k){const {error}=await sb.from('contrato_condicoes').insert({...k,contrato_id:r.id,vale_desde:row.inicio,motivo:'Condição inicial'});if(error)toast(trErr(error.message),true)}
+    if(!id&&row.proposta_id){const p=D.props.find(x=>x.id===row.proposta_id);if(p&&p.job_id)await sb.from('jobs').update({contrato_id:r.id}).eq('id',p.job_id)}
+    UI.layer={kind:'det',type:'contrato',id:r.id||id};await depois(id?'Contrato salvo':'Contrato criado');
+  });
+  if(f.id==='fcond') return run(async()=>{
+    const k=lerCond(f);if(!k)return ferr('Valor inválido.');const desde=v('cd-desde');if(!desde)return ferr('Escolha a data.');
+    const {error}=await sb.from('contrato_condicoes').insert({...k,contrato_id:f.dataset.c,vale_desde:desde,motivo:v('cd-mot')});
+    if(error)return ferr(trErr(error.message));UI.layer={kind:'det',type:'contrato',id:f.dataset.c};await depois('Nova condição registrada');
   });
   /* ---- freelancer ---- */
   if(f.id==='ffree') return run(async()=>{
