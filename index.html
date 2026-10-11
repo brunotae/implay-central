@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Implay Central</title>
+<meta name="theme-color" content="#0B0B0C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Implay">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap">
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+/* Implay Central · tema Noite (principal) e Dia. Tokens do design system Implay. */
+:root{
+  --bg:#0B0B0C; --raised:#17171A; --raised2:#1F1F23; --text:#F7F7F2; --muted:#A3A3AB; --line:#2A2A30;
+  --volt:#D4FF2F; --flash:#FF3FA4; --cobalt:#2B3BFF; --on-brand:#0B0B0C;
+  --accent-text:#D4FF2F; --step:#D4FF2F; --bar:#D4FF2F;
+  --ok:#3DDC97; --warn:#FFB23F; --bad:#FF6B6F; --info:#8C97FF;
+  --ok-bg:rgba(61,220,151,.12); --warn-bg:rgba(255,178,63,.12); --bad-bg:rgba(255,107,111,.12); --info-bg:rgba(140,151,255,.14); --flash-bg:rgba(255,63,164,.14);
+  --shade:rgba(0,0,0,.6); --glass:rgba(11,11,12,.86);
+  --f-display:"Unbounded","Noto Sans KR",system-ui,sans-serif;
+  --f-text:"Inter","Noto Sans KR",system-ui,-apple-system,sans-serif;
+  --r-sm:10px; --r-lg:20px; --r-pill:999px;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#F7F7F2; --raised:#FFFFFF; --raised2:#F0F0E9; --text:#0B0B0C; --muted:#55555C; --line:#E2E2DA;
+  --accent-text:#2B3BFF; --step:#0B0B0C; --bar:#2B3BFF;
+  --ok:#13804F; --warn:#9A5B00; --bad:#C62828; --info:#2B3BFF;
+  --ok-bg:rgba(19,128,79,.1); --warn-bg:rgba(154,91,0,.1); --bad-bg:rgba(198,40,40,.08); --info-bg:rgba(43,59,255,.08); --flash-bg:rgba(255,63,164,.12);
+  --shade:rgba(11,11,12,.4); --glass:rgba(247,247,242,.9); color-scheme:light }
+
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--f-text);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent-text)}
+:focus-visible{outline:2px solid var(--accent-text);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.label{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance}
+h1{font-size:clamp(22px,3vw,30px);font-weight:800;line-height:1.1}
+h2{font-size:15px;font-weight:700}
+h3{font-size:13px;font-weight:700}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:228px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:18px;background:var(--bg)}
+.brand{display:flex;flex-direction:column;gap:6px;padding:0 8px;background:none;border:0;text-align:left}
+.brand svg{width:132px;height:auto;display:block}
+.brand small{font-size:11px;color:var(--muted);letter-spacing:.04em}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{white-space:nowrap;display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:10px;text-align:left;background:none;border:0;border-radius:12px;padding:8px 10px;color:var(--muted);font-weight:600}
+.nav button svg{width:18px;height:18px}
+.nav button:hover{background:var(--raised);color:var(--text)}
+.nav button[aria-current="page"]{background:var(--volt);color:var(--on-brand)}
+.nav .cnt{font-size:11px;font-weight:800;background:var(--flash);color:var(--on-brand);border-radius:var(--r-pill);padding:1px 7px}
+.side .foot{margin-top:auto;padding:12px 8px 0;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.side .foot button{background:none;border:0;padding:0;color:var(--muted);text-align:left;font-size:12px;text-decoration:underline}
+
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:12px 28px;background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.search{flex:1;max-width:460px;display:flex;align-items:center;gap:8px;background:var(--raised);border:1px solid var(--line);border-radius:var(--r-pill);padding:8px 14px;color:var(--muted)}
+.search svg{width:16px;height:16px;flex:none}
+.search input{flex:1;background:none;border:0;outline:0;min-width:0;font-size:16px}
+@media (min-width:900px){.search svg{width:16px;height:16px;flex:none}
+.search input{font-size:14px}}
+.top .sp{flex:1}
+.ibtn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--raised);display:grid;place-items:center;flex:none;color:var(--text)}
+.ibtn svg{width:18px;height:18px}
+.me{display:flex;align-items:center;gap:8px}
+.av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--on-brand);flex:none}
+.av.sm{width:22px;height:22px;font-size:9px}
+.me b{display:block;font-size:13px}.me small{font-size:11px;color:var(--muted)}
+
+.page{padding:24px 28px 80px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.col{display:flex;flex-direction:column;gap:20px;min-width:0}
+.rail{display:flex;flex-direction:column;gap:16px;position:sticky;top:84px}
+.full{grid-column:1/-1}
+
+.card{background:var(--raised);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;min-width:0}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.link{background:none;border:0;padding:0;color:var(--accent-text);font-weight:700;font-size:12px;text-decoration:none}
+.empty{color:var(--muted);font-size:13px;margin:0;padding:6px 0}
+
+/* ---------- botões ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--r-pill);padding:9px 16px;font-weight:700;font-size:13px;border:1px solid var(--line);background:var(--raised);white-space:nowrap;min-height:40px;color:var(--text);text-decoration:none}
+.btn.sticker{background:var(--volt);color:var(--on-brand);border:2px solid var(--on-brand);box-shadow:4px 4px 0 var(--flash);transition:transform .12s, box-shadow .12s}
+.btn.sticker:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--flash)}
+.btn.sticker:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--flash)}
+.btn.ghost{background:none}
+.btn.ok{color:var(--ok);border-color:var(--ok)}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn.sm{min-height:32px;padding:5px 12px;font-size:12px}
+.btn.wide{width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{border:1px solid var(--line);background:var(--raised);border-radius:var(--r-pill);padding:6px 12px;font-size:12px;font-weight:700;color:var(--muted);min-height:34px}
+.chips button[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.chips.big button{min-height:40px;font-size:13px}
+
+/* ---------- pílulas ---------- */
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:var(--r-pill);padding:3px 9px;font-size:11px;font-weight:700;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-ok{background:var(--ok-bg);color:var(--ok)} .p-warn{background:var(--warn-bg);color:var(--warn)} .p-bad{background:var(--bad-bg);color:var(--bad)} .p-info{background:var(--info-bg);color:var(--info)} .p-mute{background:var(--raised2);color:var(--muted)}
+.live{display:inline-flex;align-items:center;gap:6px;background:var(--flash);color:var(--on-brand);border-radius:var(--r-pill);padding:3px 10px;font-size:11px;font-weight:800;letter-spacing:.08em;white-space:nowrap}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--on-brand);animation:pulse 1.4s infinite;display:inline-block}
+@keyframes pulse{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.live i{animation:none}}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);overflow:hidden;padding:0}
+.hero .l{padding:26px 28px;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.hero .l p{margin:0;color:var(--muted);max-width:42ch}
+.hero .r{background:var(--cobalt);color:#fff;padding:22px 24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.hero .r .label{color:rgba(255,255,255,.78)}
+.onair{display:flex;flex-direction:column;gap:10px}
+.onair .it{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;background:rgba(0,0,0,.22);border-radius:14px;padding:10px 12px;border:0;color:#fff;text-align:left;width:100%}
+.onair .it b{font-family:var(--f-display);font-size:13px;display:block}
+.onair .it small{color:rgba(255,255,255,.8);font-size:12px;display:block}
+.onair .gmv{text-align:right;font-family:var(--f-display);font-weight:700;font-size:15px}
+
+/* ---------- KPIs ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.kpi{background:var(--raised);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px;display:flex;flex-direction:column;gap:6px;text-align:left;min-width:0;color:var(--text)}
+button.kpi:hover{border-color:var(--muted)}
+.kpi .v{font-family:var(--f-display);font-weight:800;font-size:clamp(20px,1.9vw,26px);line-height:1.1;white-space:nowrap}
+.kpi .s{font-size:12px;color:var(--muted)}
+
+/* ---------- tabela / jornada ---------- */
+.tblwrap{overflow-x:auto;margin:0 -4px;padding:0 4px}
+table{width:100%;border-collapse:collapse;min-width:660px}
+th{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover td{background:var(--raised2)}
+tbody tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+.who{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:11px;flex:none;color:#fff}
+.who b{display:block;font-size:13px;white-space:nowrap}
+.who small{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+td.mk{min-width:190px}
+.steps{display:flex;align-items:flex-start;width:230px}
+.st{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;font-size:10px;color:var(--muted);min-width:0;padding-bottom:16px}
+.st::before{content:"";position:absolute;top:6px;left:-50%;width:100%;height:2px;background:var(--line)}
+.st:first-child::before{display:none}
+.st.done::before,.st.cur::before{background:var(--step)}
+.st i{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:var(--raised);position:relative;z-index:1}
+.st.done i{background:var(--step);border-color:var(--step)}
+.st.cur i{background:var(--volt);border-color:var(--on-brand);outline:2px solid var(--flash);outline-offset:1px}
+.st span{position:absolute;top:19px;left:50%;transform:translateX(-50%);white-space:nowrap;visibility:hidden}
+.st.cur span{visibility:visible;color:var(--text);font-weight:700}
+.next b{display:block;font-size:12px}.next small{color:var(--muted);font-size:11px;display:block}
+.next{min-width:140px}
+
+/* ---------- widgets ---------- */
+.quad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.quad.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.week .d{display:flex;flex-direction:column;gap:6px;min-width:0}
+.dh{font-size:11px;font-weight:700;color:var(--muted);text-align:center;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.dh b{display:block;font-family:var(--f-display);font-size:16px;color:var(--text)}
+.dh.today b{color:var(--accent-text)}
+.ev{border-radius:10px;padding:6px 7px;font-size:11px;line-height:1.25;background:var(--raised2);border:0;border-left:3px solid var(--muted);min-width:0;text-align:left;color:var(--text);width:100%}
+.ev b{display:block;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev .sub{color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev .sub .w{color:var(--warn)}
+.ev em{font-style:normal;display:block;margin-top:5px}
+.ev.c-ok{border-left-color:var(--ok)} .ev.c-warn{border-left-color:var(--warn)} .ev.c-live{border-left-color:var(--flash);background:var(--flash-bg)} .ev.c-done{border-left-color:var(--info);opacity:.8} .ev.c-x{border-left-color:var(--bad);opacity:.55;text-decoration:line-through}
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:5px}
+.room{border-radius:10px;border:1px solid var(--line);padding:7px 4px;text-align:center;font-size:10px;background:var(--raised2);color:var(--muted)}
+.room b{display:block;font-family:var(--f-display);font-size:12px;color:var(--text)}
+.room.busy{background:var(--volt);color:var(--on-brand);border-color:var(--volt)} .room.busy b{color:var(--on-brand)}
+.room.onair{background:var(--flash);color:var(--on-brand);border-color:var(--flash)} .room.onair b{color:var(--on-brand)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.money{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.money div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.money b{font-family:var(--f-display);font-size:17px;font-weight:700}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:110px minmax(0,1fr) 90px;gap:10px;align-items:center;font-size:12px}
+.bar>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .t{height:10px;border-radius:var(--r-pill);background:var(--raised2);overflow:hidden}
+.bar .t i{display:block;height:100%;background:var(--bar);border-radius:var(--r-pill)}
+.bar .v{text-align:right;font-weight:700}
+.list{display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);min-width:0}
+.row:last-child{border-bottom:0}
+.row.click{cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left;color:var(--text)}
+.row .grow{flex:1;min-width:0}
+.row .grow b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .grow small{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .amt{font-weight:700;white-space:nowrap}
+.row .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+
+/* ---------- rail ---------- */
+.today .t{display:grid;grid-template-columns:46px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--line);background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left;color:var(--text)}
+.today .t:last-child{border-bottom:0}
+.today .h{font-family:var(--f-display);font-size:12px;font-weight:700;color:var(--muted);padding-top:2px}
+.today b{display:block;font-size:13px}
+.today small{display:block;font-size:11px;color:var(--muted)}
+.assist{background:var(--volt);color:var(--on-brand);border:2px solid var(--on-brand);border-radius:var(--r-lg);padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.assist .label{color:var(--on-brand);opacity:.7}
+.assist b{font-family:var(--f-display);font-size:17px}
+.assist ul{margin:0;padding-left:16px;font-size:12px;font-weight:600;display:flex;flex-direction:column;gap:3px}
+.assist ul button{display:inline;background:none;border:0;padding:0;color:var(--on-brand);font-weight:600;text-align:left;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+.chat .m{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--line)}
+.chat .m:last-child{border-bottom:0}
+.chat b{font-size:12px;display:block}.chat p{margin:0;font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.chat time{font-size:10px;color:var(--muted);white-space:nowrap}
+.chat .clip p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---------- módulos ---------- */
+.mh{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.mh p{margin:6px 0 0;color:var(--muted);max-width:66ch}
+.mh .acts{display:flex;gap:10px;flex-wrap:wrap}
+.kanban{display:grid;grid-template-columns:repeat(5,minmax(210px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.kcol{background:var(--raised);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.kcol h3{display:flex;justify-content:space-between}
+.kc{background:var(--raised2);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;text-align:left;border:1px solid transparent;color:var(--text);align-items:flex-start}
+.kc:hover{border-color:var(--muted)}
+.kc .v{font-family:var(--f-display);font-weight:700;font-size:13px}
+.agcol{display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));gap:10px;overflow-x:auto;padding-bottom:6px}
+.agcol .d{background:var(--raised);border:1px solid var(--line);border-radius:var(--r-lg);padding:10px;display:flex;flex-direction:column;gap:8px;min-height:200px}
+.agcol .dh{text-align:left;font-size:12px}
+.agcol .ev{padding:8px 9px;font-size:12px;cursor:pointer}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.roomcard{background:var(--raised);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;display:flex;flex-direction:column;gap:6px;text-align:left;color:var(--text)}
+.roomcard .code{font-family:var(--f-display);font-weight:800;font-size:20px}
+.roomcard.busy{border-color:var(--volt)} .roomcard.onair{border-color:var(--flash)}
+.slots{display:grid;grid-template-columns:repeat(16,1fr);gap:2px;margin-top:4px}
+.slots i{height:8px;border-radius:2px;background:var(--raised2)}
+.slots i.b{background:var(--bar)} .slots i.a{background:var(--flash)}
+.slotlbl{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+.note{background:var(--raised2);border-radius:14px;padding:12px 14px;font-size:12px;color:var(--muted)}
+.note b{color:var(--text)}
+.weeknav{display:flex;align-items:center;gap:8px}
+
+/* ---------- formulários / gavetas ---------- */
+.scrim{position:fixed;inset:0;background:var(--shade);z-index:20;display:flex;justify-content:flex-end}
+.drawer{width:min(500px,100%);height:100%;background:var(--bg);border-left:1px solid var(--line);padding:22px 22px calc(22px + env(safe-area-inset-bottom));overflow:auto;display:flex;flex-direction:column;gap:16px}
+.dhead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f>span{font-size:12px;font-weight:700;color:var(--muted)}
+.f input,.f select,.f textarea{background:var(--raised);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;font-size:16px;width:100%;min-width:0}
+.f textarea{min-height:80px;resize:vertical}
+.f small{font-size:11px;color:var(--muted)}
+.f .ext{font-size:12px;color:var(--accent-text);font-weight:700}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hm{display:flex;gap:6px;align-items:center}
+.hm select{flex:1}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.swatches button{width:30px;height:30px;border-radius:50%;border:2px solid var(--line)}
+.swatches button[aria-pressed="true"]{border-color:var(--text);outline:2px solid var(--text);outline-offset:2px}
+.toggle{display:flex;align-items:center;gap:10px;font-weight:600;font-size:13px}
+.toggle input{width:20px;height:20px;accent-color:var(--volt)}
+.err{color:var(--bad);font-size:13px;margin:0;font-weight:600}
+.dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px;margin:0}
+.dl dt{color:var(--muted)} .dl dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.callout{border:1px solid var(--warn);background:var(--warn-bg);border-radius:14px;padding:10px 12px;font-size:13px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--volt);color:var(--on-brand);border:2px solid var(--on-brand);box-shadow:4px 4px 0 var(--flash);border-radius:var(--r-pill);padding:10px 18px;font-weight:700;z-index:40;width:max-content;max-width:calc(100% - 32px);text-align:center}
+.toast.bad{background:var(--bad);color:#fff}
+
+/* ---------- entrada ---------- */
+.gate{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:32px 16px}
+.gate .box{width:min(400px,100%);display:flex;flex-direction:column;gap:14px}
+.gate svg{width:200px;height:auto}
+.gate form{background:var(--raised);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;display:flex;flex-direction:column;gap:14px}
+.gate .links{display:flex;justify-content:space-between;gap:10px}
+
+/* ---------- seller (celular) ---------- */
+.sel{max-width:640px;margin:0 auto;padding:16px 16px 80px;display:flex;flex-direction:column;gap:16px}
+.selcard{background:var(--raised);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:10px}
+.selcard .when{font-family:var(--f-display);font-weight:700;font-size:15px}
+.tabs{display:flex;gap:6px;background:var(--raised);border:1px solid var(--line);border-radius:var(--r-pill);padding:4px}
+.tabs button{flex:1;border:0;background:none;border-radius:var(--r-pill);padding:9px 6px;font-weight:700;font-size:13px;color:var(--muted)}
+.tabs button[aria-current="page"]{background:var(--volt);color:var(--on-brand)}
+
+/* ---------- responsivo ---------- */
+@media (max-width:1400px){ .page{grid-template-columns:minmax(0,1fr)} .rail{position:static;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))} }
+@media (max-width:1100px){ .quad,.quad.three{grid-template-columns:minmax(0,1fr)} .grid3{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:sticky;top:0;z-index:6;height:auto;flex-direction:row;align-items:center;padding:10px 16px;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto;gap:12px}
+  .brand svg{width:86px}.brand small,.side .foot{display:none}
+  .nav{flex-direction:row}
+  .nav button{grid-template-columns:auto auto;padding:8px 12px}
+  .nav button svg{display:none}
+  .top{position:static;padding:12px 16px;flex-wrap:wrap}
+  .me div{display:none}
+  .page{padding:16px 16px 60px}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .week{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .grid3,.money{grid-template-columns:minmax(0,1fr)}
+  .week{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .frow{grid-template-columns:minmax(0,1fr)}
+  .search{order:3;max-width:none;flex-basis:100%}
+  .row{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="layer"></div>
+<script>
+'use strict';
+/* =========================================================================
+   Implay Central · app de página única (GitHub Pages + Supabase)
+   ========================================================================= */
+const CFG_=window.IMPLAY_CONFIG||{};
+const LOGO=`<svg viewBox="-22 -26 395 160" role="img" aria-label="implay"><g transform="rotate(-5 184.5 55)"><g transform="translate(7 7)" fill="none" stroke="#FF3FA4" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><path d="M15 33 V70 M49 70 V46 a12 12 0 0 1 24 0 V70 M73 46 a12 12 0 0 1 24 0 V70 M131 33 V94 M201 10 V70 M271 33 V70 M305 33 V52 a17 17 0 0 0 34 0 M339 33 V80 a14 14 0 0 1 -14 14 H317"/><circle cx="149" cy="51" r="18"/><circle cx="253" cy="51" r="18"/></g><g fill="none" stroke="#0B0B0C" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"><path d="M15 33 V70 M49 70 V46 a12 12 0 0 1 24 0 V70 M73 46 a12 12 0 0 1 24 0 V70 M131 33 V94 M201 10 V70 M271 33 V70 M305 33 V52 a17 17 0 0 0 34 0 M339 33 V80 a14 14 0 0 1 -14 14 H317"/><circle cx="149" cy="51" r="18"/><circle cx="253" cy="51" r="18"/></g><g fill="none" stroke="#D4FF2F" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"><path d="M15 33 V70 M49 70 V46 a12 12 0 0 1 24 0 V70 M73 46 a12 12 0 0 1 24 0 V70 M131 33 V94 M201 10 V70 M271 33 V70 M305 33 V52 a17 17 0 0 0 34 0 M339 33 V80 a14 14 0 0 1 -14 14 H317"/><circle cx="149" cy="51" r="18"/><circle cx="253" cy="51" r="18"/></g><path d="M15 -11 Q15 8 34 8 Q15 8 15 27 Q15 8 -4 8 Q15 8 15 -11Z" fill="#FF3FA4" stroke="#0B0B0C" stroke-width="3.5" stroke-linejoin="round"/></g></svg>`;
+
+/* ---------------- constantes ---------------- */
+const ETAPAS=['Lead','Proposta','Contrato','Briefing','Escala','No ar','Relatório','Faturado','Pago'];
+const SALAS=[...Array.from({length:11},(_,i)=>'E'+(i+1)),...Array.from({length:6},(_,i)=>'P'+(i+1)),'B1','B2','C1','Esc1','Esc2','Esc3'];
+const NIVEL={adm:'ADM',manager:'Gerência',basic:'Consulta',seller:'Seller'};
+const PAPEL={host:'Host',operador:'Operador',editor:'Editor',outro:'Outro'};
+const PROP_ST={rascunho:['Rascunho','mute'],enviada:['Enviada','info'],negociacao:['Negociação','warn'],aceita:['Aceita','ok'],perdida:['Perdida','bad']};
+const ALERTA={'':['Em dia','ok'],atencao:['Atenção','warn'],travado:['Travado','bad']};
+const CORES=['#2B3BFF','#FF3FA4','#0E9F6E','#C8102E','#7A3BFF','#8A5A2B','#F08C00','#0B7285','#55555C'];
+const DIAS=['dom','seg','ter','qua','qui','sex','sáb'];
+const DIASX=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+const MESES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const PCORES=['#D4FF2F','#FF3FA4','#8C97FF','#3DDC97','#FFB23F','#FF6B6F','#7FD8FF','#C9A0FF'];
+
+/* ---------------- estado ---------------- */
+let sb=null, SESSION=null, ME=null;
+let D={profiles:[],marcas:[],jobs:[],props:[],free:[],lives:[],cands:[],pags:[],recs:[],recados:[],log:[],desp:[],reemb:[],conv:[]};
+const UI={status:'carregando',view:'painel',q:'',filtro:'todas',semana:0,relMes:0,layer:null,confirm:null,lmode:'senha',email:'',aviso:'',erro:'',verCanc:false};
+
+/* ---------------- utilidades ---------------- */
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const dkey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const dObj=k=>{const[y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)};
+const hoje=()=>dkey(new Date());
+const addD=(k,n)=>{const d=dObj(k);d.setDate(d.getDate()+n);return dkey(d)};
+const hm=t=>(t||'').slice(0,5);
+const agoraHM=()=>{const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())};
+const dCurto=k=>{const d=dObj(k);return `${DIAS[d.getDay()]} ${d.getDate()}/${d.getMonth()+1}`};
+const dExt=k=>{if(!k)return '';const d=dObj(k);return `${DIASX[d.getDay()]}, ${d.getDate()} de ${MESES[d.getMonth()]}${d.getFullYear()!==new Date().getFullYear()?' de '+d.getFullYear():''}`};
+const quando=k=>{if(!k)return '';const h=hoje();return k===h?'Hoje':k===addD(h,1)?'Amanhã':k===addD(h,-1)?'Ontem':dCurto(k)};
+const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:0,maximumFractionDigits:Number(v)%1?2:0});
+const moneyK=v=>{v=Number(v||0);return Math.abs(v)>=10000?'R$ '+(v/1000).toLocaleString('pt-BR',{maximumFractionDigits:1})+' mil':money(v)};
+const parseValor=s=>{s=String(s??'').trim().replace(/[R$\s]/g,'');if(!s)return 0;if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)||s.includes(','))s=s.replace(/\./g,'').replace(',','.');const n=Number(s);return isFinite(n)?n:NaN};
+const valIn=v=>v||v===0?String(Number(v)).replace('.',','):'';
+const horas=(i,f)=>{const[a,b]=hm(i).split(':').map(Number),[c,d]=hm(f).split(':').map(Number);let m=(c*60+d)-(a*60+b);if(m<=0)m+=1440;return m/60};
+const fmtH=h=>(Math.round(h*10)/10).toLocaleString('pt-BR')+'h';
+const ini=n=>(n||'?').trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
+const sigla=n=>{const w=(n||'?').replace(/[^\p{L}\p{N} ]/gu,'').trim().split(/\s+/);if(/^[A-Z0-9]{2,3}$/.test(w[0]))return w[0];return (w.length>1?w[0][0]+w[1][0]:w[0].slice(0,2)).toUpperCase()};
+const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const match=(...xs)=>!UI.q||norm(xs.join(' ')).includes(norm(UI.q));
+
+const isAdm=()=>ME&&ME.nivel==='adm';
+const canOp=()=>ME&&(ME.nivel==='adm'||ME.nivel==='manager');
+const isSeller=()=>ME&&ME.nivel==='seller';
+
+const marca=id=>D.marcas.find(m=>m.id===id)||{nome:'—',cor:'#55555C',segmento:''};
+const job=id=>D.jobs.find(j=>j.id===id);
+const free=id=>id?(D.free.find(f=>f.id===id)||{id,nome:'—',papel:'outro',ativo:false}):undefined;
+const prof=id=>D.profiles.find(p=>p.id===id);
+const pNome=id=>(prof(id)||{}).nome||'—';
+const pCor=id=>{const i=D.profiles.findIndex(p=>p.id===id);return PCORES[(i<0?0:i)%PCORES.length]};
+const fCor=id=>{const i=D.free.findIndex(p=>p.id===id);return PCORES[(i<0?3:i+3)%PCORES.length]};
+const meuFreela=()=>ME&&D.free.find(f=>f.email&&f.email.toLowerCase()===String(ME.email||'').toLowerCase());
+
+const pill=(t,c)=>`<span class="pill p-${c}">${esc(t)}</span>`;
+const logo=id=>{const m=marca(id);return `<span class="logo" style="background:${esc(m.cor)}" aria-hidden="true">${esc(sigla(m.nome))}</span>`};
+const av=(nome,cor,sm)=>`<span class="av${sm?' sm':''}" style="background:${esc(cor)}" aria-hidden="true">${esc(ini(nome))}</span>`;
+const steps=e=>`<div class="steps" role="img" aria-label="Etapa: ${ETAPAS[e]}">${ETAPAS.map((s,i)=>`<div class="st ${i<e?'done':i===e?'cur':''}" title="${s}"><i></i><span>${s}</span></div>`).join('')}</div>`;
+
+/* ---------------- ícones ---------------- */
+const IC={
+ home:'<path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+ cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+ brand:'<path d="M4 7h16v13H4z"/><path d="M9 7V4h6v3"/>',
+ doc:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>',
+ team:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5 6-5s5.4 1.6 6 5"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.5c2.7 0 4.4 1.6 5 4.5"/>',
+ room:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16M3 12h9"/>',
+ money:'<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/>',
+ chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+ chat:'<path d="M4 5h16v11H9l-5 4z"/>',
+ key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M14 9l2 2"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+ moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+ x:'<path d="M6 6l12 12M18 6 6 18"/>',
+};
+const ic=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
+
+/* ---------------- tema ---------------- */
+function aplicaTema(){let t=null;try{t=localStorage.getItem('implay-tema')}catch(e){}document.documentElement.dataset.theme=t||'dark'}
+aplicaTema();
+
+/* =========================================================================
+   DADOS
+   ========================================================================= */
+async function loadAll(){
+  const s=(t,ord,asc=true,lim=5000)=>sb.from(t).select('*').order(ord,{ascending:asc}).limit(lim);
+  const desde=addD(hoje(),-400);
+  const reqs={
+    profiles:s('profiles','nome'), marcas:s('marcas','nome'), jobs:s('jobs','criado_em',false),
+    props:s('propostas','numero',false), free:s('freelancers','nome'),
+    lives:sb.from('lives').select('*').gte('data',desde).order('data').order('ini').limit(5000),
+    cands:s('candidaturas','criado_em',false), pags:s('pagamentos_freela','competencia',false),
+  };
+  if(!isSeller()){ Object.assign(reqs,{recados:s('recados','criado_em',false,60),log:s('central_log','em',false,300)}); }
+  if(isAdm()){ Object.assign(reqs,{recs:s('recebimentos','vencimento'),desp:sb.from('despesas').select('id,valor,origem,pagador_id,pagador_nome,aprov').eq('origem','pessoal').limit(10000),reemb:sb.from('reembolsos').select('id,valor,pessoa_id,pessoa_nome').limit(10000),conv:s('convites','nome')}); }
+  const ks=Object.keys(reqs), rs=await Promise.all(ks.map(k=>reqs[k]));
+  const first=rs.find(r=>r.error&&/relation|does not exist|schema cache/i.test(r.error.message));
+  if(first) throw new Error('As tabelas da Central ainda não existem. Rode o arquivo supabase/central-1.sql no Supabase.');
+  ks.forEach((k,i)=>{ if(!rs[i].error) D[k]=rs[i].data||[]; });
+  ME=D.profiles.find(p=>p.id===SESSION.user.id)||ME;
+}
+let reloadT=null;
+function scheduleReload(){clearTimeout(reloadT);reloadT=setTimeout(async()=>{try{await loadAll();redraw()}catch(e){}},350)}
+
+async function save(table,row,id){
+  const q=id?sb.from(table).update(row).eq('id',id).select().maybeSingle():sb.from(table).insert(row).select().single();
+  const {data,error}=await q;
+  if(error){toast(trErr(error.message),true);return null}
+  return data||{};
+}
+function trErr(m){
+  if(/row-level security|permission|violates row/i.test(m))return 'Seu nível de acesso não permite essa ação.';
+  if(/duplicate key/i.test(m))return 'Isso já foi registrado.';
+  if(/Failed to fetch|NetworkError/i.test(m))return 'Sem conexão. Tente de novo.';
+  if(/check constraint/i.test(m))return 'Algum campo obrigatório ficou vazio.';
+  return m;
+}
+
+/* =========================================================================
+   CÁLCULOS
+   ========================================================================= */
+const vivas=()=>D.lives.filter(l=>l.status!=='cancelada');
+const vagasDe=l=>(l.precisa_host&&!l.host_id?1:0)+(l.precisa_operador&&!l.operador_id?1:0);
+function semVaga(dias){const h=hoje(),f=addD(h,dias);return D.lives.filter(l=>l.status==='agendada'&&l.data>=h&&l.data<=f&&vagasDe(l)>0)}
+function gmvMes(off=0){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+off);const p=dkey(d).slice(0,7);return D.lives.filter(l=>l.status==='feita'&&l.data.startsWith(p)).reduce((s,l)=>s+Number(l.gmv||0),0)}
+function mesPrefixo(off=0){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+off);return {p:dkey(d).slice(0,7),nome:MESES[d.getMonth()]}}
+function saldoSocios(){
+  const m={};const k=(id,n)=>id?'i:'+id:'n:'+norm(n);
+  const add=(key,nome,v)=>{(m[key]=m[key]||{nome,v:0}).v+=v};
+  D.desp.filter(d=>d.aprov!=='recusada').forEach(d=>add(k(d.pagador_id,d.pagador_nome),d.pagador_id?pNome(d.pagador_id):d.pagador_nome,Number(d.valor)));
+  D.reemb.forEach(r=>add(k(r.pessoa_id,r.pessoa_nome),r.pessoa_id?pNome(r.pessoa_id):r.pessoa_nome,-Number(r.valor)));
+  return Object.values(m).filter(x=>Math.abs(x.v)>0.004).sort((a,b)=>b.v-a.v);
+}
+function pendencias(){
+  const P=[],h=hoje();
+  const sv=semVaga(7);if(sv.length)P.push({t:`${sv.length} live${sv.length>1?'s':''} com vaga aberta nos próximos 7 dias`,go:'agenda',f:'vagas'});
+  const cp=D.cands.filter(c=>c.status==='pendente'&&(D.lives.find(l=>l.id===c.live_id)||{}).status==='agendada');if(cp.length&&canOp())P.push({t:`${cp.length} candidatura${cp.length>1?'s':''} esperando resposta`,go:'agenda',f:'vagas'});
+  D.jobs.filter(j=>j.status==='ativo'&&j.alerta==='travado').forEach(j=>P.push({t:`Travado: ${marca(j.marca_id).nome} · ${j.nome}`,job:j.id}));
+  D.jobs.filter(j=>j.status==='ativo'&&j.prox_data&&j.prox_data<h).slice(0,3).forEach(j=>P.push({t:`Passo atrasado: ${marca(j.marca_id).nome} · ${j.prox_passo||j.nome}`,job:j.id}));
+  D.props.filter(p=>['enviada','negociacao'].includes(p.status)&&p.validade&&p.validade<=addD(h,5)).forEach(p=>P.push({t:`Proposta P-${pad(p.numero)} ${marca(p.marca_id).nome} vence ${quando(p.validade).toLowerCase()}`,go:'propostas'}));
+  if(isAdm()){
+    const at=D.recs.filter(r=>r.status==='a receber'&&r.vencimento<h);if(at.length)P.push({t:`${at.length} recebimento${at.length>1?'s':''} atrasado${at.length>1?'s':''} (${money(at.reduce((s,r)=>s+Number(r.valor),0))})`,go:'financeiro'});
+    const nf=D.pags.filter(p=>p.status==='a pagar'&&!p.nf_recebida);const nn=new Set(nf.map(p=>p.freelancer_id)).size;if(nn)P.push({t:`${nn} freelancer${nn>1?'s':''} sem NF`,go:'financeiro'});
+  }
+  const sr=D.lives.filter(l=>l.status==='feita'&&l.gmv==null&&l.data>=addD(h,-14));if(sr.length)P.push({t:`${sr.length} live${sr.length>1?'s':''} encerrada${sr.length>1?'s':''} sem resultado lançado`,go:'agenda'});
+  return P;
+}
+
+/* =========================================================================
+   DESENHO GERAL
+   ========================================================================= */
+function draw(){
+  const app=document.getElementById('app');
+  if(UI.status!=='ok'){app.innerHTML=gate();return}
+  if(isSeller()){drawSeller();return}
+  if(!document.getElementById('view')){
+    app.innerHTML=`<div class="app"><aside class="side"><button class="brand" data-go="painel" aria-label="Ir para o painel">${LOGO}<small>Central de operação · live commerce</small></button><nav class="nav" id="nav" aria-label="Módulos"></nav><div class="foot"><span id="meline"></span><a href="../Implay-despesas/" style="color:var(--muted);font-size:12px">Abrir Implay Despesas</a><button data-act="logout">Sair da conta</button></div></aside>
+    <div style="min-width:0"><header class="top"><label class="search">${ic('search')}<input id="q" placeholder="Buscar marca, job, live, pessoa…" aria-label="Buscar" autocomplete="off"></label><span class="sp"></span><button class="ibtn" data-act="tema" aria-label="Trocar tema Noite/Dia">${ic('moon')}</button><div class="me"><span id="meav"></span><div><b id="menome"></b><small id="meniv"></small></div></div></header><main class="page" id="view"></main></div></div>`;
+    document.getElementById('q').addEventListener('input',e=>{UI.q=e.target.value.trim();redraw()});
+  }
+  document.getElementById('meav').innerHTML=av(ME.nome,pCor(ME.id));
+  document.getElementById('menome').textContent=ME.nome||ME.email;
+  document.getElementById('meniv').textContent=NIVEL[ME.nivel]||'';
+  document.getElementById('meline').textContent=ME.email;
+  nav();
+  document.getElementById('view').innerHTML=(V[UI.view]||V.painel)();
+  if(UI.layer&&UI.layer.kind==='det') reopen();
+}
+const redraw=()=>{ if(UI.status==='ok') draw(); };
+function nav(){
+  const adm=isAdm();
+  const MODS=[['painel','home','Painel'],['agenda','cal','Lives e agenda'],['jobs','brand','Marcas e jobs'],['propostas','doc','Propostas'],['equipe','team','Equipe freelancer'],['estudios','room','Estúdios'],
+    ...(adm?[['financeiro','money','Financeiro']]:[]),['relatorios','chart','Relatórios'],['recados','chat','Recados'],['historico','clock','Histórico'],...(adm?[['acessos','key','Acessos']]:[])];
+  const cnt={agenda:semVaga(7).length,financeiro:adm?D.recs.filter(r=>r.status==='a receber'&&r.vencimento<hoje()).length:0,acessos:D.profiles.filter(p=>p.status==='pendente').length};
+  document.getElementById('nav').innerHTML=MODS.map(([k,i,t])=>`<button data-go="${k}" ${UI.view===k?'aria-current="page"':''}>${ic(i)}<span>${t}</span>${cnt[k]?`<span class="cnt">${cnt[k]}</span>`:'<span></span>'}</button>`).join('');
+}
+
+/* ---------------- entrada (login) ---------------- */
+function gate(){
+  const st=UI.status;let body='';
+  if(st==='carregando') body='<p class="muted" style="text-align:center">Carregando…</p>';
+  else if(st==='semconfig') body='<div class="callout">Falta configurar o arquivo config.js com a URL e a chave do Supabase.</div>';
+  else if(st==='offline') body='<div class="callout">Sem conexão. Confira a internet e abra de novo.</div>';
+  else if(st==='erro') body=`<div class="callout">Não consegui carregar: ${esc(UI.erro)}</div><button class="btn" data-act="reload">Tentar de novo</button><button class="btn ghost" data-act="logout">Sair</button>`;
+  else if(st==='pendente') body=`<div class="callout">Sua conta (${esc(SESSION.user.email)}) foi criada e está esperando um sócio liberar.</div><button class="btn" data-act="reload">Já liberaram? Atualizar</button><button class="btn ghost" data-act="logout">Sair</button>`;
+  else if(st==='bloqueado') body=`<div class="callout">Seu acesso está bloqueado. Fale com a Implay.</div><button class="btn ghost" data-act="logout">Sair</button>`;
+  else if(st==='semperfil') body=`<div class="callout">Sua conta existe, mas o cadastro não foi criado. Avise o Tae.</div><button class="btn ghost" data-act="logout">Sair</button>`;
+  else if(st==='login'){
+    const m=UI.lmode, em=`<label class="f"><span>E-mail</span><input id="l-email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" value="${esc(UI.email)}" required></label>`;
+    const err='<p class="err" id="l-err" hidden></p>';
+    const links=`<div class="links">${m!=='senha'?'<button class="link" type="button" data-lmode="senha">Entrar com senha</button>':'<button class="link" type="button" data-lmode="criar">Criar conta</button>'}${m==='senha'?'<button class="link" type="button" data-lmode="esqueci">Esqueci a senha</button>':''}</div>`;
+    if(UI.aviso) body=`<div class="callout">${UI.aviso}</div><button class="btn" data-lmode="senha">Voltar para o login</button>`;
+    else if(m==='senha') body=`<form id="fsenha">${em}<label class="f"><span>Senha</span><input id="l-senha" type="password" autocomplete="current-password" required></label>${err}<button class="btn sticker wide" type="submit">Entrar</button>${links}</form><p class="muted" style="font-size:12px;text-align:center;margin:0">Mesmo login do Implay Despesas.</p>`;
+    else if(m==='criar') body=`<form id="fcriar"><h2>Criar conta</h2>${em}<label class="f"><span>Crie uma senha</span><input id="l-senha" type="password" autocomplete="new-password" minlength="6" required><small>Pelo menos 6 caracteres. Use o e-mail que você passou para a Implay.</small></label>${err}<button class="btn sticker wide" type="submit">Criar conta</button>${links}</form>`;
+    else if(m==='esqueci') body=`<form id="fesqueci"><h2>Esqueci a senha</h2><p class="muted" style="margin:0">Enviamos um link para você criar uma senha nova.</p>${em}${err}<button class="btn sticker wide" type="submit">Enviar link</button>${links}</form>`;
+    else if(m==='novasenha') body=`<form id="fnova"><h2>Senha nova</h2><label class="f"><span>Nova senha</span><input id="l-senha" type="password" autocomplete="new-password" minlength="6" required></label>${err}<button class="btn sticker wide" type="submit">Salvar e entrar</button></form>`;
+  }
+  return `<div class="gate">${LOGO}<div class="box">${body}</div></div>`;
+}
+
+/* =========================================================================
+   PEÇAS
+   ========================================================================= */
+function liveCls(l){return l.status==='aovivo'?'c-live':l.status==='feita'?'c-done':l.status==='cancelada'?'c-x':vagasDe(l)?'c-warn':'c-ok'}
+function liveSt(l){
+  if(l.status==='aovivo')return '<span class="live"><i></i>AO VIVO</span>';
+  if(l.status==='feita')return pill(l.gmv!=null?'Feita · '+moneyK(l.gmv):'Feita · sem resultado',l.gmv!=null?'info':'warn');
+  if(l.status==='cancelada')return pill('Cancelada','bad');
+  const v=vagasDe(l);return v?pill(v>1?'2 vagas abertas':(l.precisa_host&&!l.host_id?'Falta host':'Falta operador'),'warn'):pill('Confirmada','ok');
+}
+function ondeTxt(l){return l.local==='cliente'?'no cliente':(l.sala||'sala a definir')}
+function hostTxt(l){return l.host_id?esc((free(l.host_id)||{}).nome||'host'):l.precisa_host?'<span class="w">vaga de host</span>':'sem host'}
+function evCard(l,full){
+  return `<button class="ev ${liveCls(l)}" data-live="${l.id}"><b>${hm(l.ini)} ${esc(marca(l.marca_id).nome)}</b><span class="sub">${esc(ondeTxt(l))} · ${hostTxt(l)}</span>${full?`<em>${liveSt(l)}</em>`:''}</button>`;
+}
+function jobSit(j){
+  if(j.status==='cancelado')return pill('Cancelado','bad');
+  const [t,c]=ALERTA[j.alerta||''];return pill(j.alerta?t:ETAPAS[j.etapa],j.alerta?c:(j.etapa===5?'ok':j.etapa>=6?'info':'mute'));
+}
+function rail(){
+  const h=hoje(), hj=vivas().filter(l=>l.data===h), P=pendencias();
+  return `<aside class="rail">
+   <section class="card today"><div class="card-h" style="margin-bottom:6px"><h2>Hoje</h2><span class="muted" style="font-size:12px">${dCurto(h)}</span></div>
+     ${hj.length?hj.map(l=>`<button class="t" data-live="${l.id}"><span class="h">${hm(l.ini)}</span><span><b>${esc(marca(l.marca_id).nome)} ${l.status==='aovivo'?'<span class="live" style="margin-left:4px"><i></i>AO VIVO</span>':''}</b><small>${esc(ondeTxt(l))} · host ${l.host_id?esc(free(l.host_id).nome):'—'} · até ${hm(l.fim)}</small></span></button>`).join(''):'<p class="empty">Nenhuma live hoje.</p>'}
+   </section>
+   <section class="assist"><span class="label">Pendências</span><b>${P.length?P.length+(P.length>1?' coisas travando':' coisa travando'):'Tudo em dia'}</b>
+     ${P.length?`<ul>${P.slice(0,7).map(p=>`<li><button ${p.job?`data-job="${p.job}"`:`data-go="${p.go}" ${p.f?`data-f="${p.f}"`:''}`}>${esc(p.t)}</button></li>`).join('')}</ul>`:'<span style="font-size:12px;font-weight:600">Nenhuma vaga aberta, atraso ou cobrança pendente.</span>'}
+   </section>
+   <section class="card chat"><div class="card-h" style="margin-bottom:6px"><h2>Recados</h2><button class="link" data-go="recados">Abrir ›</button></div>
+     ${D.recados.length?D.recados.slice(0,3).map(c=>`<div class="m clip">${av(pNome(c.de),pCor(c.de))}<div style="min-width:0"><b>${esc(pNome(c.de))}</b><p>${esc(c.texto)}</p></div><time>${tempo(c.criado_em)}</time></div>`).join(''):'<p class="empty">Nenhum recado ainda.</p>'}
+   </section>
+  </aside>`;
+}
+function tempo(ts){const d=new Date(ts),k=dkey(d);return k===hoje()?pad(d.getHours())+':'+pad(d.getMinutes()):quando(k).toLowerCase()}
+
+/* =========================================================================
+   TELAS (equipe interna)
+   ========================================================================= */
+const V={};
+V.painel=()=>{
+  const h=hoje(), op=canOp();
+  const ao=D.lives.filter(l=>l.status==='aovivo');
+  const prox=vivas().filter(l=>l.status==='agendada'&&(l.data>h||(l.data===h&&hm(l.ini)>=agoraHM()))).sort((a,b)=>(a.data+a.ini).localeCompare(b.data+b.ini))[0];
+  const sem=vivas().filter(l=>l.data>=h&&l.data<=addD(h,6));
+  const hsem=sem.reduce((s,l)=>s+horas(l.ini,l.fim),0);
+  const negoc=D.props.filter(p=>['enviada','negociacao'].includes(p.status));
+  const salasHoje=new Set(vivas().filter(l=>l.data===h&&l.local==='paulista'&&l.sala).map(l=>l.sala));
+  const g0=gmvMes(0),g1=gmvMes(-1),var_=g1?Math.round((g0-g1)/g1*100):null;
+  const jobs=D.jobs.filter(j=>j.status==='ativo'&&match(marca(j.marca_id).nome,j.nome,pNome(j.responsavel_id),j.prox_passo))
+    .filter(j=>UI.filtro==='todas'||(UI.filtro==='noar'?j.etapa===5:j.alerta)).sort((a,b)=>(a.prox_data||'9').localeCompare(b.prox_data||'9'));
+  const dias=Array.from({length:7},(_,i)=>addD(h,i));
+  return `<div class="col">
+   <section class="card hero">
+     <div class="l"><span class="label">Olá, ${esc((ME.nome||'').split(' ')[0])} · ${dExt(h)}</span><h1>Prova antes de hype.</h1>
+       <p>Da proposta à live no ar, da escala de hosts ao dinheiro na conta.</p>
+       ${op?`<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn sticker" data-act="novalive">+ Nova live</button><button class="btn ghost" data-act="novojob">+ Novo job</button></div>`:''}</div>
+     <div class="r">
+       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="label">No ar agora · ${agoraHM()}</span>${ao.length?`<span class="live"><i></i>${ao.length} AO VIVO</span>`:''}</div>
+       <div class="onair">${ao.map(l=>`<button class="it" data-live="${l.id}">${logo(l.marca_id)}<span style="min-width:0"><b>${esc(marca(l.marca_id).nome)}</b><small>${esc(ondeTxt(l))} · host ${l.host_id?esc(free(l.host_id).nome):'—'} · ${hm(l.ini)}–${hm(l.fim)}</small></span><span class="gmv num">${l.gmv!=null?moneyK(l.gmv):''}</span></button>`).join('')||'<div class="it" style="background:rgba(0,0,0,.12)"><span></span><span><b>Nenhuma live no ar</b><small>Abra uma live e toque em "Pôr no ar" quando começar.</small></span><span></span></div>'}
+       ${prox?`<button class="it" data-live="${prox.id}" style="background:rgba(0,0,0,.12)"><span class="logo" style="background:rgba(255,255,255,.18)">›</span><span style="min-width:0"><b>Próxima: ${esc(marca(prox.marca_id).nome)} · ${quando(prox.data)} ${hm(prox.ini)}</b><small>${esc(ondeTxt(prox))} · host ${prox.host_id?esc(free(prox.host_id).nome):'em aberto'}</small></span><span></span></button>`:''}
+       </div>
+     </div>
+   </section>
+   <section class="kpis">
+     <button class="kpi" data-go="propostas"><span class="label">Em negociação</span><span class="v num">${moneyK(negoc.reduce((s,p)=>s+Number(p.valor),0))}</span><span class="s">${negoc.length} proposta${negoc.length!==1?'s':''} aberta${negoc.length!==1?'s':''}</span></button>
+     <button class="kpi" data-go="agenda"><span class="label">Lives em 7 dias</span><span class="v num">${sem.length}</span><span class="s">${fmtH(hsem)} no ar${semVaga(7).length?` · <span style="color:var(--warn);font-weight:700">${semVaga(7).length} com vaga</span>`:''}</span></button>
+     <button class="kpi" data-go="estudios"><span class="label">Estúdios hoje</span><span class="v num">${salasHoje.size}<span class="muted" style="font-size:.5em"> / ${SALAS.length}</span></span><span class="s">${salasHoje.size?[...salasHoje].join(', '):'nenhuma reserva'}</span></button>
+     <button class="kpi" data-go="relatorios"><span class="label">GMV em ${mesPrefixo().nome}</span><span class="v num">${moneyK(g0)}</span><span class="s">${var_==null?'lives encerradas':`<b style="color:${var_>=0?'var(--ok)':'var(--bad)'}">${var_>=0?'+':''}${var_}%</b> vs. mês passado`}</span></button>
+   </section>
+   <section class="card">
+     <div class="card-h"><h2>Jornada dos jobs</h2><div class="chips" role="group" aria-label="Filtro">${[['todas','Todos'],['noar','No ar'],['alerta','Com alerta']].map(([k,t])=>`<button data-filtro="${k}" aria-pressed="${UI.filtro===k}">${t}</button>`).join('')}${op?'<button data-act="novojob">+ Job</button>':''}</div></div>
+     ${jobs.length?`<div class="tblwrap"><table><thead><tr><th>Marca e job</th><th>Etapa</th><th>Próximo passo</th><th>Situação</th></tr></thead><tbody>${jobs.map(j=>`<tr class="click" data-job="${j.id}">
+       <td class="mk"><div class="who">${logo(j.marca_id)}<div style="min-width:0"><b>${esc(marca(j.marca_id).nome)}</b><small>${esc(j.nome)}</small></div></div></td>
+       <td>${steps(j.etapa)}</td>
+       <td class="next"><b>${j.prox_data?esc(quando(j.prox_data)):'—'}</b><small>${esc(j.prox_passo||'')}</small></td>
+       <td><div style="display:flex;flex-direction:column;gap:5px;align-items:flex-start">${jobSit(j)}${j.responsavel_id?`<span class="muted" style="font-size:11px;display:flex;align-items:center;gap:6px">${av(pNome(j.responsavel_id),pCor(j.responsavel_id),1)}${esc(pNome(j.responsavel_id))}</span>`:''}</div></td></tr>`).join('')}</tbody></table></div>`
+       :`<p class="empty">${D.jobs.length?'Nenhum job neste filtro.':'Nenhum job ainda. Cadastre a primeira marca e o primeiro job em "Marcas e jobs".'}</p>`}
+   </section>
+   <section class="card"><div class="card-h"><h2>Próximos 7 dias</h2><button class="link" data-go="agenda">Agenda completa ›</button></div>
+     <div class="week">${dias.map(d=>`<div class="d"><div class="dh ${d===h?'today':''}">${DIAS[dObj(d).getDay()]}<b>${dObj(d).getDate()}</b></div>${D.lives.filter(l=>l.data===d&&l.status!=='cancelada'&&match(marca(l.marca_id).nome)).map(l=>evCard(l)).join('')}</div>`).join('')}</div>
+   </section>
+   <div class="quad${isAdm()?' three':''}">
+     <section class="card"><div class="card-h"><h2>Estúdios agora</h2><button class="link" data-go="estudios">Mapa ›</button></div>${roomsMini()}</section>
+     ${isAdm()?dinheiroCard():''}
+     <section class="card"><div class="card-h"><h2>Equipe no mês</h2><button class="link" data-go="equipe">Equipe ›</button></div>
+       ${equipeMes().slice(0,5).map(x=>`<div class="row">${av(x.f.nome,fCor(x.f.id))}<div class="grow"><b>${esc(x.f.nome)} · ${PAPEL[x.f.papel]}</b><small>${x.jobs} live${x.jobs!==1?'s':''} · ${fmtH(x.h)}</small></div>${x.nfPend?pill('Sem NF','warn'):x.jobs?pill('Ok','ok'):''}</div>`).join('')||'<p class="empty">Cadastre hosts e operadores em "Equipe freelancer".</p>'}
+     </section>
+   </div>
+  </div>${rail()}`;
+};
+function roomsMini(){
+  const h=hoje(),now=agoraHM(),st={};
+  vivas().filter(l=>l.data===h&&l.local==='paulista'&&l.sala).forEach(l=>{st[l.sala]=l.status==='aovivo'?'onair':(st[l.sala]==='onair'?'onair':'busy')});
+  return `<div class="rooms">${SALAS.map(s=>`<div class="room ${st[s]||''}"><b>${s}</b>${st[s]==='onair'?'no ar':st[s]==='busy'?'reservada':'livre'}</div>`).join('')}</div>
+  <div class="legend"><span><i style="background:var(--flash)"></i>no ar</span><span><i style="background:var(--volt)"></i>reservada hoje</span><span><i style="background:var(--raised2);border:1px solid var(--line)"></i>livre</span></div>`;
+}
+function dinheiroCard(){
+  const h=hoje(), rec=D.recs.filter(r=>r.status==='a receber'), at=rec.filter(r=>r.vencimento<h);
+  const pag=D.pags.filter(p=>p.status==='a pagar'), soc=saldoSocios().filter(x=>x.v>0);
+  return `<section class="card"><div class="card-h"><h2>Dinheiro</h2><button class="link" data-go="financeiro">Financeiro ›</button></div>
+   <div class="money">
+     <div><span class="label">A receber</span><b class="num">${moneyK(rec.reduce((s,r)=>s+Number(r.valor),0))}</b><small class="muted">${at.length?`<span style="color:var(--bad)">${money(at.reduce((s,r)=>s+Number(r.valor),0))} atrasado</span>`:'nada atrasado'}</small></div>
+     <div><span class="label">Freelancers a pagar</span><b class="num">${moneyK(pag.reduce((s,p)=>s+Number(p.valor),0))}</b><small class="muted">${new Set(pag.map(p=>p.freelancer_id)).size} pessoa(s)</small></div>
+     <div><span class="label">Implay deve aos sócios</span><b class="num">${moneyK(soc.reduce((s,x)=>s+x.v,0))}</b><small class="muted">${soc.map(x=>esc(x.nome)).join(', ')||'nada'}</small></div>
+     <div><span class="label">Recebido em ${mesPrefixo().nome}</span><b class="num">${moneyK(D.recs.filter(r=>r.status==='recebido'&&(r.recebido_em||'').startsWith(mesPrefixo().p)).reduce((s,r)=>s+Number(r.valor),0))}</b><small class="muted">das marcas</small></div>
+   </div></section>`;
+}
+function equipeMes(){
+  const {p}=mesPrefixo();
+  return D.free.filter(f=>f.ativo).map(f=>{
+    const ls=D.lives.filter(l=>l.status!=='cancelada'&&l.data.startsWith(p)&&(l.host_id===f.id||l.operador_id===f.id));
+    const cs=D.cands.filter(c=>c.freelancer_id===f.id);
+    const pg=D.pags.filter(x=>x.freelancer_id===f.id&&x.status==='a pagar');
+    return {f,jobs:ls.length,h:ls.reduce((s,l)=>s+horas(l.ini,l.fim),0),cand:cs.length,aceitas:cs.filter(c=>c.status==='aceita').length,retiradas:cs.filter(c=>c.status==='retirada').length,aPagar:pg.reduce((s,x)=>s+Number(x.valor),0),nfPend:pg.some(x=>!x.nf_recebida)};
+  }).sort((a,b)=>b.jobs-a.jobs||a.f.nome.localeCompare(b.f.nome));
+}
+
+V.agenda=()=>{
+  const h=hoje(),op=canOp();
+  const base=addD(h,UI.semana*7), dias=Array.from({length:7},(_,i)=>addD(base,i));
+  const f=UI.filtro;
+  const ok=l=>(f==='canceladas'?l.status==='cancelada':l.status!=='cancelada')&&(f==='todas'||f==='canceladas'||(f==='vagas'?l.status==='agendada'&&vagasDe(l)>0:f==='paulista'?l.local==='paulista':f==='cliente'?l.local==='cliente':true))&&match(marca(l.marca_id).nome,(job(l.job_id)||{}).nome,(free(l.host_id)||{}).nome,(free(l.operador_id)||{}).nome,l.sala);
+  const cand=D.cands.filter(c=>c.status==='pendente'&&(D.lives.find(l=>l.id===c.live_id)||{}).status==='agendada');
+  return `<div class="col full">
+   <div class="mh"><div><h1>Lives e agenda</h1><p>Toda live sai de um job. Vaga aberta aparece para os hosts e operadores no celular deles; quem quiser se candidata e a gerência confirma.</p></div>
+     ${op?'<div class="acts"><button class="btn sticker" data-act="novalive">+ Nova live</button></div>':''}</div>
+   ${cand.length&&op?`<section class="card"><div class="card-h"><h2>Candidaturas esperando resposta</h2><span class="muted">${cand.length}</span></div><div class="list">${cand.map(c=>{const l=D.lives.find(x=>x.id===c.live_id),fr=free(c.freelancer_id)||{nome:'?'};return `<div class="row">${av(fr.nome,fCor(fr.id))}<div class="grow"><b>${esc(fr.nome)} quer ser ${c.funcao} · ${esc(marca(l.marca_id).nome)}</b><small>${dCurto(l.data)} ${hm(l.ini)}–${hm(l.fim)} · ${esc(ondeTxt(l))} · pediu ${tempo(c.criado_em)}</small></div><div class="acts"><button class="btn sm ok" data-act="aceitar" data-id="${c.id}">Confirmar</button><button class="btn sm" data-act="recusar" data-id="${c.id}">Recusar</button></div></div>`}).join('')}</div></section>`:''}
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+     <div class="chips" role="group" aria-label="Filtro">${[['todas','Todas'],['vagas','Com vaga'],['paulista','Na Paulista'],['cliente','No cliente'],['canceladas','Canceladas']].map(([k,t])=>`<button data-filtro="${k}" aria-pressed="${f===k}">${t}</button>`).join('')}</div>
+     <div class="weeknav"><button class="btn sm" data-act="sem" data-d="-1" aria-label="Semana anterior">‹</button><button class="btn sm" data-act="sem" data-d="0">${UI.semana?'Voltar para hoje':'A partir de hoje'}</button><button class="btn sm" data-act="sem" data-d="1" aria-label="Próxima semana">›</button></div>
+   </div>
+   <div class="agcol">${dias.map(d=>{const ls=D.lives.filter(l=>l.data===d&&ok(l));return `<div class="d"><div class="dh ${d===h?'today':''}">${DIAS[dObj(d).getDay()]}<b>${dObj(d).getDate()}/${dObj(d).getMonth()+1}</b></div>${ls.map(l=>evCard(l,true)).join('')||'<span class="muted" style="font-size:12px">—</span>'}${op&&d>=h?`<button class="btn sm ghost" data-act="novalive" data-d="${d}" style="margin-top:auto">+ live</button>`:''}</div>`}).join('')}</div>
+   <div class="note"><b>Registro de escolha livre.</b> Cada candidatura, confirmação, recusa e desistência fica guardada com data e hora no Histórico. É a prova de que cada freelancer escolhe os próprios jobs.</div>
+  </div>`;
+};
+
+V.jobs=()=>{
+  const op=canOp();
+  const js=D.jobs.filter(j=>(UI.verCanc?j.status==='cancelado':j.status==='ativo')&&match(marca(j.marca_id).nome,j.nome,pNome(j.responsavel_id)));
+  const cols=[['Lead e proposta',j=>j.etapa<=1],['Contrato',j=>j.etapa===2],['Preparação',j=>j.etapa===3||j.etapa===4],['No ar',j=>j.etapa===5],['Fechamento',j=>j.etapa>=6]];
+  const ms=D.marcas.filter(m=>match(m.nome,m.segmento));
+  return `<div class="col full">
+   <div class="mh"><div><h1>Marcas e jobs</h1><p>Cada card é um job (uma campanha ou contrato de uma marca). Toque para ver lives, valores e o próximo passo.</p></div>
+     ${op?'<div class="acts"><button class="btn ghost" data-act="novamarca">+ Marca</button><button class="btn sticker" data-act="novojob">+ Novo job</button></div>':''}</div>
+   <div class="chips"><button data-act="vercanc" aria-pressed="${!UI.verCanc}">Ativos</button><button data-act="vercanc" aria-pressed="${UI.verCanc}">Cancelados</button></div>
+   <div class="kanban">${cols.map(([t,fn])=>{const cs=js.filter(fn);return `<div class="kcol"><h3><span>${t}</span><span class="muted">${cs.length}</span></h3>${cs.map(j=>`<button class="kc" data-job="${j.id}"><span class="who">${logo(j.marca_id)}<span style="min-width:0"><b>${esc(marca(j.marca_id).nome)}</b><small>${esc(j.nome)}</small></span></span><span class="v num">${marca(j.marca_id).conta_propria?'Conta própria':money(j.valor)}</span>${jobSit(j)}</button>`).join('')||'<span class="muted" style="font-size:12px">Nada aqui</span>'}</div>`}).join('')}</div>
+   <section class="card"><div class="card-h"><h2>Marcas</h2><span class="muted">${D.marcas.length}</span></div>
+     ${ms.length?`<div class="grid3">${ms.map(m=>{const n=D.jobs.filter(j=>j.marca_id===m.id&&j.status==='ativo').length;return `<button class="roomcard" ${op?`data-marca="${m.id}"`:''}><span class="who">${logo(m.id)}<span style="min-width:0"><b>${esc(m.nome)}</b><small>${esc(m.segmento||(m.conta_propria?'Conta própria':''))}</small></span></span><small class="muted">${n} job${n!==1?'s':''} ativo${n!==1?'s':''}${m.contato_nome?' · '+esc(m.contato_nome):''}</small></button>`}).join('')}</div>`:'<p class="empty">Nenhuma marca ainda.</p>'}
+   </section>
+  </div>`;
+};
+
+V.propostas=()=>{
+  const op=canOp(), ps=D.props.filter(p=>match(marca(p.marca_id).nome,p.escopo,'P-'+pad(p.numero)));
+  const fech=D.props.filter(p=>['aceita','perdida'].includes(p.status)), ac=fech.filter(p=>p.status==='aceita');
+  return `<div class="col full">
+   <div class="mh"><div><h1>Propostas</h1><p>Registre cada proposta enviada. Quando a marca aceitar, crie o job direto da proposta.</p></div>${op?'<div class="acts"><button class="btn sticker" data-act="novaprop">+ Nova proposta</button></div>':''}</div>
+   <div class="grid3">
+     <div class="kpi"><span class="label">Em negociação</span><span class="v num">${moneyK(D.props.filter(p=>['enviada','negociacao'].includes(p.status)).reduce((s,p)=>s+Number(p.valor),0))}</span><span class="s">enviadas e em negociação</span></div>
+     <div class="kpi"><span class="label">Taxa de fechamento</span><span class="v num">${fech.length?Math.round(ac.length/fech.length*100)+'%':'—'}</span><span class="s">${ac.length} de ${fech.length} decididas</span></div>
+     <div class="kpi"><span class="label">Ticket médio</span><span class="v num">${ac.length?moneyK(ac.reduce((s,p)=>s+Number(p.valor),0)/ac.length):'—'}</span><span class="s">propostas aceitas</span></div>
+   </div>
+   <section class="card">${ps.length?`<div class="tblwrap"><table><thead><tr><th>Nº</th><th>Marca</th><th>Escopo</th><th class="r">Valor</th><th>Situação</th><th>Validade</th></tr></thead><tbody>${ps.map(p=>`<tr class="click" ${op?`data-prop="${p.id}"`:''}><td class="num muted">P-${pad(p.numero)}</td><td><div class="who">${logo(p.marca_id)}<b>${esc(marca(p.marca_id).nome)}</b></div></td><td style="max-width:320px">${esc(p.escopo)}</td><td class="num r" style="font-weight:700">${money(p.valor)}</td><td>${pill(...PROP_ST[p.status])}${p.job_id?' <span class="muted" style="font-size:11px">· job criado</span>':''}</td><td class="muted">${p.validade?dCurto(p.validade):'—'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">Nenhuma proposta registrada.</p>'}</section>
+  </div>`;
+};
+
+V.equipe=()=>{
+  const op=canOp(), adm=isAdm(), xs=equipeMes().filter(x=>match(x.f.nome,PAPEL[x.f.papel],x.f.email));
+  const inat=D.free.filter(f=>!f.ativo);
+  return `<div class="col full">
+   <div class="mh"><div><h1>Equipe freelancer</h1><p>Hosts, operadores e editores. Cada um escolhe os jobs pelo celular, emite NF e recebe pelo que fez. Com o e-mail cadastrado, a pessoa cria a conta e já entra como Seller.</p></div>${op?'<div class="acts"><button class="btn sticker" data-act="novofree">+ Freelancer</button></div>':''}</div>
+   <section class="card">${xs.length?`<div class="tblwrap"><table><thead><tr><th>Pessoa</th><th>Função</th><th class="r">Lives no mês</th><th class="r">Horas</th><th>Escolhas (todas)</th>${adm?'<th class="r">A pagar</th><th>NF</th>':''}<th>Acesso</th></tr></thead><tbody>${xs.map(x=>{const temConta=x.f.email&&D.profiles.some(p=>p.email&&p.email.toLowerCase()===x.f.email.toLowerCase());return `<tr class="click" ${op?`data-free="${x.f.id}"`:''}><td><div class="who">${av(x.f.nome,fCor(x.f.id))}<b>${esc(x.f.nome)}</b></div></td><td>${PAPEL[x.f.papel]}</td><td class="num r">${x.jobs}</td><td class="num r">${x.h?fmtH(x.h):'—'}</td><td class="muted" style="font-size:12px">${x.cand} candidatura${x.cand!==1?'s':''} · ${x.aceitas} confirmada${x.aceitas!==1?'s':''}${x.retiradas?` · ${x.retiradas} desistência${x.retiradas>1?'s':''}`:''}</td>${adm?`<td class="num r" style="font-weight:700">${x.aPagar?money(x.aPagar):'—'}</td><td>${x.aPagar?(x.nfPend?pill('Pendente','warn'):pill('Recebida','ok')):''}</td>`:''}<td>${!x.f.email?pill('Sem e-mail','mute'):temConta?pill('Com conta','ok'):pill('Convidado','info')}</td></tr>`}).join('')}</tbody></table></div>`:'<p class="empty">Nenhum freelancer cadastrado.</p>'}</section>
+   ${inat.length?`<section class="card"><div class="card-h"><h2>Inativos</h2></div><div class="list">${inat.map(f=>`<button class="row click" ${op?`data-free="${f.id}"`:''}>${av(f.nome,'var(--raised2)')}<span class="grow"><b>${esc(f.nome)}</b><small>${PAPEL[f.papel]}</small></span></button>`).join('')}</div></section>`:''}
+   <div class="note"><b>Por que "Escolhas" importa:</b> mostra que a pessoa se candidatou, foi confirmada ou desistiu por conta própria. Junto com NF e pagamento por live, é o que afasta o vínculo CLT.</div>
+  </div>`;
+};
+
+V.estudios=()=>{
+  const h=UI.estDia||hoje();
+  const ls=vivas().filter(l=>l.data===h&&l.local==='paulista');
+  const H0=8,HN=16;
+  const ocup=s=>{const arr=Array(HN).fill('');ls.filter(l=>l.sala===s).forEach(l=>{const a=+hm(l.ini).slice(0,2),b=Math.ceil(horas(l.ini,l.fim)+(+hm(l.ini).slice(3))/60);for(let i=0;i<b;i++){const k=a+i-H0;if(k>=0&&k<HN)arr[k]=l.status==='aovivo'?'a':'b'}});return arr};
+  return `<div class="col full">
+   <div class="mh"><div><h1>Estúdios</h1><p>Salas da Paulista 2200. A ocupação vem das lives agendadas em cada sala.</p></div>
+     <div class="acts"><label class="f" style="flex-direction:row;align-items:center;gap:8px"><span>Dia</span><input type="date" id="estdia" value="${h}" style="width:auto"></label></div></div>
+   <p class="muted" style="margin:0">${dExt(h)} · linha do dia das 8h às 24h</p>
+   <div class="grid3">${SALAS.map(s=>{const lx=ls.filter(l=>l.sala===s),on=lx.some(l=>l.status==='aovivo');return `<div class="roomcard ${on?'onair':lx.length?'busy':''}"><div style="display:flex;justify-content:space-between;align-items:center"><span class="code">${s}</span>${on?'<span class="live"><i></i>AO VIVO</span>':lx.length?pill(lx.length+' live'+(lx.length>1?'s':''),'ok'):pill('Livre','mute')}</div>${lx.map(l=>`<button class="link" style="text-align:left;color:var(--text);font-weight:600;font-size:12px" data-live="${l.id}">${hm(l.ini)}–${hm(l.fim)} · ${esc(marca(l.marca_id).nome)}${l.host_id?' · '+esc(free(l.host_id).nome):''}</button>`).join('')||'<small class="muted">Sem reserva</small>'}<div class="slots">${ocup(s).map(x=>`<i class="${x}"></i>`).join('')}</div><div class="slotlbl"><span>8h</span><span>16h</span><span>24h</span></div></div>`}).join('')}</div>
+  </div>`;
+};
+
+V.financeiro=()=>{
+  if(!isAdm())return '<div class="col full"><p class="empty">Só ADM vê o financeiro.</p></div>';
+  const h=hoje(), rec=D.recs.filter(r=>r.status==='a receber').sort((a,b)=>a.vencimento.localeCompare(b.vencimento));
+  const pag=D.pags.filter(p=>p.status==='a pagar'), soc=saldoSocios();
+  const porF={};pag.forEach(p=>{(porF[p.freelancer_id]=porF[p.freelancer_id]||[]).push(p)});
+  const {p:mp,nome:mn}=mesPrefixo();
+  const recebMes=D.recs.filter(r=>r.status==='recebido'&&(r.recebido_em||'').startsWith(mp));
+  const pagosMes=D.pags.filter(x=>x.status==='pago'&&(x.pago_em||'').startsWith(mp));
+  return `<div class="col full">
+   <div class="mh"><div><h1>Financeiro</h1><p>Receber das marcas, pagar os freelancers e devolver aos sócios o que eles adiantaram.</p></div><div class="acts"><button class="btn ghost" data-act="novopag">+ Pagamento avulso</button><button class="btn sticker" data-act="novorec">+ A receber</button></div></div>
+   <div class="kpis">
+     <div class="kpi"><span class="label">A receber</span><span class="v num">${moneyK(rec.reduce((s,r)=>s+Number(r.valor),0))}</span><span class="s">${rec.filter(r=>r.vencimento<h).length?`<span style="color:var(--bad)">${money(rec.filter(r=>r.vencimento<h).reduce((s,r)=>s+Number(r.valor),0))} atrasado</span>`:'nada atrasado'}</span></div>
+     <div class="kpi"><span class="label">Freelancers a pagar</span><span class="v num">${moneyK(pag.reduce((s,p)=>s+Number(p.valor),0))}</span><span class="s">${Object.keys(porF).length} pessoa(s)</span></div>
+     <div class="kpi"><span class="label">Implay deve aos sócios</span><span class="v num">${moneyK(soc.filter(x=>x.v>0).reduce((s,x)=>s+x.v,0))}</span><span class="s">do Implay Despesas</span></div>
+     <div class="kpi"><span class="label">Saldo de ${mn}</span><span class="v num">${moneyK(recebMes.reduce((s,r)=>s+Number(r.valor),0)-pagosMes.reduce((s,x)=>s+Number(x.valor),0))}</span><span class="s">recebido ${moneyK(recebMes.reduce((s,r)=>s+Number(r.valor),0))} − pago ${moneyK(pagosMes.reduce((s,x)=>s+Number(x.valor),0))}</span></div>
+   </div>
+   <div class="quad">
+    <section class="card"><div class="card-h"><h2>A receber das marcas</h2></div>${rec.length?`<div class="list">${rec.map(r=>`<div class="row">${logo(r.marca_id)}<div class="grow"><b>${esc(marca(r.marca_id).nome)} · ${money(r.valor)}</b><small>${esc(r.descricao||'—')} · vence ${dCurto(r.vencimento)}${r.nf_emitida?' · NF emitida':''}</small></div><div class="acts">${r.vencimento<h?pill('Atrasado','bad'):pill(quando(r.vencimento),'info')}<button class="btn sm ok" data-act="recebido" data-id="${r.id}">Recebi</button><button class="btn sm" data-rec="${r.id}">Editar</button></div></div>`).join('')}</div>`:'<p class="empty">Nada a receber lançado.</p>'}</section>
+    <section class="card"><div class="card-h"><h2>Pagar freelancers</h2><span class="muted" style="font-size:12px">gerado ao encerrar cada live</span></div>${Object.keys(porF).length?`<div class="list">${Object.entries(porF).map(([fid,ps])=>{const fr=free(fid)||{nome:'?'},tot=ps.reduce((s,x)=>s+Number(x.valor),0),nf=ps.every(x=>x.nf_recebida);return `<div class="row">${av(fr.nome,fCor(fid))}<div class="grow"><b>${esc(fr.nome)} · ${money(tot)}</b><small>${ps.length} item${ps.length>1?'s':''}${fr.pix?' · PIX '+esc(fr.pix):''}</small></div><div class="acts"><button class="btn sm ${nf?'ok':''}" data-act="nf" data-f="${fid}" aria-pressed="${nf}">${nf?'NF ok':'Marcar NF'}</button><button class="btn sm ok" data-act="pagofree" data-f="${fid}">Paguei</button><button class="btn sm" data-act="verpags" data-f="${fid}">Ver</button></div></div>`}).join('')}</div>`:'<p class="empty">Ninguém para pagar.</p>'}</section>
+    <section class="card"><div class="card-h"><h2>Reembolsos dos sócios</h2><a class="link" href="../Implay-despesas/">Abrir Implay Despesas ›</a></div>${soc.length?`<div class="list">${soc.map(x=>`<div class="row">${av(x.nome,'var(--volt)')}<div class="grow"><b>${x.v>0?'Implay deve a ':'Recebeu a mais: '}${esc(x.nome)}</b><small>gastos pagos do próprio bolso − reembolsos</small></div><span class="amt num">${money(Math.abs(x.v))}</span></div>`).join('')}</div>`:'<p class="empty">Ninguém tem reembolso a receber.</p>'}</section>
+    <section class="card"><div class="card-h"><h2>Recebidos recentes</h2></div>${D.recs.filter(r=>r.status==='recebido').slice(-6).reverse().map(r=>`<div class="row">${logo(r.marca_id)}<div class="grow"><b>${esc(marca(r.marca_id).nome)}</b><small>${esc(r.descricao||'')} · ${r.recebido_em?dCurto(r.recebido_em):''}</small></div><span class="amt num">${money(r.valor)}</span></div>`).join('')||'<p class="empty">Nada recebido ainda.</p>'}</section>
+   </div>
+  </div>`;
+};
+
+V.relatorios=()=>{
+  const {p,nome}=mesPrefixo(UI.relMes);
+  const ls=D.lives.filter(l=>l.status==='feita'&&l.data.startsWith(p));
+  const porM={};ls.forEach(l=>{porM[l.marca_id]=(porM[l.marca_id]||0)+Number(l.gmv||0)});
+  const mb=Object.entries(porM).sort((a,b)=>b[1]-a[1]),mx=Math.max(1,...mb.map(x=>x[1]));
+  const porH={};ls.filter(l=>l.host_id).forEach(l=>{porH[l.host_id]=(porH[l.host_id]||0)+Number(l.gmv||0)});
+  const hb=Object.entries(porH).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const gmv=ls.reduce((s,l)=>s+Number(l.gmv||0),0),hrs=ls.reduce((s,l)=>s+horas(l.ini,l.fim),0);
+  const ped=ls.reduce((s,l)=>s+Number(l.pedidos||0),0),picos=ls.filter(l=>l.pico!=null);
+  // horas por semana (últimas 6 semanas, segunda a domingo)
+  const d0=new Date();d0.setDate(d0.getDate()-((d0.getDay()+6)%7));
+  const sem=Array.from({length:6},(_,i)=>{const s=new Date(d0);s.setDate(s.getDate()-7*(5-i));const a=dkey(s),b=addD(a,6);return [`${s.getDate()}/${s.getMonth()+1}`,D.lives.filter(l=>l.status==='feita'&&l.data>=a&&l.data<=b).reduce((x,l)=>x+horas(l.ini,l.fim),0)]});
+  const top=Math.max(10,Math.ceil(Math.max(...sem.map(x=>x[1]))/10)*10);
+  return `<div class="col full">
+   <div class="mh"><div><h1>Relatórios</h1><p>Os números que vão para a marca e para os sócios. Saem das lives encerradas com resultado lançado.</p></div>
+     <div class="chips">${[0,-1,-2].map(o=>`<button data-act="relmes" data-o="${o}" aria-pressed="${UI.relMes===o}">${mesPrefixo(o).nome}</button>`).join('')}</div></div>
+   <div class="kpis">
+     <div class="kpi"><span class="label">GMV em ${nome}</span><span class="v num">${moneyK(gmv)}</span><span class="s">${ls.length} live${ls.length!==1?'s':''} encerrada${ls.length!==1?'s':''}</span></div>
+     <div class="kpi"><span class="label">GMV por hora</span><span class="v num">${hrs?moneyK(gmv/hrs):'—'}</span><span class="s">${fmtH(hrs)} no ar</span></div>
+     <div class="kpi"><span class="label">Pedidos</span><span class="v num">${ped.toLocaleString('pt-BR')}</span><span class="s">${ped?'ticket médio '+money(gmv/ped):'sem pedidos lançados'}</span></div>
+     <div class="kpi"><span class="label">Pico médio</span><span class="v num">${picos.length?Math.round(picos.reduce((s,l)=>s+l.pico,0)/picos.length).toLocaleString('pt-BR'):'—'}</span><span class="s">pessoas assistindo</span></div>
+   </div>
+   <div class="quad">
+    <section class="card"><div class="card-h"><h2>GMV por marca</h2></div>${mb.length?`<div class="bars">${mb.map(([k,v])=>`<div class="bar"><span>${esc(marca(k).nome)}</span><span class="t"><i style="width:${v/mx*100}%"></i></span><span class="v num">${moneyK(v)}</span></div>`).join('')}</div>`:'<p class="empty">Nenhuma live encerrada com resultado neste mês.</p>'}</section>
+    <section class="card"><div class="card-h"><h2>Horas de live por semana</h2></div>
+      <svg viewBox="0 0 330 150" style="width:100%;height:auto" role="img" aria-label="Horas de live nas últimas 6 semanas">
+       ${[0,.5,1].map(f=>`<line x1="36" x2="322" y1="${120-f*100}" y2="${120-f*100}" stroke="var(--line)"/><text x="30" y="${124-f*100}" text-anchor="end" font-size="10" fill="var(--muted)">${Math.round(top*f)}</text>`).join('')}
+       ${sem.map(([d,v],i)=>{const hh=v/top*100,last=i===sem.length-1;return `<rect x="${50+i*46}" y="${120-hh}" width="28" height="${Math.max(hh,0)}" rx="5" fill="${last?'var(--flash)':'var(--muted)'}" opacity="${last?1:.5}"/>${v?`<text x="${64+i*46}" y="${114-hh}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text)">${Math.round(v)}h</text>`:''}<text x="${64+i*46}" y="138" text-anchor="middle" font-size="10" fill="var(--muted)">${d}</text>`}).join('')}
+      </svg></section>
+    <section class="card"><div class="card-h"><h2>Hosts com mais GMV</h2></div>${hb.length?`<div class="list">${hb.map(([id,v])=>`<div class="row">${av(free(id).nome,fCor(id))}<div class="grow"><b>${esc(free(id).nome)}</b><small>${ls.filter(l=>l.host_id===id).length} live(s)</small></div><span class="amt num">${money(v)}</span></div>`).join('')}</div>`:'<p class="empty">Sem dados neste mês.</p>'}</section>
+    <section class="card"><div class="card-h"><h2>Lives encerradas</h2></div>${ls.length?`<div class="list">${ls.slice().reverse().slice(0,8).map(l=>`<button class="row click" data-live="${l.id}">${logo(l.marca_id)}<span class="grow"><b>${esc(marca(l.marca_id).nome)} · ${dCurto(l.data)}</b><small>${fmtH(horas(l.ini,l.fim))}${l.pedidos!=null?' · '+l.pedidos+' pedidos':''}${l.pico!=null?' · pico '+l.pico:''}</small></span><span class="amt num">${l.gmv!=null?money(l.gmv):'—'}</span></button>`).join('')}</div>`:'<p class="empty">Nenhuma.</p>'}</section>
+   </div>
+  </div>`;
+};
+
+V.recados=()=>`<div class="col full"><div class="mh"><div><h1>Recados</h1><p>Avisos rápidos para a equipe interna. Sellers não veem.</p></div></div>
+  <form class="card" id="frecado" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap"><label class="f" style="flex:1;min-width:220px"><span>Novo recado</span><input id="r-txt" maxlength="500" placeholder="Ex.: Kit da Lumi chegou, está no E3" autocomplete="off"></label><button class="btn sticker" type="submit">Enviar</button></form>
+  <section class="card chat">${D.recados.map(c=>`<div class="m">${av(pNome(c.de),pCor(c.de))}<div style="min-width:0"><b>${esc(pNome(c.de))}</b><p>${esc(c.texto)}</p></div><span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><time>${tempo(c.criado_em)}</time>${c.de===ME.id||isAdm()?`<button class="link" style="color:var(--muted);font-size:11px" data-act="delrecado" data-id="${c.id}">apagar</button>`:''}</span></div>`).join('')||'<p class="empty">Nenhum recado.</p>'}</section></div>`;
+
+V.historico=()=>`<div class="col full"><div class="mh"><div><h1>Histórico</h1><p>Gravado pelo próprio banco. Ninguém edita nem apaga.</p></div></div>
+  <section class="card">${D.log.filter(x=>match(x.acao,pNome(x.quem))).map(x=>{const d=new Date(x.em);return `<div class="row"><span class="muted num" style="font-size:12px;width:92px;flex:none">${dCurto(dkey(d))} ${pad(d.getHours())}:${pad(d.getMinutes())}</span><span class="grow" style="font-size:13px"><b style="display:inline">${esc(pNome(x.quem))}</b> ${esc(x.acao)}</span></div>`}).join('')||'<p class="empty">Nada ainda.</p>'}</section></div>`;
+
+V.acessos=()=>{
+  if(!isAdm())return '<div class="col full"><p class="empty">Só ADM.</p></div>';
+  const pend=D.profiles.filter(p=>p.status==='pendente'), ativos=D.profiles.filter(p=>p.status!=='pendente');
+  const opts=v=>Object.entries(NIVEL).map(([k,l])=>`<option value="${k}" ${v===k?'selected':''}>${l}</option>`).join('');
+  return `<div class="col full"><div class="mh"><div><h1>Acessos</h1><p>ADM: tudo. Gerência: lives, jobs, propostas, equipe e estúdios, sem financeiro. Consulta: só olha. Seller: vagas, os próprios jobs e pagamentos.</p></div></div>
+   ${pend.map(p=>`<section class="card" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="grow" style="flex:1;min-width:200px"><b>${esc(p.email)}</b> pediu acesso</span><select class="btn sm" id="lv-${p.id}" aria-label="Nível">${opts('seller')}</select><button class="btn sm ok" data-act="libera" data-id="${p.id}">Liberar</button><button class="btn sm danger" data-act="bloq" data-id="${p.id}">Recusar</button></section>`).join('')}
+   <section class="card"><div class="tblwrap"><table><thead><tr><th>Pessoa</th><th>E-mail</th><th>Nível</th><th></th></tr></thead><tbody>${ativos.map(p=>`<tr><td><div class="who">${av(p.nome,pCor(p.id))}<b>${esc(p.nome)}</b></div></td><td class="muted">${esc(p.email)}</td><td><select class="btn sm" data-nivel="${p.id}" ${p.id===ME.id?'disabled':''} aria-label="Nível de ${esc(p.nome)}">${opts(p.nivel)}</select></td><td class="r">${p.id===ME.id?'<span class="muted">você</span>':p.status==='ativo'?`<button class="btn sm danger" data-act="bloq" data-id="${p.id}">Bloquear</button>`:`<button class="btn sm" data-act="libera" data-id="${p.id}">Desbloquear</button>`}</td></tr>`).join('')}</tbody></table></div></section>
+   <form class="card" id="fconv"><div class="card-h"><h2>Liberar um e-mail antes da pessoa entrar</h2></div><div class="frow"><label class="f"><span>Nome</span><input id="c-nome" required></label><label class="f"><span>E-mail</span><input id="c-email" type="email" autocapitalize="none" required></label></div><div style="display:flex;gap:10px;align-items:flex-end;margin-top:12px;flex-wrap:wrap"><label class="f"><span>Nível</span><select id="c-niv">${opts('manager')}</select></label><button class="btn sticker" type="submit">Liberar</button></div><p class="muted" style="font-size:12px;margin:10px 0 0">Para freelancers, cadastre em "Equipe freelancer" com o e-mail: o acesso de Seller é liberado sozinho.</p></form>
+   ${D.conv.length?`<section class="card"><div class="card-h"><h2>E-mails liberados</h2></div><div class="list">${D.conv.map(c=>`<div class="row"><span class="grow"><b>${esc(c.nome)}</b><small>${esc(c.email)}</small></span>${pill(NIVEL[c.nivel]||c.nivel,'mute')}</div>`).join('')}</div></section>`:''}
+  </div>`;
+};
+
+/* =========================================================================
+   GAVETAS DE DETALHE
+   ========================================================================= */
+function abrir(kind,type,id,extra){UI.layer={kind,type,id,extra};UI.confirm=null;renderLayer()}
+function fechar(){UI.layer=null;UI.confirm=null;document.getElementById('layer').innerHTML=''}
+function reopen(){if(UI.layer&&UI.layer.kind==='det')renderLayer()}
+function renderLayer(){
+  const L=UI.layer;if(!L){fechar();return}
+  const fn=L.kind==='det'?DET[L.type]:FORM[L.type];
+  const body=fn(L.id,L.extra);if(body==null){fechar();return}
+  const wasOpen=!!document.querySelector('#layer .drawer'), sc=wasOpen?document.querySelector('#layer .drawer').scrollTop:0;
+  document.getElementById('layer').innerHTML=`<div class="scrim" data-scrim><div class="drawer" role="dialog" aria-modal="true">${body}</div></div>`;
+  const dr=document.querySelector('#layer .drawer');dr.scrollTop=sc;
+  if(!wasOpen){const f=dr.querySelector('input:not([type=hidden]),select,textarea,button');f&&f.focus({preventScroll:true})}
+  syncForm();
+}
+const fecharBtn='<button type="button" class="ibtn" data-act="fechar" aria-label="Fechar">'+ic('x')+'</button>';
+const DET={};
+DET.live=id=>{
+  const l=D.lives.find(x=>x.id===id);if(!l)return null;
+  const op=canOp(), j=job(l.job_id), cs=D.cands.filter(c=>c.live_id===l.id);
+  const rot=(fid,precisa,funcao)=>fid?esc((free(fid)||{nome:'?'}).nome):precisa?`<span style="color:var(--warn)">vaga aberta${cs.filter(c=>c.funcao===funcao&&c.status==='pendente').length?` · ${cs.filter(c=>c.funcao===funcao&&c.status==='pendente').length} candidato(s)`:''}</span>`:'não precisa';
+  let acts='';
+  if(op){
+    if(l.status==='agendada') acts=`<button class="btn sticker" data-act="noar" data-id="${l.id}">Pôr no ar</button><button class="btn" data-act="encerrar" data-id="${l.id}">Encerrar e lançar resultado</button>`;
+    else if(l.status==='aovivo') acts=`<button class="btn sticker" data-act="encerrar" data-id="${l.id}">Encerrar e lançar resultado</button>`;
+    else if(l.status==='feita') acts=`<button class="btn" data-act="encerrar" data-id="${l.id}">${l.gmv==null?'Lançar resultado':'Corrigir resultado'}</button>`;
+    else acts=`<button class="btn" data-act="reabrir" data-id="${l.id}">Reabrir live</button>`;
+    acts+=`<button class="btn ghost" data-act="editlive" data-id="${l.id}">Editar</button>`;
+    if(l.status==='agendada') acts+= UI.confirm==='canc'?`<button class="btn danger" data-act="cancelalive" data-id="${l.id}">Confirmar cancelamento</button>`:`<button class="btn ghost danger" data-act="confirm" data-c="canc">Cancelar live</button>`;
+  }
+  return `<div class="dhead"><div class="who">${logo(l.marca_id)}<div style="min-width:0"><b style="font-size:15px">${esc(marca(l.marca_id).nome)}</b><small>${esc(dExt(l.data))} · ${hm(l.ini)}–${hm(l.fim)}</small></div></div>${fecharBtn}</div>
+   <div>${liveSt(l)}</div>
+   ${l.status==='feita'||l.status==='aovivo'?`<div class="card" style="background:var(--cobalt);color:#fff;border:0"><div class="money"><div><span class="label" style="color:rgba(255,255,255,.78)">GMV</span><b class="num">${l.gmv!=null?money(l.gmv):'—'}</b></div><div><span class="label" style="color:rgba(255,255,255,.78)">Pico</span><b class="num">${l.pico!=null?l.pico.toLocaleString('pt-BR'):'—'}</b></div><div><span class="label" style="color:rgba(255,255,255,.78)">Pedidos</span><b class="num">${l.pedidos!=null?l.pedidos:'—'}</b></div><div><span class="label" style="color:rgba(255,255,255,.78)">Duração</span><b class="num">${fmtH(horas(l.ini,l.fim))}</b></div></div></div>`:''}
+   <dl class="dl"><dt>Job</dt><dd>${j?`<button class="link" style="font-size:13px" data-job="${j.id}">${esc(j.nome)} ›</button>`:'—'}</dd><dt>Onde</dt><dd>${l.local==='cliente'?'No local do cliente':'Paulista 2200 · '+esc(l.sala||'sala a definir')}</dd><dt>Conta</dt><dd>${l.conta==='implay'?'TikTok da Implay':'TikTok da marca'}</dd><dt>Host</dt><dd>${rot(l.host_id,l.precisa_host,'host')}</dd><dt>Operador</dt><dd>${rot(l.operador_id,l.precisa_operador,'operador')}</dd>${l.obs?`<dt>Obs.</dt><dd>${esc(l.obs)}</dd>`:''}</dl>
+   ${cs.length?`<div><span class="label">Candidaturas</span><div class="list" style="margin-top:6px">${cs.map(c=>{const fr=free(c.freelancer_id)||{nome:'?'};const st={pendente:['Esperando','warn'],aceita:['Confirmada','ok'],recusada:['Não selecionada','mute'],retirada:['Desistiu','mute']}[c.status];return `<div class="row">${av(fr.nome,fCor(fr.id))}<div class="grow"><b>${esc(fr.nome)} · ${c.funcao}</b><small>pediu ${tempo(c.criado_em)}</small></div>${c.status==='pendente'&&op&&l.status==='agendada'?`<div class="acts"><button class="btn sm ok" data-act="aceitar" data-id="${c.id}">Confirmar</button><button class="btn sm" data-act="recusar" data-id="${c.id}">Recusar</button></div>`:pill(...st)}</div>`}).join('')}</div></div>`:''}
+   ${acts?`<div style="display:flex;gap:8px;flex-wrap:wrap">${acts}</div>`:''}`;
+};
+DET.job=id=>{
+  const j=job(id);if(!j)return null;
+  const op=canOp(),m=marca(j.marca_id), ls=D.lives.filter(l=>l.job_id===j.id).sort((a,b)=>(a.data+a.ini).localeCompare(b.data+b.ini));
+  const feitas=ls.filter(l=>l.status==='feita'), gmv=feitas.reduce((s,l)=>s+Number(l.gmv||0),0);
+  const recs=D.recs.filter(r=>r.job_id===j.id), props=D.props.filter(p=>p.job_id===j.id);
+  return `<div class="dhead"><div class="who">${logo(j.marca_id)}<div style="min-width:0"><b style="font-size:15px">${esc(m.nome)}</b><small>${esc(m.segmento)}</small></div></div>${fecharBtn}</div>
+   <h2 style="font-size:18px">${esc(j.nome)}</h2><div>${jobSit(j)}</div>
+   <div class="tblwrap" style="margin:0">${steps(j.etapa)}</div>
+   ${op&&j.status==='ativo'?`<div class="chips" role="group" aria-label="Mover etapa"><button data-act="etapa" data-id="${j.id}" data-d="-1" ${j.etapa===0?'disabled':''}>‹ Voltar etapa</button><button data-act="etapa" data-id="${j.id}" data-d="1" ${j.etapa===8?'disabled':''} style="background:var(--volt);color:var(--on-brand);border-color:var(--volt)">Avançar para ${ETAPAS[Math.min(8,j.etapa+1)]} ›</button></div>`:''}
+   <dl class="dl"><dt>Valor</dt><dd class="num">${m.conta_propria?'Conta própria':money(j.valor)}</dd><dt>Lives</dt><dd>${feitas.length} feitas de ${j.lives_previstas||ls.length} previstas</dd><dt>GMV até agora</dt><dd class="num">${money(gmv)}</dd><dt>Onde</dt><dd>${esc(j.canais||'—')}</dd><dt>Responsável</dt><dd>${esc(pNome(j.responsavel_id))}</dd><dt>Próximo passo</dt><dd>${esc(j.prox_passo||'—')}${j.prox_data?' · '+esc(dExt(j.prox_data)):''}</dd>${j.obs?`<dt>Obs.</dt><dd>${esc(j.obs)}</dd>`:''}${props.length?`<dt>Proposta</dt><dd>${props.map(p=>'P-'+pad(p.numero)).join(', ')}</dd>`:''}</dl>
+   <div><div class="card-h" style="margin-bottom:6px"><span class="label">Lives</span>${op&&j.status==='ativo'?`<button class="btn sm" data-act="novalive" data-job="${j.id}">+ Live neste job</button>`:''}</div><div class="list">${ls.map(l=>`<button class="row click" data-live="${l.id}"><span class="grow"><b>${dCurto(l.data)} · ${hm(l.ini)}–${hm(l.fim)}</b><small>${esc(ondeTxt(l))} · host ${l.host_id?esc(free(l.host_id).nome):'—'}</small></span>${liveSt(l)}</button>`).join('')||'<p class="empty">Nenhuma live ainda.</p>'}</div></div>
+   ${isAdm()?`<div><div class="card-h" style="margin-bottom:6px"><span class="label">A receber deste job</span><button class="btn sm" data-act="novorec" data-job="${j.id}">+ A receber</button></div><div class="list">${recs.map(r=>`<button class="row click" data-rec="${r.id}"><span class="grow"><b>${money(r.valor)} · ${esc(r.descricao||'')}</b><small>vence ${dCurto(r.vencimento)}</small></span>${r.status==='recebido'?pill('Recebido','ok'):r.vencimento<hoje()?pill('Atrasado','bad'):pill('A receber','info')}</button>`).join('')||'<p class="empty">Nada lançado.</p>'}</div></div>`:''}
+   ${op?`<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="editjob" data-id="${j.id}">Editar job</button>${j.status==='ativo'?(UI.confirm==='cancj'?`<button class="btn danger" data-act="canceljob" data-id="${j.id}">Confirmar cancelamento</button>`:'<button class="btn ghost danger" data-act="confirm" data-c="cancj">Cancelar job</button>'):`<button class="btn" data-act="reativajob" data-id="${j.id}">Reativar</button>`}</div>`:''}`;
+};
+DET.pags=fid=>{
+  const fr=free(fid);if(!fr)return null;const ps=D.pags.filter(p=>p.freelancer_id===fid&&p.status!=='cancelado').sort((a,b)=>b.competencia.localeCompare(a.competencia));
+  return `<div class="dhead"><div class="who">${av(fr.nome,fCor(fid))}<div><b style="font-size:15px">${esc(fr.nome)}</b><small>${PAPEL[fr.papel]}${fr.pix?' · PIX '+esc(fr.pix):''}</small></div></div>${fecharBtn}</div>
+   <div class="list">${ps.map(p=>`<div class="row"><div class="grow"><b>${money(p.valor)} · ${esc(p.descricao)}</b><small>${dCurto(p.competencia)}${p.pago_em?' · pago '+dCurto(p.pago_em):''}${p.nf_recebida?' · NF ok':''}</small></div><div class="acts">${p.status==='pago'?pill('Pago','ok'):`<button class="btn sm" data-pag="${p.id}">Editar</button>`}</div></div>`).join('')||'<p class="empty">Nada.</p>'}</div>`;
+};
+
+/* =========================================================================
+   FORMULÁRIOS
+   ========================================================================= */
+const FORM={};
+const chips=(group,opts,val,cls='')=>`<div class="chips ${cls}" role="group" data-group="${group}">${opts.map(([v,t])=>`<button type="button" data-v="${esc(v)}" aria-pressed="${String(val)===String(v)}">${esc(t)}</button>`).join('')}</div>`;
+const gv=(form,g)=>{const b=form.querySelector(`[data-group="${g}"] [aria-pressed="true"]`);return b?b.dataset.v:''};
+const horaSel=(id,val)=>{const[h,m]=(hm(val)||'').split(':');const hs=[...Array.from({length:18},(_,i)=>pad(i+6)),...Array.from({length:6},(_,i)=>pad(i))];return `<div class="hm"><select id="${id}-h" aria-label="Hora">${hs.map(x=>`<option ${x===h?'selected':''}>${x}</option>`).join('')}</select><span>:</span><select id="${id}-m" aria-label="Minutos">${['00','15','30','45'].map(x=>`<option ${x===m?'selected':''}>${x}</option>`).join('')}</select></div>`};
+const dataIn=(id,val,lbl)=>`<label class="f"><span>${lbl}</span><input type="date" id="${id}" value="${val||''}" data-ext><span class="ext" id="${id}-ext">${val?esc(dExt(val)):''}</span></label>`;
+const v=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
+function syncForm(){
+  const f=document.querySelector('#layer form');if(!f)return;
+  f.querySelectorAll('[data-show]').forEach(el=>{const[g,vals]=el.dataset.show.split('=');el.hidden=!vals.split('|').includes(gv(f,g))});
+}
+
+FORM.live=(id,ex={})=>{
+  const l=id?D.lives.find(x=>x.id===id):{data:ex.d||hoje(),ini:'10:00',fim:'13:00',local:'paulista',sala:'',conta:'marca',precisa_host:true,precisa_operador:true,job_id:ex.job||'',obs:''};
+  const js=D.jobs.filter(j=>j.status==='ativo'||j.id===l.job_id);
+  const hosts=D.free.filter(f=>f.ativo&&(f.papel==='host'||f.id===l.host_id)), ops=D.free.filter(f=>f.ativo&&(f.papel==='operador'||f.id===l.operador_id));
+  if(!js.length) return `<div class="dhead"><h2>Nova live</h2>${fecharBtn}</div><div class="callout">Toda live pertence a um job. Cadastre primeiro a marca e o job.</div><button class="btn sticker" data-act="novojob">+ Novo job</button>`;
+  return `<form id="flive" data-id="${id||''}"><div class="dhead"><h2>${id?'Editar live':'Nova live'}</h2>${fecharBtn}</div>
+   <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
+   <label class="f"><span>Job</span><select id="lv-job" required>${js.map(j=>`<option value="${j.id}" ${j.id===l.job_id?'selected':''}>${esc(marca(j.marca_id).nome)} · ${esc(j.nome)}</option>`).join('')}</select></label>
+   ${dataIn('lv-data',l.data,'Dia')}
+   <div class="frow"><div class="f"><span>Começa</span>${horaSel('lv-ini',l.ini)}</div><div class="f"><span>Termina</span>${horaSel('lv-fim',l.fim)}</div></div>
+   <div class="f"><span>Onde</span>${chips('local',[['paulista','Paulista 2200'],['cliente','No local do cliente']],l.local,'big')}</div>
+   <div class="f" data-show="local=paulista"><span>Sala</span>${chips('sala',SALAS.map(s=>[s,s]),l.sala)}</div>
+   <div class="f"><span>Conta do TikTok</span>${chips('conta',[['marca','Da marca'],['implay','Da Implay']],l.conta,'big')}</div>
+   <div class="frow">
+     <div class="f"><span>Host</span><select id="lv-host"><option value="__vaga" ${!l.host_id&&l.precisa_host?'selected':''}>Abrir vaga (candidatura)</option><option value="__nao" ${!l.precisa_host?'selected':''}>Não precisa</option>${hosts.map(f=>`<option value="${f.id}" ${f.id===l.host_id?'selected':''}>${esc(f.nome)}</option>`).join('')}</select></div>
+     <div class="f"><span>Operador</span><select id="lv-op"><option value="__vaga" ${!l.operador_id&&l.precisa_operador?'selected':''}>Abrir vaga (candidatura)</option><option value="__nao" ${!l.precisa_operador?'selected':''}>Não precisa</option>${ops.map(f=>`<option value="${f.id}" ${f.id===l.operador_id?'selected':''}>${esc(f.nome)}</option>`).join('')}</select></div>
+   </div>
+   <small class="muted">Escolher a pessoa direto confirma sem candidatura. "Abrir vaga" mostra a live no celular dos freelancers daquela função.</small>
+   <label class="f"><span>Observação</span><input id="lv-obs" value="${esc(l.obs)}" placeholder="Ex.: kit chega 1h antes"></label>
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">${id?'Salvar':'Criar live'}</button></div></form>`;
+};
+FORM.resultado=id=>{
+  const l=D.lives.find(x=>x.id===id);if(!l)return null;
+  return `<form id="fres" data-id="${id}"><div class="dhead"><h2>Resultado da live</h2>${fecharBtn}</div>
+   <p class="muted">${esc(marca(l.marca_id).nome)} · ${esc(dExt(l.data))} ${hm(l.ini)}–${hm(l.fim)}</p>
+   <div style="display:flex;flex-direction:column;gap:14px">
+   <div class="frow"><label class="f"><span>GMV (R$)</span><input id="rs-gmv" inputmode="decimal" value="${valIn(l.gmv)}" placeholder="0,00"></label><label class="f"><span>Pedidos</span><input id="rs-ped" inputmode="numeric" value="${l.pedidos??''}"></label></div>
+   <div class="frow"><label class="f"><span>Pico de audiência</span><input id="rs-pico" inputmode="numeric" value="${l.pico??''}"></label><div class="f"><span>Terminou às</span>${horaSel('rs-fim',l.fim)}</div></div>
+   <small class="muted">Ao encerrar, o app lança o pagamento do host e do operador pelas horas × valor/hora de cada um.</small>
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">${l.status==='feita'?'Salvar resultado':'Encerrar live'}</button></div></form>`;
+};
+FORM.job=(id,ex={})=>{
+  const j=id?job(id):{marca_id:ex.marca||'',nome:'',etapa:ex.etapa??0,responsavel_id:ME.id,valor:ex.valor||0,lives_previstas:0,canais:'',prox_passo:'',prox_data:'',alerta:'',obs:''};
+  const resp=D.profiles.filter(p=>p.status==='ativo'&&['adm','manager'].includes(p.nivel));
+  if(!D.marcas.length) return `<div class="dhead"><h2>Novo job</h2>${fecharBtn}</div><div class="callout">Cadastre a marca primeiro.</div><button class="btn sticker" data-act="novamarca">+ Marca</button>`;
+  return `<form id="fjob" data-id="${id||''}" data-fromprop="${ex.prop||''}"><div class="dhead"><h2>${id?'Editar job':'Novo job'}</h2>${fecharBtn}</div>
+   <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
+   <div class="f"><span>Marca</span><div style="display:flex;gap:8px"><select id="jb-marca" style="flex:1" required>${D.marcas.filter(m=>m.ativo||m.id===j.marca_id).map(m=>`<option value="${m.id}" ${m.id===j.marca_id?'selected':''}>${esc(m.nome)}</option>`).join('')}</select><button type="button" class="btn sm" data-act="novamarca">+ Marca</button></div></div>
+   <label class="f"><span>Nome do job</span><input id="jb-nome" value="${esc(j.nome)}" placeholder="Ex.: Lançamento sérum vitamina C" required></label>
+   <div class="f"><span>Etapa</span>${chips('etapa',ETAPAS.map((e,i)=>[i,e]),j.etapa)}</div>
+   <div class="frow"><label class="f"><span>Valor do contrato (R$)</span><input id="jb-valor" inputmode="decimal" value="${valIn(j.valor)}"></label><label class="f"><span>Lives previstas</span><input id="jb-lives" inputmode="numeric" value="${j.lives_previstas||''}"></label></div>
+   <label class="f"><span>Onde acontece</span><input id="jb-canais" value="${esc(j.canais)}" placeholder="Ex.: TikTok da marca + afiliados"></label>
+   <label class="f"><span>Responsável</span><select id="jb-resp"><option value="">—</option>${resp.map(p=>`<option value="${p.id}" ${p.id===j.responsavel_id?'selected':''}>${esc(p.nome)}</option>`).join('')}</select></label>
+   <div class="frow"><label class="f"><span>Próximo passo</span><input id="jb-passo" value="${esc(j.prox_passo)}" placeholder="Ex.: reunião de briefing"></label>${dataIn('jb-pdata',j.prox_data,'Quando')}</div>
+   <div class="f"><span>Situação</span>${chips('alerta',Object.entries(ALERTA).map(([k,[t]])=>[k,t]),j.alerta)}</div>
+   <label class="f"><span>Observação</span><textarea id="jb-obs">${esc(j.obs)}</textarea></label>
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">${id?'Salvar':'Criar job'}</button></div></form>`;
+};
+FORM.marca=id=>{
+  const m=id?marca(id):{nome:'',segmento:'',cor:CORES[D.marcas.length%CORES.length],contato_nome:'',contato_tel:'',conta_propria:false,ativo:true,obs:''};
+  return `<form id="fmarca" data-id="${id||''}"><div class="dhead"><h2>${id?'Editar marca':'Nova marca'}</h2>${fecharBtn}</div>
+   <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
+   <label class="f"><span>Nome</span><input id="mc-nome" value="${esc(m.nome)}" required></label>
+   <label class="f"><span>Segmento</span><input id="mc-seg" value="${esc(m.segmento)}" placeholder="Ex.: Skincare"></label>
+   <div class="f"><span>Cor no sistema</span><div class="swatches" role="group" data-group="cor">${CORES.map(c=>`<button type="button" data-v="${c}" aria-pressed="${c===m.cor}" style="background:${c}" aria-label="Cor ${c}"></button>`).join('')}</div></div>
+   <div class="frow"><label class="f"><span>Contato</span><input id="mc-cont" value="${esc(m.contato_nome)}"></label><label class="f"><span>Telefone</span><input id="mc-tel" inputmode="tel" value="${esc(m.contato_tel)}"></label></div>
+   <label class="toggle"><input type="checkbox" id="mc-propria" ${m.conta_propria?'checked':''}> Conta própria (marca da casa, como a OMG)</label>
+   ${id?`<label class="toggle"><input type="checkbox" id="mc-ativo" ${m.ativo?'checked':''}> Ativa</label>`:''}
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">${id?'Salvar':'Criar marca'}</button></div></form>`;
+};
+FORM.prop=id=>{
+  const p=id?D.props.find(x=>x.id===id):{marca_id:'',escopo:'',valor:'',status:'enviada',validade:addD(hoje(),15),motivo:'',job_id:null};
+  if(!D.marcas.length) return `<div class="dhead"><h2>Nova proposta</h2>${fecharBtn}</div><div class="callout">Cadastre a marca primeiro.</div><button class="btn sticker" data-act="novamarca">+ Marca</button>`;
+  return `<form id="fprop" data-id="${id||''}"><div class="dhead"><h2>${id?'Proposta P-'+pad(p.numero):'Nova proposta'}</h2>${fecharBtn}</div>
+   <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
+   <div class="f"><span>Marca</span><div style="display:flex;gap:8px"><select id="pp-marca" style="flex:1">${D.marcas.map(m=>`<option value="${m.id}" ${m.id===p.marca_id?'selected':''}>${esc(m.nome)}</option>`).join('')}</select><button type="button" class="btn sm" data-act="novamarca">+ Marca</button></div></div>
+   <label class="f"><span>Escopo</span><textarea id="pp-esc" placeholder="Ex.: 12 lives de 3h + 20 cortes">${esc(p.escopo)}</textarea></label>
+   <div class="frow"><label class="f"><span>Valor (R$)</span><input id="pp-valor" inputmode="decimal" value="${valIn(p.valor)}"></label>${dataIn('pp-val',p.validade,'Válida até')}</div>
+   <div class="f"><span>Situação</span>${chips('pst',Object.entries(PROP_ST).map(([k,[t]])=>[k,t]),p.status)}</div>
+   <label class="f" data-show="pst=perdida"><span>Por que perdemos</span><input id="pp-mot" value="${esc(p.motivo)}" placeholder="Ex.: preço"></label>
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">${id?'Salvar':'Registrar proposta'}</button>
+   ${id&&p.status==='aceita'&&!p.job_id?`<button type="button" class="btn" data-act="propjob" data-id="${p.id}">Criar job desta proposta</button>`:''}
+   ${id&&p.job_id?`<button type="button" class="btn ghost" data-job="${p.job_id}">Abrir o job ›</button>`:''}
+   </div></form>`;
+};
+FORM.free=id=>{
+  const f=id?free(id):{nome:'',papel:'host',email:'',telefone:'',pix:'',documento:'',valor_hora:'',valor_corte:'',ativo:true,obs:''};
+  return `<form id="ffree" data-id="${id||''}"><div class="dhead"><h2>${id?esc(f.nome):'Novo freelancer'}</h2>${fecharBtn}</div>
+   <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
+   <label class="f"><span>Nome</span><input id="fr-nome" value="${esc(f.nome)}" required></label>
+   <div class="f"><span>Função</span>${chips('papel',Object.entries(PAPEL),f.papel,'big')}</div>
+   <label class="f"><span>E-mail (login no app)</span><input id="fr-email" type="email" autocapitalize="none" value="${esc(f.email)}"><small>Com o e-mail, a pessoa cria a conta no app e já entra como Seller.</small></label>
+   <div class="frow"><label class="f"><span>Telefone</span><input id="fr-tel" inputmode="tel" value="${esc(f.telefone)}"></label><label class="f"><span>Chave PIX</span><input id="fr-pix" value="${esc(f.pix)}"></label></div>
+   <label class="f"><span>CNPJ / MEI</span><input id="fr-doc" value="${esc(f.documento)}"></label>
+   <div class="frow"><label class="f" data-show="papel=host|operador|outro"><span>Valor por hora (R$)</span><input id="fr-vh" inputmode="decimal" value="${valIn(f.valor_hora)}"></label><label class="f" data-show="papel=editor|outro"><span>Valor por corte (R$)</span><input id="fr-vc" inputmode="decimal" value="${valIn(f.valor_corte)}"></label></div>
+   <label class="f"><span>Observação</span><input id="fr-obs" value="${esc(f.obs)}"></label>
+   ${id?`<label class="toggle"><input type="checkbox" id="fr-ativo" ${f.ativo?'checked':''}> Ativo</label>`:''}
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">${id?'Salvar':'Cadastrar'}</button></div></form>`;
+};
+FORM.rec=(id,ex={})=>{
+  const r=id?D.recs.find(x=>x.id===id):{marca_id:ex.job?job(ex.job).marca_id:'',job_id:ex.job||'',descricao:'',valor:'',vencimento:addD(hoje(),15),nf_emitida:false,status:'a receber'};
+  if(!D.marcas.length) return `<div class="dhead"><h2>A receber</h2>${fecharBtn}</div><div class="callout">Cadastre a marca primeiro.</div>`;
+  return `<form id="frec" data-id="${id||''}"><div class="dhead"><h2>${id?'Editar a receber':'Novo a receber'}</h2>${fecharBtn}</div>
+   <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
+   <label class="f"><span>Job</span><select id="rc-job"><option value="">Sem job (só a marca)</option>${D.jobs.map(j=>`<option value="${j.id}" ${j.id===r.job_id?'selected':''}>${esc(marca(j.marca_id).nome)} · ${esc(j.nome)}</option>`).join('')}</select></label>
+   <label class="f"><span>Marca</span><select id="rc-marca">${D.marcas.map(m=>`<option value="${m.id}" ${m.id===r.marca_id?'selected':''}>${esc(m.nome)}</option>`).join('')}</select><small>Se escolher um job, a marca vem dele.</small></label>
+   <label class="f"><span>Descrição</span><input id="rc-desc" value="${esc(r.descricao)}" placeholder="Ex.: parcela 1/3"></label>
+   <div class="frow"><label class="f"><span>Valor (R$)</span><input id="rc-valor" inputmode="decimal" value="${valIn(r.valor)}" required></label>${dataIn('rc-venc',r.vencimento,'Vencimento')}</div>
+   <label class="toggle"><input type="checkbox" id="rc-nf" ${r.nf_emitida?'checked':''}> NF emitida</label>
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">${id?'Salvar':'Lançar'}</button>
+   ${id&&r.status!=='cancelado'?(UI.confirm==='cancr'?`<button type="button" class="btn danger" data-act="cancelrec" data-id="${id}">Confirmar exclusão</button>`:`<button type="button" class="btn ghost danger" data-act="confirm" data-c="cancr">Cancelar este a receber</button>`):''}
+   </div></form>`;
+};
+FORM.pag=(id)=>{
+  const p=id?D.pags.find(x=>x.id===id):{freelancer_id:'',descricao:'',valor:'',competencia:hoje(),nf_recebida:false};
+  return `<form id="fpag" data-id="${id||''}"><div class="dhead"><h2>${id?'Editar pagamento':'Pagamento avulso'}</h2>${fecharBtn}</div>
+   <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
+   <label class="f"><span>Freelancer</span><select id="pg-free" ${id?'disabled':''}>${D.free.filter(f=>f.ativo||f.id===p.freelancer_id).map(f=>`<option value="${f.id}" ${f.id===p.freelancer_id?'selected':''}>${esc(f.nome)} · ${PAPEL[f.papel]}</option>`).join('')}</select></label>
+   <label class="f"><span>Descrição</span><input id="pg-desc" value="${esc(p.descricao)}" placeholder="Ex.: 20 cortes Lumi Skin"></label>
+   <div class="frow"><label class="f"><span>Valor (R$)</span><input id="pg-valor" inputmode="decimal" value="${valIn(p.valor)}"></label>${dataIn('pg-comp',p.competencia,'Referente a')}</div>
+   <label class="toggle"><input type="checkbox" id="pg-nf" ${p.nf_recebida?'checked':''}> NF recebida</label>
+   <p class="err" id="f-err" hidden></p>
+   <button class="btn sticker" type="submit">${id?'Salvar':'Lançar'}</button></div></form>`;
+};
+function ferr(m){const e=document.getElementById('f-err');if(e){e.textContent=m;e.hidden=false;e.scrollIntoView({block:'center'})}return false}
+
+/* =========================================================================
+   SELLER (hosts, operadores, editores) · celular
+   ========================================================================= */
+function drawSeller(){
+  const app=document.getElementById('app'), eu=meuFreela(), h=hoje();
+  const tab=['vagas','meus','ganhos'].includes(UI.view)?UI.view:'vagas';
+  let body='';
+  if(!eu) body=`<div class="selcard"><b>Seu cadastro de freelancer ainda não foi ligado a este e-mail.</b><p class="muted" style="margin:0">Peça para a Implay cadastrar você em "Equipe freelancer" com o e-mail ${esc(ME.email)}.</p></div>`;
+  else if(tab==='vagas'){
+    const ls=D.lives.filter(l=>l.status==='agendada'&&l.data>=h&&((eu.papel==='host'&&l.precisa_host&&!l.host_id)||(eu.papel==='operador'&&l.precisa_operador&&!l.operador_id))).sort((a,b)=>(a.data+a.ini).localeCompare(b.data+b.ini));
+    body=ls.map(l=>{const c=D.cands.find(x=>x.live_id===l.id&&x.freelancer_id===eu.id);const hh=horas(l.ini,l.fim);
+      return `<div class="selcard"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span class="when">${esc(quando(l.data))} · ${hm(l.ini)}–${hm(l.fim)}</span>${logo(l.marca_id)}</div>
+       <div><b>${esc(marca(l.marca_id).nome)}</b><div class="muted" style="font-size:13px">${esc(dExt(l.data))} · ${l.local==='cliente'?'no local do cliente':'Paulista 2200 · '+esc(l.sala||'sala a definir')} · ${fmtH(hh)}${eu.valor_hora?' · '+money(hh*eu.valor_hora):''}</div>${l.obs?`<div class="muted" style="font-size:12px;margin-top:4px">${esc(l.obs)}</div>`:''}</div>
+       ${!c?`<button class="btn sticker wide" data-act="candidatar" data-id="${l.id}">Quero essa vaga</button>`:c.status==='pendente'?`<div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap">${pill('Candidatura enviada','info')}<button class="btn sm ghost" data-act="retirar" data-id="${c.id}">Desistir</button></div>`:c.status==='retirada'?`<button class="btn wide" data-act="recandidatar" data-id="${c.id}">Me candidatar de novo</button>`:pill('Não foi dessa vez','mute')}</div>`}).join('')||`<div class="selcard"><b>Nenhuma vaga aberta agora.</b><p class="muted" style="margin:0">Quando a Implay abrir uma live para ${PAPEL[eu.papel].toLowerCase()}, ela aparece aqui.</p></div>`;
+  }else if(tab==='meus'){
+    const ls=D.lives.filter(l=>(l.host_id===eu.id||l.operador_id===eu.id)&&l.status!=='cancelada');
+    const fut=ls.filter(l=>l.data>=h).sort((a,b)=>(a.data+a.ini).localeCompare(b.data+b.ini)), pas=ls.filter(l=>l.data<h).sort((a,b)=>(b.data+b.ini).localeCompare(a.data+a.ini));
+    const card=l=>`<div class="selcard"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span class="when">${esc(quando(l.data))} · ${hm(l.ini)}–${hm(l.fim)}</span>${l.status==='aovivo'?'<span class="live"><i></i>AO VIVO</span>':pill(l.host_id===eu.id?'Host':'Operador','ok')}</div><div><b>${esc(marca(l.marca_id).nome)}</b><div class="muted" style="font-size:13px">${esc(dExt(l.data))} · ${l.local==='cliente'?'no local do cliente':'Paulista 2200 · '+esc(l.sala||'sala a definir')}</div>${l.obs?`<div class="muted" style="font-size:12px;margin-top:4px">${esc(l.obs)}</div>`:''}</div></div>`;
+    body=`<h2>Próximos</h2>${fut.map(card).join('')||'<p class="empty">Nenhum job confirmado.</p>'}${pas.length?`<h2>Feitos</h2>${pas.slice(0,20).map(card).join('')}`:''}`;
+  }else{
+    const ps=D.pags.filter(p=>p.freelancer_id===eu.id&&p.status!=='cancelado').sort((a,b)=>b.competencia.localeCompare(a.competencia));
+    const ap=ps.filter(p=>p.status==='a pagar');
+    body=`<div class="selcard"><span class="label">A receber da Implay</span><span class="when" style="font-size:24px">${money(ap.reduce((s,p)=>s+Number(p.valor),0))}</span>${ap.some(p=>!p.nf_recebida)?'<span class="muted" style="font-size:12px">Envie a NF para a Implay liberar o pagamento.</span>':''}</div>
+      ${ps.map(p=>`<div class="selcard" style="flex-direction:row;align-items:center"><div style="flex:1;min-width:0"><b style="font-size:13px">${esc(p.descricao||'Pagamento')}</b><div class="muted" style="font-size:12px">${dCurto(p.competencia)}${p.pago_em?' · pago '+dCurto(p.pago_em):''}</div></div><div style="text-align:right"><b class="num">${money(p.valor)}</b><div>${p.status==='pago'?pill('Pago','ok'):pill('A pagar','warn')}</div></div></div>`).join('')}`;
+  }
+  app.innerHTML=`<header class="top" style="position:sticky"><button class="brand" data-go="vagas" style="padding:0">${LOGO.replace('<svg ','<svg style="width:90px" ')}</button><span class="sp"></span><button class="ibtn" data-act="tema" aria-label="Trocar tema">${ic('moon')}</button><button class="btn sm ghost" data-act="logout">Sair</button></header>
+   <div class="sel"><div><span class="label">Olá, ${esc((eu||ME).nome||'')}</span><h1 style="margin-top:4px">${tab==='vagas'?'Vagas abertas':tab==='meus'?'Meus jobs':'Meus pagamentos'}</h1></div>
+   <nav class="tabs" aria-label="Seções">${[['vagas','Vagas'],['meus','Meus jobs'],['ganhos','Pagamentos']].map(([k,t])=>`<button data-go="${k}" ${tab===k?'aria-current="page"':''}>${t}</button>`).join('')}</nav>
+   ${body}<p class="muted" style="font-size:11px;text-align:center">Você escolhe os jobs que quer fazer. Toda candidatura fica registrada.</p></div>`;
+}
+
+/* =========================================================================
+   AÇÕES
+   ========================================================================= */
+let tt;
+function toast(m,bad){clearTimeout(tt);let t=document.querySelector('.toast');if(!t){t=document.createElement('div');t.className='toast';t.setAttribute('role','status');document.body.appendChild(t)}t.textContent=m;t.classList.toggle('bad',!!bad);tt=setTimeout(()=>t.remove(),2800)}
+async function depois(msg){await loadAll();redraw();if(UI.layer)renderLayer();if(msg)toast(msg)}
+
+document.addEventListener('click',async e=>{
+  const t=e.target.closest('[data-act],[data-go],[data-live],[data-job],[data-marca],[data-prop],[data-free],[data-rec],[data-pag],[data-filtro],[data-lmode],[data-group] button,[data-scrim]');
+  if(!t)return;
+  if(t.hasAttribute('data-scrim')){if(e.target===t)fechar();return}
+  if(t.closest('[data-group]')&&t.dataset.v!==undefined){e.preventDefault();t.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===t)));syncForm();return}
+  if(t.dataset.lmode){const el=document.getElementById('l-email');if(el)UI.email=el.value.trim();UI.lmode=t.dataset.lmode;UI.aviso='';draw();return}
+  if(t.dataset.go){UI.view=t.dataset.go;UI.filtro=t.dataset.f||'todas';UI.semana=0;fechar();draw();window.scrollTo(0,0);return}
+  if(t.dataset.filtro){UI.filtro=t.dataset.filtro;draw();return}
+  if(t.dataset.live&&!t.dataset.act){abrir('det','live',t.dataset.live);return}
+  if(t.dataset.job&&!t.dataset.act){abrir('det','job',t.dataset.job);return}
+  if(t.dataset.marca){abrir('form','marca',t.dataset.marca);return}
+  if(t.dataset.prop){abrir('form','prop',t.dataset.prop);return}
+  if(t.dataset.free){abrir('form','free',t.dataset.free);return}
+  if(t.dataset.rec){abrir('form','rec',t.dataset.rec);return}
+  if(t.dataset.pag){abrir('form','pag',t.dataset.pag);return}
+  const a=t.dataset.act,id=t.dataset.id;
+  switch(a){
+    case 'fechar': fechar(); return;
+    case 'confirm': UI.confirm=t.dataset.c; renderLayer(); return;
+    case 'tema': {const n=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=n;try{localStorage.setItem('implay-tema',n)}catch(e){}return}
+    case 'logout': await sb.auth.signOut(); return;
+    case 'reload': start(); return;
+    case 'novalive': abrir('form','live',null,{d:t.dataset.d,job:t.dataset.job}); return;
+    case 'editlive': abrir('form','live',id); return;
+    case 'novojob': abrir('form','job',null); return;
+    case 'editjob': abrir('form','job',id); return;
+    case 'novamarca': UI.voltar=UI.layer&&UI.layer.kind==='form'?{...UI.layer}:null; abrir('form','marca',null); return;
+    case 'novaprop': abrir('form','prop',null); return;
+    case 'novofree': abrir('form','free',null); return;
+    case 'novorec': abrir('form','rec',null,{job:t.dataset.job}); return;
+    case 'novopag': abrir('form','pag',null); return;
+    case 'verpags': abrir('det','pags',t.dataset.f); return;
+    case 'vercanc': UI.verCanc=!UI.verCanc; draw(); return;
+    case 'sem': UI.semana=t.dataset.d==='0'?0:UI.semana+Number(t.dataset.d); draw(); return;
+    case 'relmes': UI.relMes=Number(t.dataset.o); draw(); return;
+    case 'encerrar': abrir('form','resultado',id); return;
+    case 'noar': if(await save('lives',{status:'aovivo'},id)) depois('Live no ar'); return;
+    case 'reabrir': if(await save('lives',{status:'agendada'},id)) depois('Live reaberta'); return;
+    case 'cancelalive': UI.confirm=null; if(await save('lives',{status:'cancelada'},id)) depois('Live cancelada'); return;
+    case 'aceitar': if(await save('candidaturas',{status:'aceita'},id)) depois('Confirmado. A vaga foi preenchida.'); return;
+    case 'recusar': if(await save('candidaturas',{status:'recusada'},id)) depois('Candidatura recusada'); return;
+    case 'etapa': {const j=job(id);const n=Math.max(0,Math.min(8,j.etapa+Number(t.dataset.d)));if(await save('jobs',{etapa:n},id)) depois('Movido para '+ETAPAS[n]);return}
+    case 'canceljob': UI.confirm=null; if(await save('jobs',{status:'cancelado'},id)) depois('Job cancelado'); return;
+    case 'reativajob': if(await save('jobs',{status:'ativo'},id)) depois('Job reativado'); return;
+    case 'propjob': {const p=D.props.find(x=>x.id===id);abrir('form','job',null,{marca:p.marca_id,etapa:2,valor:p.valor,prop:p.id});return}
+    case 'recebido': if(await save('recebimentos',{status:'recebido',recebido_em:hoje()},id)) depois('Marcado como recebido'); return;
+    case 'cancelrec': UI.confirm=null; if(await save('recebimentos',{status:'cancelado'},id)){fechar();depois('Cancelado')} return;
+    case 'nf': {const ps=D.pags.filter(p=>p.freelancer_id===t.dataset.f&&p.status==='a pagar');const val=t.getAttribute('aria-pressed')!=='true';const {error}=await sb.from('pagamentos_freela').update({nf_recebida:val}).in('id',ps.map(p=>p.id));if(error)toast(trErr(error.message),true);else depois(val?'NF marcada como recebida':'NF desmarcada');return}
+    case 'pagofree': {const ps=D.pags.filter(p=>p.freelancer_id===t.dataset.f&&p.status==='a pagar');const {error}=await sb.from('pagamentos_freela').update({status:'pago',pago_em:hoje()}).in('id',ps.map(p=>p.id));if(error)toast(trErr(error.message),true);else depois(`Pago: ${money(ps.reduce((s,p)=>s+Number(p.valor),0))} a ${free(t.dataset.f).nome}`);return}
+    case 'delrecado': {const {error}=await sb.from('recados').delete().eq('id',id);if(error)toast(trErr(error.message),true);else depois();return}
+    case 'libera': {const sel=document.getElementById('lv-'+id);const patch={status:'ativo'};if(sel)patch.nivel=sel.value;if(await save('profiles',patch,id))depois('Acesso liberado');return}
+    case 'bloq': if(await save('profiles',{status:'bloqueado'},id)) depois('Acesso bloqueado'); return;
+    case 'candidatar': {const eu=meuFreela();const {error}=await sb.from('candidaturas').insert({live_id:id,freelancer_id:eu.id,funcao:eu.papel==='operador'?'operador':'host'});if(error)toast(trErr(error.message),true);else depois('Candidatura enviada. A Implay vai confirmar.');return}
+    case 'retirar': if(await save('candidaturas',{status:'retirada'},id)) depois('Você desistiu desta vaga'); return;
+    case 'recandidatar': if(await save('candidaturas',{status:'pendente'},id)) depois('Candidatura enviada de novo'); return;
+  }
+});
+document.addEventListener('change',async e=>{
+  const el=e.target;
+  if(el.matches('[data-ext]')){const x=document.getElementById(el.id+'-ext');if(x)x.textContent=el.value?dExt(el.value):'';return}
+  if(el.id==='estdia'){UI.estDia=el.value||null;draw();return}
+  if(el.id==='rc-job'&&el.value){const j=job(el.value);const m=document.getElementById('rc-marca');if(j&&m)m.value=j.marca_id;return}
+  if(el.dataset.nivel){if(await save('profiles',{nivel:el.value},el.dataset.nivel))depois('Nível alterado');return}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&UI.layer)fechar()});
+
+document.addEventListener('submit',async e=>{
+  e.preventDefault();const f=e.target, id=f.dataset.id||null;
+  const btn=f.querySelector('button[type=submit]');
+  const run=async fn=>{if(btn)btn.disabled=true;try{await fn()}finally{if(btn)btn.disabled=false}};
+  /* ---- login ---- */
+  if(['fsenha','fcriar','fesqueci','fnova'].includes(f.id)) return run(async()=>{
+    const email=(document.getElementById('l-email')?.value||'').trim().toLowerCase(), senha=document.getElementById('l-senha')?.value||'';
+    const fail=m=>{const er=document.getElementById('l-err');er.textContent=m;er.hidden=false};
+    UI.email=email; const back=location.origin+location.pathname;
+    if(f.id!=='fnova'&&!email.includes('@'))return fail('Digite um e-mail válido.');
+    if((f.id==='fcriar'||f.id==='fnova')&&senha.length<6)return fail('A senha precisa ter pelo menos 6 caracteres.');
+    if(f.id==='fsenha'){const {error}=await sb.auth.signInWithPassword({email,password:senha});if(error)return fail(/confirm/i.test(error.message)?'Falta confirmar o e-mail: toque no link que enviamos.':/invalid/i.test(error.message)?'E-mail ou senha não conferem.':error.message);return}
+    if(f.id==='fcriar'){const {data,error}=await sb.auth.signUp({email,password:senha,options:{emailRedirectTo:back}});if(error)return fail(/registered|exists/i.test(error.message)?'Esse e-mail já tem conta. Use "Entrar com senha" ou "Esqueci a senha".':error.message);if(!data.session){UI.aviso=`Conta criada. Confirme pelo link que chegou em <b>${esc(email)}</b> e depois entre com e-mail e senha.`;draw()}return}
+    if(f.id==='fesqueci'){const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:back});if(error)return fail(error.message);UI.aviso=`Se existir conta para <b>${esc(email)}</b>, chegou um link no e-mail para criar a senha nova.`;draw();return}
+    if(f.id==='fnova'){const {error}=await sb.auth.updateUser({password:senha});if(error)return fail(error.message);UI.lmode='senha';toast('Senha alterada');start();return}
+  });
+  /* ---- recado ---- */
+  if(f.id==='frecado') return run(async()=>{const tx=v('r-txt');if(!tx)return;const {error}=await sb.from('recados').insert({texto:tx,de:ME.id});if(error)toast(trErr(error.message),true);else{document.getElementById('r-txt').value='';depois('Recado enviado')}});
+  /* ---- convite ---- */
+  if(f.id==='fconv') return run(async()=>{const row={nome:v('c-nome'),email:v('c-email').toLowerCase(),nivel:v('c-niv')};if(!row.nome||!row.email.includes('@'))return toast('Preencha nome e e-mail',true);const {error}=await sb.from('convites').upsert(row);if(error)toast(trErr(error.message),true);else{f.reset();depois('E-mail liberado como '+NIVEL[row.nivel])}});
+  /* ---- live ---- */
+  if(f.id==='flive') return run(async()=>{
+    const jb=job(v('lv-job'));if(!jb)return ferr('Escolha o job.');
+    const data=v('lv-data');if(!data)return ferr('Escolha o dia.');
+    const ini=v('lv-ini-h')+':'+v('lv-ini-m'),fim=v('lv-fim-h')+':'+v('lv-fim-m');if(ini===fim)return ferr('O horário de início e de fim não podem ser iguais.');
+    const local=gv(f,'local')||'paulista',sala=local==='paulista'?gv(f,'sala'):'';
+    if(local==='paulista'&&!sala)return ferr('Escolha a sala.');
+    const hs=v('lv-host'),os=v('lv-op');
+    const row={job_id:jb.id,marca_id:jb.marca_id,data,ini,fim,local,sala,conta:gv(f,'conta')||'marca',obs:v('lv-obs'),
+      precisa_host:hs!=='__nao',host_id:hs.startsWith('__')?null:hs,precisa_operador:os!=='__nao',operador_id:os.startsWith('__')?null:os};
+    const conflito=D.lives.find(l=>l.id!==id&&l.status!=='cancelada'&&l.local==='paulista'&&local==='paulista'&&l.sala===sala&&l.data===data&&hm(l.ini)<fim&&ini<hm(l.fim));
+    if(conflito&&!f.dataset.ok){f.dataset.ok='1';return ferr(`A sala ${sala} já tem ${marca(conflito.marca_id).nome} das ${hm(conflito.ini)} às ${hm(conflito.fim)}. Toque de novo em salvar para manter mesmo assim.`)}
+    const r=await save('lives',row,id);if(!r)return;
+    UI.layer={kind:'det',type:'live',id:r.id||id};await depois(id?'Live salva':(row.host_id||!row.precisa_host)&&(row.operador_id||!row.precisa_operador)?'Live criada':'Live criada · vaga aberta para os freelancers');
+  });
+  if(f.id==='fres') return run(async()=>{
+    const gmv=parseValor(v('rs-gmv'));if(isNaN(gmv))return ferr('GMV inválido.');
+    const l=D.lives.find(x=>x.id===id);
+    const row={gmv:v('rs-gmv')?gmv:null,pedidos:v('rs-ped')?parseInt(v('rs-ped').replace(/\D/g,''),10):null,pico:v('rs-pico')?parseInt(v('rs-pico').replace(/\D/g,''),10):null,fim:v('rs-fim-h')+':'+v('rs-fim-m'),status:'feita'};
+    if(await save('lives',row,id)){UI.layer={kind:'det',type:'live',id};await depois(l.status==='feita'?'Resultado salvo':'Live encerrada')}
+  });
+  /* ---- job ---- */
+  if(f.id==='fjob') return run(async()=>{
+    const valor=parseValor(v('jb-valor'));if(isNaN(valor))return ferr('Valor inválido.');
+    const row={marca_id:v('jb-marca'),nome:v('jb-nome'),etapa:Number(gv(f,'etapa')||0),valor:valor||0,lives_previstas:parseInt(v('jb-lives')||'0',10)||0,canais:v('jb-canais'),responsavel_id:v('jb-resp')||null,prox_passo:v('jb-passo'),prox_data:v('jb-pdata')||null,alerta:gv(f,'alerta'),obs:v('jb-obs')};
+    if(!row.marca_id)return ferr('Escolha a marca.');if(!row.nome)return ferr('Dê um nome para o job.');
+    const r=await save('jobs',row,id);if(!r)return;
+    if(f.dataset.fromprop) await sb.from('propostas').update({job_id:r.id}).eq('id',f.dataset.fromprop);
+    UI.layer={kind:'det',type:'job',id:r.id||id};await depois(id?'Job salvo':'Job criado');
+  });
+  /* ---- marca ---- */
+  if(f.id==='fmarca') return run(async()=>{
+    const row={nome:v('mc-nome'),segmento:v('mc-seg'),cor:gv(f,'cor')||CORES[0],contato_nome:v('mc-cont'),contato_tel:v('mc-tel'),conta_propria:document.getElementById('mc-propria').checked};
+    if(id)row.ativo=document.getElementById('mc-ativo').checked;
+    if(!row.nome)return ferr('Digite o nome da marca.');
+    const r=await save('marcas',row,id);if(!r)return;
+    const volta=UI.voltar;UI.voltar=null;await loadAll();
+    if(volta){UI.layer=volta;renderLayer();const sel=document.getElementById(volta.type==='job'?'jb-marca':volta.type==='prop'?'pp-marca':'');if(sel&&r.id)sel.value=r.id}else fechar();
+    redraw();toast(id?'Marca salva':'Marca criada');
+  });
+  /* ---- proposta ---- */
+  if(f.id==='fprop') return run(async()=>{
+    const valor=parseValor(v('pp-valor'));if(isNaN(valor))return ferr('Valor inválido.');
+    const row={marca_id:v('pp-marca'),escopo:v('pp-esc'),valor:valor||0,validade:v('pp-val')||null,status:gv(f,'pst')||'enviada',motivo:v('pp-mot')};
+    if(!row.escopo)return ferr('Descreva o escopo.');
+    const r=await save('propostas',row,id);if(!r)return;
+    if(row.status==='aceita'&&!r.job_id){UI.layer={kind:'form',type:'prop',id:r.id};await depois('Proposta aceita! Agora crie o job.')}else{fechar();await depois(id?'Proposta salva':'Proposta registrada')}
+  });
+  /* ---- freelancer ---- */
+  if(f.id==='ffree') return run(async()=>{
+    const vh=parseValor(v('fr-vh')),vc=parseValor(v('fr-vc'));if(isNaN(vh)||isNaN(vc))return ferr('Valor inválido.');
+    const row={nome:v('fr-nome'),papel:gv(f,'papel')||'host',email:v('fr-email').toLowerCase(),telefone:v('fr-tel'),pix:v('fr-pix'),documento:v('fr-doc'),valor_hora:vh||0,valor_corte:vc||0,obs:v('fr-obs')};
+    if(id)row.ativo=document.getElementById('fr-ativo').checked;
+    if(!row.nome)return ferr('Digite o nome.');if(row.email&&!row.email.includes('@'))return ferr('E-mail inválido.');
+    if(row.email&&D.free.some(x=>x.id!==id&&x.email===row.email))return ferr('Já existe outro freelancer com esse e-mail.');
+    if(await save('freelancers',row,id)){fechar();await depois(id?'Cadastro salvo':row.email?'Cadastrado. Avise a pessoa para criar a conta com '+row.email:'Cadastrado')}
+  });
+  /* ---- a receber ---- */
+  if(f.id==='frec') return run(async()=>{
+    const valor=parseValor(v('rc-valor'));if(!(valor>0))return ferr('Digite o valor.');
+    const jb=job(v('rc-job'));const row={job_id:jb?jb.id:null,marca_id:jb?jb.marca_id:v('rc-marca'),descricao:v('rc-desc'),valor,vencimento:v('rc-venc'),nf_emitida:document.getElementById('rc-nf').checked};
+    if(!row.vencimento)return ferr('Escolha o vencimento.');
+    if(await save('recebimentos',row,id)){fechar();await depois(id?'Salvo':'Lançado')}
+  });
+  /* ---- pagamento avulso ---- */
+  if(f.id==='fpag') return run(async()=>{
+    const valor=parseValor(v('pg-valor'));if(isNaN(valor)||valor<0)return ferr('Valor inválido.');
+    const row={descricao:v('pg-desc'),valor,competencia:v('pg-comp')||hoje(),nf_recebida:document.getElementById('pg-nf').checked};
+    if(!id)row.freelancer_id=v('pg-free');
+    if(await save('pagamentos_freela',row,id)){fechar();await depois(id?'Salvo':'Pagamento lançado')}
+  });
+});
+
+/* =========================================================================
+   INÍCIO
+   ========================================================================= */
+let channel=null, poll=null;
+async function boot(){
+  draw();
+  if(!CFG_.SUPABASE_URL||!CFG_.SUPABASE_ANON_KEY){UI.status='semconfig';draw();return}
+  if(!window.supabase){UI.status='offline';draw();return}
+  sb=window.supabase.createClient(CFG_.SUPABASE_URL,CFG_.SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const {data}=await sb.auth.getSession();SESSION=data.session;
+  sb.auth.onAuthStateChange((ev,s)=>{const had=!!SESSION;SESSION=s;if(ev==='PASSWORD_RECOVERY'){UI.lmode='novasenha';UI.aviso='';UI.status='login';draw();return}if(!!s!==had&&UI.lmode!=='novasenha')start()});
+  start();
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&UI.status==='ok')scheduleReload()});
+}
+async function start(){
+  if(!SESSION||UI.lmode==='novasenha'){ME=null;UI.status='login';document.getElementById('app').innerHTML='';draw();return}
+  UI.status='carregando';draw();
+  try{
+    const me=await sb.from('profiles').select('*').eq('id',SESSION.user.id).maybeSingle();
+    ME=me.data;
+    if(!ME){UI.status='semperfil';draw();return}
+    if(ME.status!=='ativo'){UI.status=ME.status;draw();return}
+    await loadAll();
+    UI.status='ok';UI.view=isSeller()?'vagas':'painel';
+    document.getElementById('app').innerHTML='';draw();
+    if(!channel){channel=sb.channel('implay-central');['lives','candidaturas','jobs','propostas','freelancers','pagamentos_freela','recebimentos','recados','marcas'].forEach(t=>channel.on('postgres_changes',{event:'*',schema:'public',table:t},scheduleReload));channel.subscribe()}
+    clearInterval(poll);poll=setInterval(()=>{if(document.visibilityState==='visible')scheduleReload()},60000);
+  }catch(e){UI.status='erro';UI.erro=e.message;draw()}
+}
+boot();
+if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
