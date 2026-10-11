@@ -357,6 +357,40 @@ td.mk{min-width:190px}
 .tt{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:2px 6px;background:var(--raised2);color:var(--muted)}
 .tt-live{background:var(--flash-bg);color:var(--flash)}
 .ev .num{font-family:var(--f-display);font-size:10px;color:var(--muted);margin-right:2px}
+.cals{display:grid;gap:16px}
+.cals.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cals.c1{grid-template-columns:minmax(0,1fr)}
+.cal{padding:14px}
+.cgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.cgrid .wd{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center;padding:2px 0 4px}
+.cd{min-height:64px;border-radius:8px;background:var(--raised2);padding:4px;display:flex;flex-direction:column;gap:2px;min-width:0;cursor:pointer;border:1px solid transparent}
+.cals.c1 .cd{min-height:104px;padding:6px}
+.cd:hover{border-color:var(--muted)}
+.cd.vazio{background:none;cursor:default;border:0}
+.cd.passado{opacity:.75}
+.cd.hoje{border-color:var(--accent-text)}
+.cd.hoje .n{background:var(--volt);color:var(--on-brand);border-radius:99px;padding:0 5px}
+.cd .n{font-family:var(--f-display);font-size:11px;font-weight:700;align-self:flex-start}
+.ck{display:flex;align-items:center;gap:4px;border:0;border-left:3px solid var(--muted);background:var(--raised);border-radius:4px;padding:2px 4px;font-size:10px;text-align:left;color:var(--text);min-width:0;width:100%}
+.cals.c1 .ck{font-size:11px;padding:3px 5px}
+.ck span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ck b{font-family:var(--f-display);font-size:9px}
+.ck i{width:6px;height:6px;border-radius:50%;flex:none}
+.ck.c-ok{border-left-color:var(--ok)}.ck.c-warn{border-left-color:var(--warn)}.ck.c-live{border-left-color:var(--flash)}.ck.c-done{border-left-color:var(--info)}.ck.c-x{border-left-color:var(--bad);text-decoration:line-through}
+.cd .mais{font-size:10px;color:var(--muted);font-weight:700}
+td.ldia{vertical-align:top;white-space:nowrap}
+td.ldia b{display:block;font-family:var(--f-display);font-size:15px}
+td.ldia small{color:var(--muted);font-size:11px}
+tr.hojeRow td{background:var(--flash-bg)}
+.tipbox{position:fixed;z-index:50;width:min(340px,calc(100vw - 16px));background:var(--raised);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 40px var(--shade);padding:10px 12px;display:flex;flex-direction:column;gap:8px;pointer-events:none;font-size:12px}
+.tipbox .th{font-family:var(--f-display);font-weight:700;font-size:13px}
+.tipbox .tl{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start;border-top:1px solid var(--line);padding-top:8px}
+.tipbox .tl b{display:block;font-size:12px}
+.tipbox .tl small{display:block;color:var(--muted);font-size:11px;line-height:1.35}
+.tipbox .tl small .w{color:var(--warn)}
+.tipbox .cod{font-size:10px;padding:4px 5px}
+.tipbox .tf{color:var(--muted);border-top:1px solid var(--line);padding-top:6px}
+@media (max-width:1100px){.cals.c3{grid-template-columns:minmax(0,1fr)}}
 /* ---------- responsivo ---------- */
 @media (max-width:1400px){ .page{grid-template-columns:minmax(0,1fr)} .rail{position:static;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))} }
 @media (max-width:1100px){ .quad,.quad.three{grid-template-columns:minmax(0,1fr)} .grid3{grid-template-columns:repeat(2,minmax(0,1fr))} }
@@ -633,7 +667,7 @@ const codTag=t=>`<span class="cod num">${cod(t.codigo)}</span>`;
 function trCls(t){return t.status==='andamento'?'c-live':t.status==='cancelado'?'c-x':realizado(t)?'c-done':vagasTot(t)?'c-warn':'c-ok'}
 function trSt(t){
   if(t.status==='andamento')return '<span class="live"><i></i>NO AR</span>';
-  if(t.status==='agendado'){const v=vagasTot(t);return v?pill(v===1?'1 vaga aberta':v+' vagas abertas','warn'):pill('Equipe completa','ok')}
+  if(t.status==='agendado'){const v=vagasTot(t);return v?pill(v===1?'1 vaga aberta':v+' vagas abertas','warn'):(t.vagas_seller+t.vagas_operador?pill('Equipe completa','ok'):pill('Agendado','mute'))}
   if(t.status==='realizado'&&t.tipo==='live'&&t.gmv==null)return pill('Realizado · sem GMV','warn');
   const [a,c]=TRAB_ST[t.status];return pill(a,c);
 }
@@ -644,7 +678,7 @@ function equipeTxt(t){
   return [s.length?s.join(', '):'',o.length?'op. '+o.join(', '):'',vs?`<span class="w">${vs} vaga${vs>1?'s':''} seller</span>`:'',vo?`<span class="w">${vo} vaga${vo>1?'s':''} op.</span>`:''].filter(Boolean).join(' · ')||'sem equipe';
 }
 function evCard(t,full){
-  return `<button class="ev ${trCls(t)}" data-trab="${t.id}"><b><span class="num">${cod(t.codigo)}</span> ${t.ini?hm(t.ini)+' ':''}${esc(marca(t.marca_id).nome)}</b><span class="sub">${TIPOS[t.tipo]} · ${esc(ondeTxt(t))}</span><span class="sub">${equipeTxt(t)}</span>${full?`<em>${trSt(t)}</em>`:''}</button>`;
+  return `<button class="ev ${trCls(t)}" data-trab="${t.id}" data-tip="trab:${t.id}"><b><span class="num">${cod(t.codigo)}</span> ${t.ini?hm(t.ini)+' ':''}${esc(marca(t.marca_id).nome)}</b><span class="sub">${TIPOS[t.tipo]} · ${esc(ondeTxt(t))}</span><span class="sub">${equipeTxt(t)}</span>${full?`<em>${trSt(t)}</em>`:''}</button>`;
 }
 function rail(){
   const h=hoje(), hj=vivos().filter(t=>t.data===h), P=pendencias();
@@ -752,23 +786,70 @@ function equipeMes(){
 }
 
 V.agenda=()=>{
-  const h=hoje(),op=canOp();
-  const base=addD(h,UI.semana*7), dias=Array.from({length:7},(_,i)=>addD(base,i));
+  const h=hoje(),op=canOp(),modo=UI.agModo||'semana',nm=UI.agMeses||3;
   const f=UI.filtro;
   const ok=t=>(f==='canceladas'?t.status==='cancelado':t.status!=='cancelado')&&(['todas','canceladas'].includes(f)||(f==='vagas'?t.status==='agendado'&&vagasTot(t)>0:f==='live'?t.tipo==='live':f==='outros'?t.tipo!=='live':f==='paulista'?t.local==='paulista':t.local!=='paulista'))&&match(cod(t.codigo),marca(t.marca_id).nome,TIPOS[t.tipo],t.titulo,nomesEq(t).join(' '),t.sala);
+  const doDia=d=>D.trab.filter(t=>t.data===d&&ok(t)).sort((a,b)=>(a.ini||'99').localeCompare(b.ini||'99'));
   const cand=D.cands.filter(c=>c.status==='pendente'&&(trab(c.trabalho_id)||{}).status==='agendado');
+  const m0=new Date();m0.setDate(1);m0.setMonth(m0.getMonth()+(UI.agMesOff||0));
+  const meses=Array.from({length:modo==='semana'?0:(modo==='mes'?nm:nm)},(_,i)=>{const d=new Date(m0);d.setMonth(d.getMonth()+i);return {y:d.getFullYear(),m:d.getMonth()}});
+  const nomeMes=x=>MESES[x.m][0].toUpperCase()+MESES[x.m].slice(1)+' '+x.y;
+  let corpo='';
+  if(modo==='semana'){
+    const base=addD(h,UI.semana*7), dias=Array.from({length:7},(_,i)=>addD(base,i));
+    corpo=`<div class="agcol">${dias.map(d=>{const ts=doDia(d);return `<div class="d"><div class="dh ${d===h?'today':''}" data-tip="dia:${d}">${DIAS[dObj(d).getDay()]}<b>${dObj(d).getDate()}/${dObj(d).getMonth()+1}</b></div>${ts.map(t=>evCard(t,true)).join('')||'<span class="muted" style="font-size:12px">—</span>'}${op?`<button class="btn sm ghost" data-act="novotrab" data-d="${d}" style="margin-top:auto">+ trabalho</button>`:''}</div>`}).join('')}</div>`;
+  }else if(modo==='mes'){
+    corpo=`<div class="cals c${nm}">${meses.map(x=>{
+      const first=new Date(x.y,x.m,1),off=(first.getDay()+6)%7,nd=new Date(x.y,x.m+1,0).getDate();
+      const cells=Array.from({length:Math.ceil((off+nd)/7)*7},(_,i)=>{const n=i-off+1;if(n<1||n>nd)return '<div class="cd vazio"></div>';
+        const d=`${x.y}-${pad(x.m+1)}-${pad(n)}`,ts=doDia(d),max=nm===1?4:3;
+        return `<div class="cd${d===h?' hoje':''}${d<h?' passado':''}${ts.length?' tem':''}" data-tip="dia:${d}" ${op?`data-dia="${d}"`:''}><span class="n">${n}</span>${ts.slice(0,max).map(t=>`<button class="ck ${trCls(t)}" data-trab="${t.id}" data-tip="trab:${t.id}"><i style="background:${esc(marca(t.marca_id).cor)}"></i><span>${nm===1?`<b>${cod(t.codigo)}</b> ${t.ini?hm(t.ini)+' ':''}${esc(marca(t.marca_id).nome)}`:`<b>${cod(t.codigo)}</b>`}</span></button>`).join('')}${ts.length>max?`<span class="mais">+${ts.length-max}</span>`:''}</div>`}).join('');
+      const tot=D.trab.filter(t=>ok(t)&&t.data.startsWith(`${x.y}-${pad(x.m+1)}`));
+      return `<section class="card cal"><div class="card-h" style="margin-bottom:8px"><h2>${nomeMes(x)}</h2><span class="muted" style="font-size:12px">${tot.length} trabalho${tot.length!==1?'s':''}</span></div><div class="cgrid">${['seg','ter','qua','qui','sex','sáb','dom'].map(w=>`<div class="wd">${w}</div>`).join('')}${cells}</div></section>`}).join('')}</div>
+    <div class="legend"><span><i style="background:var(--ok)"></i>equipe ok</span><span><i style="background:var(--warn)"></i>com vaga</span><span><i style="background:var(--flash)"></i>no ar</span><span><i style="background:var(--info)"></i>realizado</span>${op?'<span>· clique num dia vazio para criar um trabalho</span>':''}</div>`;
+  }else{
+    const ini_=`${meses[0].y}-${pad(meses[0].m+1)}-01`, ul=meses[meses.length-1], fim_=dkey(new Date(ul.y,ul.m+1,0));
+    const ts=D.trab.filter(t=>ok(t)&&t.data>=ini_&&t.data<=fim_).sort((a,b)=>(a.data+(a.ini||'99')).localeCompare(b.data+(b.ini||'99')));
+    const porDia={};ts.forEach(t=>{(porDia[t.data]=porDia[t.data]||[]).push(t)});
+    corpo=`<section class="card">${ts.length?`<div class="tblwrap"><table><thead><tr><th>Dia</th><th>Trabalho</th><th>Horário</th><th>Onde</th><th>Equipe</th><th class="r">GMV</th><th>Situação</th></tr></thead><tbody>${Object.entries(porDia).map(([d,xs])=>xs.map((t,i)=>`<tr class="click${d===h?' hojeRow':''}" data-trab="${t.id}">${i===0?`<td rowspan="${xs.length}" class="ldia"><b>${dObj(d).getDate()}/${dObj(d).getMonth()+1}</b><small>${DIAS[dObj(d).getDay()]}${d===h?' · hoje':''}</small></td>`:''}<td><div class="who">${codTag(t)}<div style="min-width:0"><b>${esc(marca(t.marca_id).nome)}</b><small>${TIPOS[t.tipo]}${t.titulo?' · '+esc(t.titulo):''}</small></div></div></td><td class="num">${t.ini?hm(t.ini)+'–'+hm(t.fim):'—'}</td><td>${esc(ondeTxt(t))}</td><td style="font-size:12px;max-width:220px">${equipeTxt(t)}</td><td class="num r">${t.gmv!=null?money(t.gmv):'—'}</td><td>${trSt(t)}</td></tr>`).join('')).join('')}</tbody></table></div>`:'<p class="empty">Nenhum trabalho neste período.</p>'}</section>`;
+  }
+  const navTxt=modo==='semana'?(UI.semana?'Voltar para hoje':'A partir de hoje'):(meses.length?(meses.length>1?nomeMes(meses[0]).split(' ')[0]+' – '+nomeMes(meses[meses.length-1]):nomeMes(meses[0])):'');
   return `<div class="col full">
-   <div class="mh"><div><h1>Agenda</h1><p>Todos os trabalhos por dia. Vaga aberta aparece no celular dos sellers e operadores: quem quiser se candidata e a gerência confirma.</p></div>
+   <div class="mh"><div><h1>Agenda</h1><p>Todos os trabalhos, feitos e agendados. Passe o cursor num dia para ver o resumo. Vaga aberta aparece no celular dos sellers e operadores.</p></div>
      ${op?'<div class="acts"><button class="btn sticker" data-act="novotrab">+ Novo trabalho</button></div>':''}</div>
    ${cand.length&&op?`<section class="card"><div class="card-h"><h2>Candidaturas esperando resposta</h2><span class="muted">${cand.length}</span></div><div class="list">${cand.map(c=>{const t=trab(c.trabalho_id),fr=free(c.freelancer_id);return `<div class="row">${av(fr.nome,fCor(fr.id))}<div class="grow"><b>${esc(fr.nome)} quer ser ${FUNC[c.funcao].toLowerCase()} · ${cod(t.codigo)} ${esc(marca(t.marca_id).nome)}</b><small>${dCurto(t.data)}${t.ini?' '+hm(t.ini)+'–'+hm(t.fim):''} · ${esc(ondeTxt(t))} · ${vagas(t,c.funcao)} vaga(s) · pediu ${tempo(c.criado_em)}</small></div><div class="acts"><button class="btn sm ok" data-act="aceitar" data-id="${c.id}">Confirmar</button><button class="btn sm" data-act="recusar" data-id="${c.id}">Recusar</button></div></div>`}).join('')}</div></section>`:''}
    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-     <div class="chips" role="group" aria-label="Filtro">${[['todas','Todos'],['vagas','Com vaga'],['live','Lives'],['outros','Outros tipos'],['paulista','Na Paulista'],['fora','Fora'],['canceladas','Cancelados']].map(([k,t])=>`<button data-filtro="${k}" aria-pressed="${f===k}">${t}</button>`).join('')}</div>
-     <div class="weeknav"><button class="btn sm" data-act="sem" data-d="-1" aria-label="Semana anterior">‹</button><button class="btn sm" data-act="sem" data-d="0">${UI.semana?'Voltar para hoje':'A partir de hoje'}</button><button class="btn sm" data-act="sem" data-d="1" aria-label="Próxima semana">›</button></div>
+     <div class="tabs" style="width:auto" role="group" aria-label="Visualização">${[['semana','Semana'],['mes','Calendário'],['lista','Lista']].map(([k,t])=>`<button data-act="agmodo" data-m="${k}" ${modo===k?'aria-current="page"':''} style="padding:8px 16px">${t}</button>`).join('')}</div>
+     <div class="weeknav">${modo!=='semana'?`<div class="chips" style="margin-right:6px">${[[1,'1 mês'],[3,'3 meses']].map(([n,t])=>`<button data-act="agmeses" data-n="${n}" aria-pressed="${nm===n}">${t}</button>`).join('')}</div>`:''}<button class="btn sm" data-act="agnav" data-d="-1" aria-label="Anterior">‹</button><button class="btn sm" data-act="agnav" data-d="0">${esc(navTxt)}</button><button class="btn sm" data-act="agnav" data-d="1" aria-label="Próximo">›</button></div>
    </div>
-   <div class="agcol">${dias.map(d=>{const ts=D.trab.filter(t=>t.data===d&&ok(t));return `<div class="d"><div class="dh ${d===h?'today':''}">${DIAS[dObj(d).getDay()]}<b>${dObj(d).getDate()}/${dObj(d).getMonth()+1}</b></div>${ts.map(t=>evCard(t,true)).join('')||'<span class="muted" style="font-size:12px">—</span>'}${op?`<button class="btn sm ghost" data-act="novotrab" data-d="${d}" style="margin-top:auto">+ trabalho</button>`:''}</div>`}).join('')}</div>
+   <div class="chips" role="group" aria-label="Filtro">${[['todas','Todos'],['vagas','Com vaga'],['live','Lives'],['outros','Outros tipos'],['paulista','Na Paulista'],['fora','Fora'],['canceladas','Cancelados']].map(([k,t])=>`<button data-filtro="${k}" aria-pressed="${f===k}">${t}</button>`).join('')}</div>
+   ${corpo}
    <div class="note"><b>Registro de escolha livre.</b> Cada candidatura, confirmação, recusa e desistência fica guardada com data e hora no Histórico. É a prova de que cada freelancer escolhe os próprios trabalhos.</div>
   </div>`;
 };
+/* ---------- janelinha ao passar o cursor ---------- */
+function tipHTML(k){
+  const [tp,val]=k.split(/:(.+)/);
+  const linha=t=>`<div class="tl"><span class="cod num">${cod(t.codigo)}</span><div><b>${esc(marca(t.marca_id).nome)} · ${TIPOS[t.tipo]}</b><small>${t.ini?hm(t.ini)+'–'+hm(t.fim)+' · ':''}${esc(ondeTxt(t))}${t.titulo?' · '+esc(t.titulo):''}</small><small>${equipeTxt(t)}</small><small>${t.gmv!=null?'GMV '+money(t.gmv)+' · ':''}${isAdm()?esc(remTxt(t,1))+' · ':''}${TRAB_ST[t.status][0]}${t.responsavel?' · resp. '+esc(t.responsavel):''}</small></div></div>`;
+  if(tp==='trab'){const t=trab(val);return t?linha(t):''}
+  const ts=D.trab.filter(t=>t.data===val&&t.status!=='cancelado').sort((a,b)=>(a.ini||'99').localeCompare(b.ini||'99'));
+  const g=ts.filter(realizado).reduce((s,t)=>s+Number(t.gmv||0),0);
+  return `<div class="th">${esc(dExt(val))}</div>${ts.length?ts.map(linha).join('')+(g?`<div class="tf">GMV do dia: <b>${money(g)}</b></div>`:''):'<div class="tf">Nenhum trabalho.</div>'}`;
+}
+let tipEl=null,tipKey=null;
+document.addEventListener('mouseover',e=>{
+  const el=e.target.closest('[data-tip]');
+  if(!el||!matchMedia('(hover:hover)').matches){if(tipEl&&!e.target.closest('.tipbox')){tipEl.remove();tipEl=null;tipKey=null}return}
+  const k=el.dataset.tip;if(k===tipKey)return;
+  const html=tipHTML(k);if(!html)return;
+  if(!tipEl){tipEl=document.createElement('div');tipEl.className='tipbox';tipEl.setAttribute('role','tooltip');document.body.appendChild(tipEl)}
+  tipEl.innerHTML=html;tipKey=k;
+  const r=el.getBoundingClientRect(),w=tipEl.offsetWidth,hh=tipEl.offsetHeight;
+  let x=r.left+r.width/2-w/2, y=r.bottom+8;
+  if(y+hh>innerHeight-8)y=r.top-hh-8; x=Math.max(8,Math.min(x,innerWidth-w-8)); y=Math.max(8,y);
+  tipEl.style.left=x+'px';tipEl.style.top=y+'px';
+});
+document.addEventListener('scroll',()=>{if(tipEl){tipEl.remove();tipEl=null;tipKey=null}},true);
 
 V.trabalhos=()=>{
   const op=canOp(), {p,nome}=mesPrefixo(UI.mesT);
@@ -1425,7 +1506,8 @@ async function faturarTrabs(ts,marca_id,contrato_id,descricao,valor,venc){
 }
 
 document.addEventListener('click',async e=>{
-  const t=e.target.closest('[data-act],[data-go],[data-g],[data-contrato],[data-trab],[data-marca],[data-prop],[data-free],[data-rec],[data-pag],[data-filtro],[data-lmode],[data-group] button,[data-mgroup] button,[data-scrim]');
+  if(tipEl){tipEl.remove();tipEl=null;tipKey=null}
+  const t=e.target.closest('[data-act],[data-go],[data-g],[data-dia],[data-contrato],[data-trab],[data-marca],[data-prop],[data-free],[data-rec],[data-pag],[data-filtro],[data-lmode],[data-group] button,[data-mgroup] button,[data-scrim]');
   if(!t)return;
   if(t.hasAttribute('data-scrim')){if(e.target===t)fechar();return}
   if(t.closest('[data-mgroup]')&&t.dataset.v!==undefined){e.preventDefault();t.setAttribute('aria-pressed',String(t.getAttribute('aria-pressed')!=='true'));return}
@@ -1435,6 +1517,7 @@ document.addEventListener('click',async e=>{
   if(t.dataset.filtro){UI.filtro=t.dataset.filtro;draw();return}
   if(t.dataset.g){genChip(t);return}
   if(t.dataset.trab&&!t.dataset.act){abrir('det','trab',t.dataset.trab);return}
+  if(t.dataset.dia){if(tipEl){tipEl.remove();tipEl=null;tipKey=null}abrir('form','trab',null,{d:t.dataset.dia});return}
   if(t.dataset.contrato&&!t.dataset.act){abrir('det','contrato',t.dataset.contrato);return}
   if(t.dataset.marca){abrir('form','marca',t.dataset.marca);return}
   if(t.dataset.prop){abrir('det','prop',t.dataset.prop);return}
@@ -1458,6 +1541,9 @@ document.addEventListener('click',async e=>{
     case 'verpags': abrir('det','pags',t.dataset.f); return;
     case 'vercanc': UI.verCanc=!UI.verCanc; draw(); return;
     case 'sem': UI.semana=t.dataset.d==='0'?0:UI.semana+Number(t.dataset.d); draw(); return;
+    case 'agmodo': UI.agModo=t.dataset.m; if(UI.agModo!=='semana'){UI.agMesOff=0} draw(); return;
+    case 'agmeses': UI.agMeses=Number(t.dataset.n); draw(); return;
+    case 'agnav': {const d=Number(t.dataset.d);if((UI.agModo||'semana')==='semana'){UI.semana=d===0?0:UI.semana+d}else{UI.agMesOff=d===0?0:(UI.agMesOff||0)+d*(UI.agMeses||3)}draw();return}
     case 'mest': UI.mesT+=Number(t.dataset.d); draw(); return;
     case 'tipo': UI.tipo=t.dataset.t; draw(); return;
     case 'relmes': UI.relMes=Number(t.dataset.o); draw(); return;
