@@ -261,8 +261,10 @@ td.mk{min-width:190px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .hm{display:flex;gap:6px;align-items:center}
 .hm select{flex:1}
-.swatches{display:flex;gap:8px;flex-wrap:wrap}
-.swatches button{width:30px;height:30px;border-radius:50%;border:2px solid var(--line)}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(30px,1fr));gap:8px}
+.swatches button{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);padding:0}
+.corlivre{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);margin-top:4px}
+.corlivre input{width:44px;height:32px;padding:0;border:1px solid var(--line);border-radius:8px;background:none}
 .swatches button[aria-pressed="true"]{border-color:var(--text);outline:2px solid var(--text);outline-offset:2px}
 .toggle{display:flex;align-items:center;gap:10px;font-weight:600;font-size:13px}
 .toggle input{width:20px;height:20px;accent-color:var(--volt)}
@@ -332,7 +334,12 @@ const NIVEL={adm:'ADM',manager:'Gerência',basic:'Consulta',seller:'Seller'};
 const PAPEL={host:'Host',operador:'Operador',editor:'Editor',outro:'Outro'};
 const PROP_ST={rascunho:['Rascunho','mute'],enviada:['Enviada','info'],negociacao:['Negociação','warn'],aceita:['Aceita','ok'],perdida:['Perdida','bad']};
 const ALERTA={'':['Em dia','ok'],atencao:['Atenção','warn'],travado:['Travado','bad']};
-const CORES=['#2B3BFF','#FF3FA4','#0E9F6E','#C8102E','#7A3BFF','#8A5A2B','#F08C00','#0B7285','#55555C'];
+const CORES=[
+ '#C8102E','#E63946','#FF6B6F','#FF5A1F','#F08C00','#FFB23F','#F4D03F','#D4FF2F','#9BE15D','#3DDC97',
+ '#0E9F6E','#1B5E20','#2E7D6B','#00B8A9','#0B7285','#7FD8FF','#1E88E5','#2B3BFF','#1A237E',
+ '#7A3BFF','#9C27B0','#C9A0FF','#FF3FA4','#E91E63','#F8BBD0','#AD1457','#8A5A2B','#C49A6C','#E8D5B7',
+ '#6D4C41','#3E2723','#78909C','#55555C','#263238','#0B0B0C','#F7F7F2'];
+const corTexto=c=>{const h=String(c||'').replace('#','');if(h.length<6)return '#fff';const [r,g,b]=[0,2,4].map(i=>parseInt(h.slice(i,i+2),16)/255).map(x=>x<=.03928?x/12.92:((x+.055)/1.055)**2.4);return (.2126*r+.7152*g+.0722*b)>.4?'#0B0B0C':'#fff'};
 const DIAS=['dom','seg','ter','qua','qui','sex','sáb'];
 const DIASX=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
 const MESES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
@@ -380,7 +387,7 @@ const fCor=id=>{const i=D.free.findIndex(p=>p.id===id);return PCORES[(i<0?3:i+3)
 const meuFreela=()=>ME&&D.free.find(f=>f.email&&f.email.toLowerCase()===String(ME.email||'').toLowerCase());
 
 const pill=(t,c)=>`<span class="pill p-${c}">${esc(t)}</span>`;
-const logo=id=>{const m=marca(id);return `<span class="logo" style="background:${esc(m.cor)}" aria-hidden="true">${esc(sigla(m.nome))}</span>`};
+const logo=id=>{const m=marca(id);return `<span class="logo" style="background:${esc(m.cor)};color:${corTexto(m.cor)};box-shadow:inset 0 0 0 1px rgba(127,127,127,.25)" aria-hidden="true">${esc(sigla(m.nome))}</span>`};
 const av=(nome,cor,sm)=>`<span class="av${sm?' sm':''}" style="background:${esc(cor)}" aria-hidden="true">${esc(ini(nome))}</span>`;
 const steps=e=>`<div class="steps" role="img" aria-label="Etapa: ${ETAPAS[e]}">${ETAPAS.map((s,i)=>`<div class="st ${i<e?'done':i===e?'cur':''}" title="${s}"><i></i><span>${s}</span></div>`).join('')}</div>`;
 
@@ -924,7 +931,7 @@ FORM.marca=id=>{
    <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
    <label class="f"><span>Nome</span><input id="mc-nome" value="${esc(m.nome)}" required></label>
    <label class="f"><span>Segmento</span><input id="mc-seg" value="${esc(m.segmento)}" placeholder="Ex.: Skincare"></label>
-   <div class="f"><span>Cor no sistema</span><div class="swatches" role="group" data-group="cor">${CORES.map(c=>`<button type="button" data-v="${c}" aria-pressed="${c===m.cor}" style="background:${c}" aria-label="Cor ${c}"></button>`).join('')}</div></div>
+   <div class="f"><span>Cor no sistema</span><div class="swatches" role="group" data-group="cor">${(CORES.includes(m.cor)?CORES:[...CORES,m.cor]).map(c=>`<button type="button" data-v="${c}" aria-pressed="${c===m.cor}" style="background:${c}" aria-label="Cor ${c}"></button>`).join('')}</div><label class="corlivre">Outra cor (ex.: a cor exata da marca) <input type="color" id="mc-cor" value="${esc(m.cor)}"></label></div>
    <div class="frow"><label class="f"><span>Contato</span><input id="mc-cont" value="${esc(m.contato_nome)}"></label><label class="f"><span>Telefone</span><input id="mc-tel" inputmode="tel" value="${esc(m.contato_tel)}"></label></div>
    <label class="toggle"><input type="checkbox" id="mc-propria" ${m.conta_propria?'checked':''}> Conta própria (marca da casa, como a OMG)</label>
    ${id?`<label class="toggle"><input type="checkbox" id="mc-ativo" ${m.ativo?'checked':''}> Ativa</label>`:''}
@@ -1032,7 +1039,7 @@ document.addEventListener('click',async e=>{
   const t=e.target.closest('[data-act],[data-go],[data-live],[data-job],[data-marca],[data-prop],[data-free],[data-rec],[data-pag],[data-filtro],[data-lmode],[data-group] button,[data-scrim]');
   if(!t)return;
   if(t.hasAttribute('data-scrim')){if(e.target===t)fechar();return}
-  if(t.closest('[data-group]')&&t.dataset.v!==undefined){e.preventDefault();t.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===t)));syncForm();return}
+  if(t.closest('[data-group]')&&t.dataset.v!==undefined){e.preventDefault();t.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===t)));if(t.parentElement.dataset.group==='cor'){const ci=document.getElementById('mc-cor');if(ci)ci.value=t.dataset.v}syncForm();return}
   if(t.dataset.lmode){const el=document.getElementById('l-email');if(el)UI.email=el.value.trim();UI.lmode=t.dataset.lmode;UI.aviso='';draw();return}
   if(t.dataset.go){UI.view=t.dataset.go;UI.filtro=t.dataset.f||'todas';UI.semana=0;fechar();draw();window.scrollTo(0,0);return}
   if(t.dataset.filtro){UI.filtro=t.dataset.filtro;draw();return}
@@ -1088,6 +1095,7 @@ document.addEventListener('click',async e=>{
 document.addEventListener('change',async e=>{
   const el=e.target;
   if(el.matches('[data-ext]')){const x=document.getElementById(el.id+'-ext');if(x)x.textContent=el.value?dExt(el.value):'';return}
+  if(el.id==='mc-cor'){document.querySelectorAll('[data-group="cor"] button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v.toLowerCase()===el.value.toLowerCase())));return}
   if(el.id==='estdia'){UI.estDia=el.value||null;draw();return}
   if(el.id==='rc-job'&&el.value){const j=job(el.value);const m=document.getElementById('rc-marca');if(j&&m)m.value=j.marca_id;return}
   if(el.dataset.nivel){if(await save('profiles',{nivel:el.value},el.dataset.nivel))depois('Nível alterado');return}
@@ -1146,7 +1154,7 @@ document.addEventListener('submit',async e=>{
   });
   /* ---- marca ---- */
   if(f.id==='fmarca') return run(async()=>{
-    const row={nome:v('mc-nome'),segmento:v('mc-seg'),cor:gv(f,'cor')||CORES[0],contato_nome:v('mc-cont'),contato_tel:v('mc-tel'),conta_propria:document.getElementById('mc-propria').checked};
+    const row={nome:v('mc-nome'),segmento:v('mc-seg'),cor:gv(f,'cor')||v('mc-cor')||CORES[0],contato_nome:v('mc-cont'),contato_tel:v('mc-tel'),conta_propria:document.getElementById('mc-propria').checked};
     if(id)row.ativo=document.getElementById('mc-ativo').checked;
     if(!row.nome)return ferr('Digite o nome da marca.');
     const r=await save('marcas',row,id);if(!r)return;
